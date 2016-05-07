@@ -173,7 +173,7 @@ public class New_Event extends javax.swing.JFrame {
 
         jLabel14.setText("$");
 
-        jButton1.setText("Añadir");
+        jButton1.setText("Crear");
 
         jButton2.setText("Aceptar");
 
