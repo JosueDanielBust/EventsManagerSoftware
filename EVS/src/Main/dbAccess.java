@@ -37,4 +37,21 @@ private Connection conexion;
         } catch(Exception e){ e.printStackTrace(); }
     return this;
     }
-}
+    
+    public boolean ejecutar(String sql){
+     try{
+         Statement st = getConexion().createStatement(
+         ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
+         st.executeUpdate(sql);
+         getConexion().commit();
+     }catch(SQLException e){
+        e.printStackTrace();
+        return false;
+        }
+     return true;
+    }
+    
+    public ResultSet Consultar(String sql){
+    
+    
+}}
