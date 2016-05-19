@@ -29,9 +29,7 @@ public class New_Event extends javax.swing.JFrame {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jTree1 = new javax.swing.JTree();
-        query1 = java.beans.Beans.isDesignTime() ? null : ((javax.persistence.EntityManager)null).createQuery("");
         list1 = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : ((javax.persistence.Query)null).getResultList();
-        query2 = java.beans.Beans.isDesignTime() ? null : ((javax.persistence.EntityManager)null).createQuery("");
         jLabel10 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
@@ -474,7 +472,5 @@ public class New_Event extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField7;
     private javax.swing.JTree jTree1;
     private java.util.List list1;
-    private javax.persistence.Query query1;
-    private javax.persistence.Query query2;
     // End of variables declaration//GEN-END:variables
 }
