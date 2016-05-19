@@ -28,8 +28,13 @@ private Connection conexion;
             Class.forName("oracle.jdbc.OracleDriver");
             String BaseDeDatos = "jdbc:oracle:thin:@dbeafit.cyzd3byk9uno.us-east-1.rds.amazonaws.com:1521:DB20161";
             conexion= DriverManager.getConnection(BaseDeDatos,"jbusta16","mlyBQM93");
+            
+            ResultSet st=conexion.createStatement().executeQuery("SELECT * FROM city");
+            while(st.next())
+                System.out.println(st.getString(1));
+          
             if(conexion!=null){
-            System.out.println("Conexion exitosa a esquema JBUSTA16");
+                System.out.println("Conexion exitosa a esquema JBUSTA16");
             }else{ System.out.println("Conexion fallida");}
         }catch(Exception e){
             e.printStackTrace();}
