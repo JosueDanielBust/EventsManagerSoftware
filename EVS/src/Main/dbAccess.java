@@ -7,53 +7,37 @@ import java.sql.*;
 public class dbAccess {
     //objeto de conexion 
     
-    private Connection conexion;
-    //para conectarse
+private Connection conexion;
+
+ public static void main(String[] args) {
+  dbAccess obconeccion=new dbAccess();
+    obconeccion.Conectar();
+    }
     
-    
-  public static void main (String args []) throws SQLException
-  {
-    try 
-    {
-     Class.forName ("oracle.jdbc.driver.OracleDriver");
-    } 
-    catch (ClassNotFoundException e) 
-    {
-     e.printStackTrace();
+    public Connection getConexion() {
+        return conexion;
     }
 
-    Connection conn = DriverManager.getConnection
-         ("jdbc:oracle:oci:@ORACLEBD", "user", "passw");
-          //               @TNSNames_Entry,  userid,  password
+    public void setConexion(Connection conexion) {
+        this.conexion = conexion;
+    }
+    
+    public dbAccess Conectar()
+    {
+        try{
+        Class.forName("oracle.jdbc.OracleDriver");
+        String BaseDeDatos = "jdbc:oracle:thin:@dbeafit.cyzd3byk9uno.us-east-1.rds.amazonaws.com:1521:DB20161";
+        conexion= DriverManager.getConnection(BaseDeDatos,"jbusta16","mlyBQM93");
+        if(conexion!=null)
+        {
+        System.out.println("Conexion exitosa a esquema BDDEMO1");
+        }
+        else{System.out.println("Conexion fallida");}
+        }
+        catch(Exception e)
+        {e.printStackTrace();}
+       
+    return this;
+    }
 
-    Statement stmt = conn.createStatement();
-    ResultSet rset = 
-              stmt.executeQuery("select BANNER from SYS.V_$VERSION");
-    while (rset.next())
-          System.out.println (rset.getString(1));   // Print col 1
-    stmt.close();
-  }
-  
-  
-  //para escribir en Java  procedimientos almacenados, funciones,  triggers ... 
-  public static String showBanner() throws SQLException
-  {
-    String banner="";
-    Connection conn = 
-    (new oracle.jdbc.driver.OracleDriver()).defaultConnection();
-
-    Statement stmt = conn.createStatement();
-    ResultSet rset = 
-              stmt.executeQuery("select BANNER from SYS.V_$VERSION");
-    while (rset.next())
-           banner += rset.getString(1);          
-    //stmt.close(); NO CERRAR LA CONEXION
-    return banner;
-  }
-  
-  
-  
-  
-  
 }
-  
