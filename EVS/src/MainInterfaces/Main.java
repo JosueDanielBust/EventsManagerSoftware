@@ -5,17 +5,22 @@
  */
 package MainInterfaces;
 
+import Mundo.Person;
+
 /**
  *
- * @author JosueDanielBust
+ * @author Nicolas
  */
 public class Main {
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        // TODO code application logic here
-    }
+   
+    private static DBAccess DBA;
+    private static Person usuario;
+    private static Login login;
     
+    
+    
+    public static void main(String[] args){
+        DBA = new DBAccess();
+        login = new Login(DBA);
+    }
 }
