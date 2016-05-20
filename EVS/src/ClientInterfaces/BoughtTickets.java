@@ -95,8 +95,20 @@ public class BoughtTickets extends javax.swing.JFrame {
             }
         });
 
+        jCBEvento.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCBEventoActionPerformed(evt);
+            }
+        });
+
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jLabel1.setText("Tickets Comprados");
+
+        jCBFecha.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCBFechaActionPerformed(evt);
+            }
+        });
 
         jTable1.setAutoCreateRowSorter(true);
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
@@ -132,7 +144,19 @@ public class BoughtTickets extends javax.swing.JFrame {
 
         jLabel4.setText("Categoria del Evento");
 
+        jCBCiudad.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCBCiudadActionPerformed(evt);
+            }
+        });
+
         jLabel6.setText("Nombre del Lugar");
+
+        jCBLugar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCBLugarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -256,6 +280,46 @@ public class BoughtTickets extends javax.swing.JFrame {
     private void jCBCategoriaItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jCBCategoriaItemStateChanged
         // TODO add your handling code here:
     }//GEN-LAST:event_jCBCategoriaItemStateChanged
+
+    private void jCBCiudadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCBCiudadActionPerformed
+        JComboBox cb = (JComboBox)evt.getSource();
+        String cat= (String)cb.getSelectedItem();
+        
+        tk.setCiudad(cat);
+       
+        rs=dba.consultar(tk.buscarEventos());      
+        jCBEvento = new JComboBox(rsToArray(rs));
+    }//GEN-LAST:event_jCBCiudadActionPerformed
+
+    private void jCBEventoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCBEventoActionPerformed
+        JComboBox cb = (JComboBox)evt.getSource();
+        String cat= (String)cb.getSelectedItem();
+        
+        tk.setEvento(cat);
+       
+        rs=dba.consultar(tk.buscarFecha());      
+        jCBFecha = new JComboBox(rsToArray(rs));
+    }//GEN-LAST:event_jCBEventoActionPerformed
+
+    private void jCBFechaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCBFechaActionPerformed
+        JComboBox cb = (JComboBox)evt.getSource();
+        String cat= (String)cb.getSelectedItem();
+        
+        tk.setFecha(cat);
+       
+        rs=dba.consultar(tk.buscarLugar());      
+        jCBLugar = new JComboBox(rsToArray(rs));
+    }//GEN-LAST:event_jCBFechaActionPerformed
+
+    private void jCBLugarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCBLugarActionPerformed
+        JComboBox cb = (JComboBox)evt.getSource();
+        String cat= (String)cb.getSelectedItem();
+        
+        tk.setLugar(cat);
+       
+        rs=dba.consultar(tk.buscarBoletas());      
+       //sacar las boletas a la tabla
+    }//GEN-LAST:event_jCBLugarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

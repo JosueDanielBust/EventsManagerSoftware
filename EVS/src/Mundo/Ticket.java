@@ -85,6 +85,10 @@ public class Ticket {
             "AND ticket.PERSON_ID = "+ person_id);  
             
     }
+
+    public void setEvento(String evento) {
+        this.evento = evento;
+    }
     
     
     //revisar este!!
