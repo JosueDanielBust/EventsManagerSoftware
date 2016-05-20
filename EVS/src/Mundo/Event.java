@@ -10,5 +10,7 @@ package Mundo;
  * @author Julian
  */
 public class Event {
+private String id,type,place;
+
     public Event(){}
 }
