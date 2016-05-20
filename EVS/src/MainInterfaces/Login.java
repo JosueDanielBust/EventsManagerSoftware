@@ -1,5 +1,7 @@
 package MainInterfaces;
 
+import ClientInterfaces.ClientMenu;
+import ClientInterfaces.Register;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -17,7 +19,8 @@ import java.util.logging.Logger;
  */
 public class Login extends javax.swing.JFrame {
 
-    DBAccess DBA;
+    private DBAccess DBA;
+    private String PERSON_ID;
     
     /**
      * Creates new form Login
@@ -121,14 +124,14 @@ public class Login extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void RegistrarseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RegistrarseButtonActionPerformed
-        // TODO add your handling code here:
+        new Register();
     }//GEN-LAST:event_RegistrarseButtonActionPerformed
 
     private void IngresarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IngresarButtonActionPerformed
-         ResultSet datosUsuario = DBA.consultar(CorreoElectronicoTF.getText());
+        ResultSet datosUsuario = DBA.consultar(CorreoElectronicoTF.getText());
         try {
             if(datosUsuario != null && datosUsuario.getString("PASSWORD").equals(String.valueOf(ContraseñaTF.getPassword()))){
-                System.out.println("JJJJJJJJJJJ");
+                new ClientMenu(DBA,PERSON_ID);
             }
         } catch (SQLException ex) {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
