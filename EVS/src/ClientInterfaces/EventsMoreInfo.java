@@ -1,5 +1,5 @@
 package ClientInterfaces;
-
+import Mundo.Event;
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -11,12 +11,14 @@ package ClientInterfaces;
  * @author Nicolas
  */
 public class EventsMoreInfo extends javax.swing.JFrame {
-
+    Event evento;
     /**
      * Creates new form EventsMoreInfo
      */
-    public EventsMoreInfo() {
+    public EventsMoreInfo(Event ev) {
         initComponents();
+        evento=ev;
+        //mostrar todos los datos de evento
     }
 
     /**
