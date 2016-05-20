@@ -52,6 +52,15 @@ private Connection conexion;
     }
     
     public ResultSet Consultar(String sql){
-    
-    
-}}
+        ResultSet salida=null;
+        try{
+            Statement st = getConexion().createStatement();
+            salida = st.executeQuery(sql);
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        
+        return salida;
+    }
+ 
+}
