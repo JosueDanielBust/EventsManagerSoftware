@@ -12,9 +12,15 @@ import Mundo.Person;
  * @author Nicolas
  */
 public class Main {
-      
+   
+    private static DBAccess DBA;
+    private static Person usuario;
+    private static Login login;
+    
+    
     
     public static void main(String[] args){
-        new Login(new DBAccess());
+        DBA = new DBAccess();
+        login = new Login(DBA);
     }
 }
