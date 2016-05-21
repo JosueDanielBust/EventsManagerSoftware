@@ -4,19 +4,26 @@
  * and open the template in the editor.
  */
 package ClientInterfaces;
-
+import MainInterfaces.DBAccess;
 /**
  *
  * @author Nicolas
  */
 public class EventSearch extends javax.swing.JFrame {
-
+    DBAccess dba;
+    String person_id;
     /**
      * Creates new form EventTicketsSearch
      */
-    public EventSearch() {
+    public EventSearch(DBAccess db,String id_person) {
         initComponents();
+        dba=db;
+        person_id=id_person;
     }
+    
+   public EventSearch(){
+    initComponents();
+   }
 
     /**
      * This method is called from within the constructor to initialize the form.

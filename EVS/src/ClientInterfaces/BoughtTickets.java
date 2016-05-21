@@ -1,16 +1,13 @@
 package ClientInterfaces;
 
-
-
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JComboBox;
+import java.util.ArrayList;
 import java.sql.*;
 
 import Mundo.Ticket;
 
 import MainInterfaces.DBAccess;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.ComboBoxModel;
 
 /**
@@ -20,24 +17,27 @@ import javax.swing.ComboBoxModel;
 public class BoughtTickets extends javax.swing.JFrame {
     private String id_person,id_event;
     private DBAccess dba;
-    private Ticket tk;
     private ResultSet rs;
+    private String categoria, ciudad, evento, fecha, lugar;
     /**
      * Creates new form BoughtTickets
      */
-    public BoughtTickets(DBAccess db,String id) {
+    public BoughtTickets(DBAccess conexion,String id_p) {
         initComponents();
-        setVisible(true);
-        id_person=id;
-        dba=db;
-        tk = new Ticket(id);
+        this.setVisible(true);
+        id_person=id_p;
+        dba=conexion;
        
         //traer las categorias disponibles al comboBox
-        rs=tk.buscarCategorias(dba);      
+     
+        rs=dba.consultar(Ticket.buscarCategorias(id_person));      
         jCBCategoria = new JComboBox(rsToArray(rs));
         
     }
-    public BoughtTickets() {}
+    public BoughtTickets() {
+        initComponents();
+        this.setVisible(true);
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -80,11 +80,6 @@ public class BoughtTickets extends javax.swing.JFrame {
             }
         });
 
-        jCBCategoria.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                jCBCategoriaItemStateChanged(evt);
-            }
-        });
         jCBCategoria.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jCBCategoriaActionPerformed(evt);
@@ -246,68 +241,46 @@ public class BoughtTickets extends javax.swing.JFrame {
 
     private void jCBCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCBCategoriaActionPerformed
         JComboBox cb = (JComboBox)evt.getSource();
-        String cat= (String)cb.getSelectedItem();
-        
-        tk.setCategoria(cat);
- 
-        try {   
-            rs=dba.consultar(tk.buscarCiudades());
-            jCBCiudad = new JComboBox(dba.rsToArray(rs));
-        } catch (SQLException ex) {
-            Logger.getLogger(BoughtTickets.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        categoria = (String)cb.getSelectedItem();      
+        rs=dba.consultar(Ticket.buscarCiudades(categoria,id_person));      
+        jCBCiudad = new JComboBox(rsToArray(rs));
     }//GEN-LAST:event_jCBCategoriaActionPerformed
 
     private void MoreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MoreActionPerformed
-     
-        new EventsMoreInfo(dba,id_person,id_event);
+           new EventsMoreInfo(dba,id_person,id_event);
+           //cerrar la actual(?)
     }//GEN-LAST:event_MoreActionPerformed
-
-    private void jCBCategoriaItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jCBCategoriaItemStateChanged
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jCBCategoriaItemStateChanged
 
     private void jCBCiudadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCBCiudadActionPerformed
         JComboBox cb = (JComboBox)evt.getSource();
-        String cat= (String)cb.getSelectedItem();
-        
-        tk.setCiudad(cat);
-       
-        rs=dba.consultar(tk.buscarEventos());      
+        ciudad = (String)cb.getSelectedItem();
+        rs=dba.consultar(Ticket.buscarEventos(ciudad,id_person));      
         jCBEvento = new JComboBox(rsToArray(rs));
     }//GEN-LAST:event_jCBCiudadActionPerformed
 
     private void jCBEventoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCBEventoActionPerformed
         JComboBox cb = (JComboBox)evt.getSource();
-        String ev= (String)cb.getSelectedItem();
-        
-        tk.setEvento(ev);
-       
-        rs=dba.consultar(tk.buscarFecha());      
+        evento= (String)cb.getSelectedItem();
+        rs=dba.consultar(Ticket.buscarFecha(evento,id_person));      
         jCBFecha = new JComboBox(rsToArray(rs));
     }//GEN-LAST:event_jCBEventoActionPerformed
 
     private void jCBFechaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCBFechaActionPerformed
         JComboBox cb = (JComboBox)evt.getSource();
-        String cat= (String)cb.getSelectedItem();        
-        tk.setFecha(cat);
-       
-        rs=tk.buscarLugar(dba);      
-        jCBLugar = new JComboBox(dba.rsToArray(rs));
+        fecha= (String)cb.getSelectedItem();
+        rs=dba.consultar(Ticket.buscarLugar(fecha,id_person));      
+        jCBLugar = new JComboBox(rsToArray(rs));
     }//GEN-LAST:event_jCBFechaActionPerformed
 
     private void jCBLugarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCBLugarActionPerformed
         JComboBox cb = (JComboBox)evt.getSource();
-        String cat= (String)cb.getSelectedItem();
-        
-        tk.setLugar(cat);
-        
-        
+        lugar = (String)cb.getSelectedItem();
+   
         DefaultTableModel modelo = new DefaultTableModel();
         jCBLugar.setModel((ComboBoxModel<String>) modelo);
         
         try{
-            rs=dba.consultar(tk.buscarBoletas());    
+            rs=dba.consultar(Ticket.buscarBoletas(lugar,id_person));    
             ResultSetMetaData rsMD = rs.getMetaData();
             int nColumnas = rsMD.getColumnCount();
             
@@ -320,7 +293,7 @@ public class BoughtTickets extends javax.swing.JFrame {
                 modelo.addRow(fila);
             }
             
-            rs=dba.consultar(tk.buscarEventId());
+            rs=dba.consultar(Ticket.buscarEventId(ciudad,evento,fecha,lugar));
              if (rs.next()){
                 id_event=rs.getString(1);
                 System.out.println("id_event cambío a: "+id_event);
@@ -332,29 +305,38 @@ public class BoughtTickets extends javax.swing.JFrame {
         
     }//GEN-LAST:event_jCBLugarActionPerformed
 
-    public JComboBox<String> getjCBCategoria() {
-        return jCBCategoria;
-    }
-
-    public JComboBox<String> getjCBCiudad() {
-        return jCBCiudad;
-    }
-
-    public JComboBox<String> getjCBEvento() {
-        return jCBEvento;
-    }
-
-    public JComboBox<String> getjCBFecha() {
-        return jCBFecha;
-    }
-
-    public JComboBox<String> getjCBLugar() {
-        return jCBLugar;
-    }
-
     
-    
-    
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(ClientConfiguration.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(ClientConfiguration.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(ClientConfiguration.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(ClientConfiguration.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new BoughtTickets();
+            }
+        });
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton More;
