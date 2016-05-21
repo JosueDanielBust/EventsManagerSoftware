@@ -1,5 +1,6 @@
 package ClientInterfaces;
 
+import MainInterfaces.DBAccess;
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -11,13 +12,14 @@ package ClientInterfaces;
  * @author Nicolas
  */
 public class Register extends javax.swing.JFrame {
-
+    DBAccess DBA;
     /**
      * Creates new form New_Account
      */
-    public Register() {
+    public Register(DBAccess dba) {
         initComponents();
         setVisible(true);
+        DBA=dba;
     }
 
     /**
