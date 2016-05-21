@@ -1,7 +1,11 @@
 package ClientInterfaces;
+
 import Mundo.Event;
 import MainInterfaces.DBAccess;
+
 import javax.swing.JTextField;
+import java.sql.*;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -18,11 +22,68 @@ public class EventsMoreInfo extends javax.swing.JFrame {
     /**
      * Creates new form EventsMoreInfo
      */
-    public EventsMoreInfo(DBAccess db,String id,String eid) {
+    public EventsMoreInfo(DBAccess db,String id,String e_id) {
         initComponents();
-        event_id=eid;
+        
+        //inicializo las variables locales
+        event_id=e_id;
         dba=db;
         idp=id;
+        
+        
+        ResultSet sc2;
+        Event ev=new Event();
+        String arg,comando;
+        
+        //le paso el id para que me devuleva la consulta en un String
+        String sql = ev.consultarPorId(e_id);
+        ResultSet sc=dba.consultar(sql);
+        try{
+             if(sc.next()){
+               
+               //traer categoria segun id
+               arg=sc.getString(1);
+               comando = ev.consultarEventCategory(arg);
+               sc2 = dba.consultar(comando);
+               
+               if(sc2.next())
+                   arg = sc2.getString(1);
+               jTFCategoria.setText(arg);
+               
+               //traer nombre del evento segun id
+               arg=sc.getString(2);
+               comando = ev.consultarETName(arg);
+               sc2 = dba.consultar(comando);
+               
+               if(sc2.next())
+                   arg = sc2.getString(1);
+               jTFNombre.setText(arg);
+               
+               //traer el lugar segun id
+               arg=sc.getString(3);
+               comando = ev.consultarETName(arg);
+               sc2 = dba.consultar(comando);
+               
+               if(sc2.next())
+                   arg = sc2.getString(1);
+               jTFLugar.setText(arg);
+               
+               
+               //traer fecha y hora
+               arg=sc.getString(5);
+               comando = ev.(arg);
+               sc2 = dba.consultar(comando);
+               
+               if(sc2.next())
+                   arg = sc2.getString(1);
+               .setText(arg);
+               
+             }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+       
+       
         //mostrar todos los datos de evento
     }
 
@@ -51,7 +112,7 @@ public class EventsMoreInfo extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         jTFLugar = new javax.swing.JTextField();
         jTFNombre = new javax.swing.JTextField();
-        jTFcategoria = new javax.swing.JTextField();
+        jTFCategoria = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jTF_PType = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
@@ -105,7 +166,7 @@ public class EventsMoreInfo extends javax.swing.JFrame {
         jTFNombre.setEditable(false);
         jTFNombre.setToolTipText("");
 
-        jTFcategoria.setEditable(false);
+        jTFCategoria.setEditable(false);
 
         jLabel3.setText("Nombre");
 
@@ -144,7 +205,7 @@ public class EventsMoreInfo extends javax.swing.JFrame {
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(jTFcategoria, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jTFCategoria, javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(jTFNombre, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jTFCiudad, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -176,7 +237,7 @@ public class EventsMoreInfo extends javax.swing.JFrame {
                 .addGap(35, 35, 35)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel14)
-                    .addComponent(jTFcategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTFCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTFNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -258,7 +319,7 @@ public class EventsMoreInfo extends javax.swing.JFrame {
     }
 
     public void setjTFcategoria(JTextField jTFcategoria) {
-        this.jTFcategoria = jTFcategoria;
+        this.jTFCategoria = jTFcategoria;
     }
 
 
@@ -278,6 +339,7 @@ public class EventsMoreInfo extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jTA_Rest;
+    private javax.swing.JTextField jTFCategoria;
     private javax.swing.JTextField jTFCiudad;
     private javax.swing.JTextField jTFFecha;
     private javax.swing.JTextField jTFHora;
@@ -285,6 +347,5 @@ public class EventsMoreInfo extends javax.swing.JFrame {
     private javax.swing.JTextField jTFNombre;
     private javax.swing.JTextField jTF_Dir;
     private javax.swing.JTextField jTF_PType;
-    private javax.swing.JTextField jTFcategoria;
     // End of variables declaration//GEN-END:variables
 }
