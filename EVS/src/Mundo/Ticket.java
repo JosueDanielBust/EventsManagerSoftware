@@ -137,6 +137,10 @@ public class Ticket {
     
     }
         
+    public String buscarTicketId(){
+        
+        return"";
+    }
     
 }
    

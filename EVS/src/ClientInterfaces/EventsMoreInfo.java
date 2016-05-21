@@ -13,15 +13,14 @@ import javax.swing.JTextField;
  * @author Nicolas
  */
 public class EventsMoreInfo extends javax.swing.JFrame {
-    private Event evento;
     private DBAccess dba;
-    private String idp;
+    private String idp,event_id;
     /**
      * Creates new form EventsMoreInfo
      */
-    public EventsMoreInfo(DBAccess db,String id,Event ev) {
+    public EventsMoreInfo(DBAccess db,String id,String eid) {
         initComponents();
-        evento=ev;
+        event_id=eid;
         dba=db;
         idp=id;
         //mostrar todos los datos de evento
