@@ -2,10 +2,16 @@ package MainInterfaces;
 
 import ClientInterfaces.ClientMenu;
 import ClientInterfaces.Register;
+import Mundo.Person;
+import java.sql.JDBCType;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLType;
+import java.sql.Types;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.eclipse.persistence.platform.database.jdbc.JDBCTypes;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -19,14 +25,13 @@ import java.util.logging.Logger;
  */
 public class Login extends javax.swing.JFrame {
 
-    private DBAccess DBA;
-    private String PERSON_ID;
+    private DBAccess dba;
     
     /**
      * Creates new form Login
      */
-    public Login(DBAccess DBA) {
-        this.DBA = DBA;
+    public Login(DBAccess dba) {
+        this.dba = dba;
         initComponents();
         setVisible(true);
     }
@@ -138,21 +143,20 @@ public class Login extends javax.swing.JFrame {
 
     private void registrarseBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registrarseBActionPerformed
         dispose();
-        new Register(DBA);
+        new Register(dba);
     }//GEN-LAST:event_registrarseBActionPerformed
 
     private void ingresarBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ingresarBActionPerformed
-     try {
-            ResultSet datosUsuario = DBA.consultar("SELECT PASSWORD FROM PERSON WHERE PERSON_EMAIL = '"+correoElectronicoTF.getText()+"'");
+        ArrayList parametros = new ArrayList();
+        parametros.add(correoElectronicoTF.getText());
+        parametros.add(String.valueOf(contraseñaTF.getPassword()));
+        try {
+            ResultSet datosUsuario = dba.funcion("LOGIN_CONFIRMATION(?,?)", JDBCType.NUMERIC, parametros);
             datosUsuario.next();
-            if(datosUsuario.getString("PASSWORD").equals(String.valueOf(contraseñaTF.getPassword()))){
-                dispose();
-                new ClientMenu(DBA,PERSON_ID);
-            }else{
-                alertaL.setText("El Correo Electronico y/o la Contraseña es Incorrecta");
-            }
+            dispose();
+            new ClientMenu(dba, datosUsuario.getString("ID"));
         } catch (SQLException ex) {
-            alertaL.setText("El Correo Electronico y/o la Contraseña es Incorrecta");
+            alertaL.setText("El Correo Electronico o la Contraseña es Incorrecta");
         }
     }//GEN-LAST:event_ingresarBActionPerformed
 

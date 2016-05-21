@@ -5,13 +5,18 @@
  */
 package Mundo;
 
+import MainInterfaces.DBAccess;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 /**
  *
  * @author Julian
  */
 public class Ticket {
     private String ticket_id, person_id, ttype_id, ciudad, categoria, evento, fecha, lugar;
-
+    
+    
 
     public Ticket(){}
 
@@ -39,8 +44,8 @@ public class Ticket {
 
    
     //tipos de eventos que tienen boletas con este usuario
-    public String buscarCategorias(){
-        return ("SELECT ec.ecategory " +
+    public ResultSet buscarCategorias(DBAccess dba) throws SQLException{
+        return dba.consultar("SELECT ec.ecategory " +
         "    from EVENT_CATEGORY ec inner join EVENT_TYPE et" +
         "    on ec.ecategory_id = et.ecategory_id" +
         "    inner join event ev on ev.etype_id = et.etype_id" +
@@ -57,7 +62,7 @@ public class Ticket {
     
     //Segun la categoria de arriba me trae las ciudades
     public String buscarCiudades(){
-       return ("select city_name from city " +
+       return return dba.consultar("select city_name from city " +
             "inner join place on city.city_id=place.city_id " +
             "inner join event on event.place_id = place.place_id " +
             "inner join event_type on event.ETYPE_ID = event_type.ETYPE_ID " +
@@ -108,13 +113,12 @@ public class Ticket {
     }
     
     //mostrar el lugar del evento que se realiza en esa fecha
-    public String buscarLugar(){
-        return ("inner join event on event.place_id = place.place_id " +
-            "and event.DATE_HOUR = "+fecha +
-            " INNER JOIN TICKET_TYPE ON TICKET_TYPE.EVENT_ID = event.EVENT_ID " +
-            "INNER JOIN TICKET ON TICKET.TTYPE_ID = TICKET_TYPE.TTYPE_ID " +
-            "AND ticket.PERSON_ID = "+person_id);
-          
+    public ResultSet buscarLugar(DBAccess dba) throws SQLException{
+        return dba.consultar("inner join event on event.place_id = place.place_id " +
+                    "and event.DATE_HOUR = "+fecha +
+                    " INNER JOIN TICKET_TYPE ON TICKET_TYPE.EVENT_ID = event.EVENT_ID " +
+                    "INNER JOIN TICKET ON TICKET.TTYPE_ID = TICKET_TYPE.TTYPE_ID " +
+                    "AND ticket.PERSON_ID = "+person_id);
     }
     
     //lugar seleccionado
@@ -137,9 +141,17 @@ public class Ticket {
     
     }
         
-    public String buscarTicketId(){
-        
-        return"";
+    public String buscarEventId(){
+        return ("SELECT event_id "+
+                "from event e " +
+                "inner join place p on p.place_id = p.place_id " +
+                "inner join city c on c.city_id = c.city_id " +
+                "inner join event_type et on et.etype_id = e.etype_id " +
+                "AND c.city_name = "+ciudad  +
+                "   AND et.etype_name = "+ evento +
+                " AND e.date_hour = "+ fecha +
+                " And p.place_name = "+ lugar);
+      
     }
     
 }

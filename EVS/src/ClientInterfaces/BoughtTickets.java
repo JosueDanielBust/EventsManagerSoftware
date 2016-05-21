@@ -1,15 +1,17 @@
 package ClientInterfaces;
 
 
-import javax.swing.JComboBox;
+
 import javax.swing.table.DefaultTableModel;
-import java.util.ArrayList;
+import javax.swing.JComboBox;
 import java.sql.*;
 
 import Mundo.Ticket;
-import Mundo.Event;
 
 import MainInterfaces.DBAccess;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.ComboBoxModel;
 
 /**
  *
@@ -31,7 +33,7 @@ public class BoughtTickets extends javax.swing.JFrame {
         tk = new Ticket(id);
        
         //traer las categorias disponibles al comboBox
-        rs=dba.consultar(tk.buscarCategorias());      
+        rs=tk.buscarCategorias(dba);      
         jCBCategoria = new JComboBox(rsToArray(rs));
         
     }
@@ -247,13 +249,17 @@ public class BoughtTickets extends javax.swing.JFrame {
         String cat= (String)cb.getSelectedItem();
         
         tk.setCategoria(cat);
-       
-        rs=dba.consultar(tk.buscarCiudades());      
-        jCBCiudad = new JComboBox(dba.rsToArray(rs));
+ 
+        try {   
+            rs=dba.consultar(tk.buscarCiudades());
+            jCBCiudad = new JComboBox(dba.rsToArray(rs));
+        } catch (SQLException ex) {
+            Logger.getLogger(BoughtTickets.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jCBCategoriaActionPerformed
 
     private void MoreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MoreActionPerformed
-        //consultar y sacar en con setText()
+     
         new EventsMoreInfo(dba,id_person,id_event);
     }//GEN-LAST:event_MoreActionPerformed
 
@@ -273,9 +279,9 @@ public class BoughtTickets extends javax.swing.JFrame {
 
     private void jCBEventoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCBEventoActionPerformed
         JComboBox cb = (JComboBox)evt.getSource();
-        String cat= (String)cb.getSelectedItem();
+        String ev= (String)cb.getSelectedItem();
         
-        tk.setEvento(cat);
+        tk.setEvento(ev);
        
         rs=dba.consultar(tk.buscarFecha());      
         jCBFecha = new JComboBox(rsToArray(rs));
@@ -283,12 +289,11 @@ public class BoughtTickets extends javax.swing.JFrame {
 
     private void jCBFechaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCBFechaActionPerformed
         JComboBox cb = (JComboBox)evt.getSource();
-        String cat= (String)cb.getSelectedItem();
-        
+        String cat= (String)cb.getSelectedItem();        
         tk.setFecha(cat);
        
-        rs=dba.consultar(tk.buscarLugar());      
-        jCBLugar = new JComboBox(rsToArray(rs));
+        rs=tk.buscarLugar(dba);      
+        jCBLugar = new JComboBox(dba.rsToArray(rs));
     }//GEN-LAST:event_jCBFechaActionPerformed
 
     private void jCBLugarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCBLugarActionPerformed
@@ -297,13 +302,34 @@ public class BoughtTickets extends javax.swing.JFrame {
         
         tk.setLugar(cat);
         
-        rs=dba.consultar(tk.buscarBoletas());    
         
-  
+        DefaultTableModel modelo = new DefaultTableModel();
+        jCBLugar.setModel((ComboBoxModel<String>) modelo);
         
-        rs=dba.consultar(tk.buscarTicketId());
+        try{
+            rs=dba.consultar(tk.buscarBoletas());    
+            ResultSetMetaData rsMD = rs.getMetaData();
+            int nColumnas = rsMD.getColumnCount();
+            
+            while (rs.next()){
+                 Object [] fila = new Object[nColumnas]; // Hay tres columnas en la tabla
+
+                for (int i=0;i<nColumnas;i++)
+                   fila[i] = rs.getObject(i+1); 
+
+                modelo.addRow(fila);
+            }
+            
+            rs=dba.consultar(tk.buscarEventId());
+             if (rs.next()){
+                id_event=rs.getString(1);
+                System.out.println("id_event cambío a: "+id_event);
+             }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
         
-       //sacar las boletas a la tabla
+        
     }//GEN-LAST:event_jCBLugarActionPerformed
 
     public JComboBox<String> getjCBCategoria() {
