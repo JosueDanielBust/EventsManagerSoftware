@@ -43,10 +43,12 @@ public class Login extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        RegistrarseButton = new javax.swing.JButton();
-        IngresarButton = new javax.swing.JButton();
-        CorreoElectronicoTF = new javax.swing.JTextField();
-        ContraseñaTF = new javax.swing.JPasswordField();
+        registrarseB = new javax.swing.JButton();
+        ingresarB = new javax.swing.JButton();
+        correoElectronicoTF = new javax.swing.JTextField();
+        contraseñaTF = new javax.swing.JPasswordField();
+        javax.swing.JLabel alerta = new javax.swing.JLabel();
+        alertaL = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -59,19 +61,23 @@ public class Login extends javax.swing.JFrame {
 
         jLabel3.setText("Contraseña");
 
-        RegistrarseButton.setText("Registrarse");
-        RegistrarseButton.addActionListener(new java.awt.event.ActionListener() {
+        registrarseB.setText("Registrarse");
+        registrarseB.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                RegistrarseButtonActionPerformed(evt);
+                registrarseBActionPerformed(evt);
             }
         });
 
-        IngresarButton.setText("Ingresar");
-        IngresarButton.addActionListener(new java.awt.event.ActionListener() {
+        ingresarB.setText("Ingresar");
+        ingresarB.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                IngresarButtonActionPerformed(evt);
+                ingresarBActionPerformed(evt);
             }
         });
+
+        alerta.setForeground(java.awt.Color.red);
+
+        alertaL.setForeground(java.awt.Color.red);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -80,21 +86,28 @@ public class Login extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(32, 32, 32)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
-                    .addComponent(RegistrarseButton)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(50, 50, 50)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(ContraseñaTF)
-                    .addComponent(CorreoElectronicoTF, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addGap(15, 15, 15)
-                        .addComponent(IngresarButton, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(0, 38, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(alerta, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(alertaL)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel2))
+                                .addGap(25, 25, 25)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(contraseñaTF, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+                                    .addComponent(correoElectronicoTF))))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(registrarseB)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(ingresarB, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(60, 60, 60))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(82, Short.MAX_VALUE)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(53, 53, 53))
+                .addGap(57, 57, 57))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -104,44 +117,54 @@ public class Login extends javax.swing.JFrame {
                 .addGap(28, 28, 28)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(CorreoElectronicoTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(correoElectronicoTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(38, 38, 38)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(ContraseñaTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(contraseñaTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 59, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(alerta)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(alertaL)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(RegistrarseButton)
-                    .addComponent(IngresarButton))
-                .addGap(20, 20, 20))
+                    .addComponent(registrarseB)
+                    .addComponent(ingresarB))
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void RegistrarseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RegistrarseButtonActionPerformed
-        new Register();
-    }//GEN-LAST:event_RegistrarseButtonActionPerformed
+    private void registrarseBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registrarseBActionPerformed
+        setVisible(false);
+        new Register(DBA);
+    }//GEN-LAST:event_registrarseBActionPerformed
 
-    private void IngresarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IngresarButtonActionPerformed
-        ResultSet datosUsuario = DBA.consultar(CorreoElectronicoTF.getText());
+    private void ingresarBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ingresarBActionPerformed
+        ResultSet datosUsuario = DBA.consultar("SELECT PASSWORD FROM PERSON WHERE PERSON_EMAIL = '"+correoElectronicoTF.getText()+"';");
         try {
-            if(datosUsuario != null && datosUsuario.getString("PASSWORD").equals(String.valueOf(ContraseñaTF.getPassword()))){
+            System.out.print(datosUsuario.getObject(0));
+            if(datosUsuario != null && datosUsuario.getString("PASSWORD").equals(String.valueOf(contraseñaTF.getPassword()))){
+                setVisible(false);
                 new ClientMenu(DBA,PERSON_ID);
+            }else{
+                alertaL.setText("El Correo Electronico y/o la Contraseña es Incorrecta");
             }
         } catch (SQLException ex) {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_IngresarButtonActionPerformed
+    }//GEN-LAST:event_ingresarBActionPerformed
 
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPasswordField ContraseñaTF;
-    private javax.swing.JTextField CorreoElectronicoTF;
-    private javax.swing.JButton IngresarButton;
-    private javax.swing.JButton RegistrarseButton;
+    private javax.swing.JLabel alertaL;
+    private javax.swing.JPasswordField contraseñaTF;
+    private javax.swing.JTextField correoElectronicoTF;
+    private javax.swing.JButton ingresarB;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JButton registrarseB;
     // End of variables declaration//GEN-END:variables
 }

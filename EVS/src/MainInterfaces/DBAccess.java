@@ -55,11 +55,12 @@ private Connection conexion;
     public ResultSet consultar(String sql){
         ResultSet salida = null;
         try{
-            Statement st = getConexion().createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
-            salida = st.executeQuery(sql);
-        }catch(SQLException e){
-             return null;
-        }     
+            PreparedStatement st = getConexion().prepareStatement(sql);
+            salida = st.executeQuery();
+          //  salida.next();
+          // System.out.println(salida.getString("PASSWORD"));
+            
+        }catch(SQLException e){}   
         return salida;
     }
  

@@ -26,25 +26,36 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="32" pref="32" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="RegistrarseButton" min="-2" max="-2" attributes="0"/>
-                  <Component id="jLabel3" min="-2" pref="72" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace min="-2" pref="50" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                  <Component id="ContraseñaTF" max="32767" attributes="0"/>
-                  <Component id="CorreoElectronicoTF" pref="140" max="32767" attributes="0"/>
                   <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
-                      <Component id="IngresarButton" min="-2" pref="90" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="alerta" alignment="0" min="-2" pref="253" max="-2" attributes="0"/>
+                          <Component id="alertaL" min="-2" max="-2" attributes="0"/>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="jLabel3" alignment="0" min="-2" pref="72" max="-2" attributes="0"/>
+                                  <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                  <Component id="contraseñaTF" pref="200" max="32767" attributes="0"/>
+                                  <Component id="correoElectronicoTF" max="32767" attributes="0"/>
+                              </Group>
+                          </Group>
+                      </Group>
+                      <EmptySpace max="32767" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Component id="registrarseB" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
+                      <Component id="ingresarB" min="-2" pref="90" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="60" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace min="0" pref="38" max="32767" attributes="0"/>
           </Group>
           <Group type="102" alignment="1" attributes="0">
-              <EmptySpace max="32767" attributes="0"/>
+              <EmptySpace pref="82" max="32767" attributes="0"/>
               <Component id="jLabel1" min="-2" pref="235" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="53" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="57" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -56,19 +67,23 @@
               <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="CorreoElectronicoTF" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="correoElectronicoTF" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="38" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="ContraseñaTF" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="contraseñaTF" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="59" max="32767" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <Component id="alerta" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="alertaL" min="-2" max="-2" attributes="0"/>
+              <EmptySpace pref="38" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="RegistrarseButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="IngresarButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="registrarseB" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="ingresarB" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -96,25 +111,43 @@
         <Property name="text" type="java.lang.String" value="Contrase&#xf1;a"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JButton" name="RegistrarseButton">
+    <Component class="javax.swing.JButton" name="registrarseB">
       <Properties>
         <Property name="text" type="java.lang.String" value="Registrarse"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="RegistrarseButtonActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="registrarseBActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="IngresarButton">
+    <Component class="javax.swing.JButton" name="ingresarB">
       <Properties>
         <Property name="text" type="java.lang.String" value="Ingresar"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="IngresarButtonActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="ingresarBActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JTextField" name="CorreoElectronicoTF">
+    <Component class="javax.swing.JTextField" name="correoElectronicoTF">
     </Component>
-    <Component class="javax.swing.JPasswordField" name="Contrase&#xf1;aTF">
+    <Component class="javax.swing.JPasswordField" name="contrase&#xf1;aTF">
+    </Component>
+    <Component class="javax.swing.JLabel" name="alerta">
+      <Properties>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="0" green="0" id="red" palette="1" red="ff" type="palette"/>
+        </Property>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="true"/>
+        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
+      </AuxValues>
+    </Component>
+    <Component class="javax.swing.JLabel" name="alertaL">
+      <Properties>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="0" green="0" id="red" palette="1" red="ff" type="palette"/>
+        </Property>
+      </Properties>
     </Component>
   </SubComponents>
 </Form>
