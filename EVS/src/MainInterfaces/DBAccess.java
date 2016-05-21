@@ -54,16 +54,13 @@ private Connection conexion;
     
     public ResultSet consultar(String sql){
         ResultSet salida = null;
-        System.out.print("HOLI");
         try{
-            PreparedStatement st = getConexion().prepareStatement("SELECT PASSWORD FROM PERSON WHERE PERSON_EMAIL = 'correo@example.com'");
+            PreparedStatement st = getConexion().prepareStatement(sql);
             salida = st.executeQuery();
-            salida.next();
-           System.out.println(salida.getString("PASSWORD"));
+          //  salida.next();
+          // System.out.println(salida.getString("PASSWORD"));
             
-        }catch(SQLException e){
-             
-        }   
+        }catch(SQLException e){}   
         return salida;
     }
  

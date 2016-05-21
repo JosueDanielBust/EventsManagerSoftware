@@ -40,13 +40,13 @@ public class Ticket {
    
     //tipos de eventos que tienen boletas con este usuario
     public String buscarCategorias(){
-        return ("select ec.ecategory " +
+        return ("SELECT ec.ecategory " +
         "    from EVENT_CATEGORY ec inner join EVENT_TYPE et" +
         "    on ec.ecategory_id = et.ecategory_id" +
         "    inner join event ev on ev.etype_id = et.etype_id" +
         "    inner join ticket_type tt on ev.event_id = tt.event_id" +
-        "    inner join ticket tc on tc.ttype_id = tc.ttype_id" +
-        "   AND tc.person_id = "+person_id);
+        "    inner join ticket tc on tc.ttype_id = tt.ttype_id" +
+        "    AND tc.person_id = "+person_id);
      
     }
     
@@ -79,11 +79,15 @@ public class Ticket {
             "inner join event on event.etype_id = event_type.etype_id " +
             "inner join place on event.place_id = place.place_id " +
             "inner join city on place.city_id = city.city_id " +
-            "and city.city_name = "+ ciudad + 
-            " INNER JOIN TICKET_TYPE ON TICKET_TYPE.EVENT_ID = event.EVENT_ID " +
+            "AND city.city_name = "+ ciudad + 
+            "INNER JOIN TICKET_TYPE ON TICKET_TYPE.EVENT_ID = event.EVENT_ID " +
             "INNER JOIN TICKET ON TICKET.TTYPE_ID = TICKET_TYPE.TTYPE_ID " +
             "AND ticket.PERSON_ID = "+ person_id);  
             
+    }
+
+    public void setEvento(String evento) {
+        this.evento = evento;
     }
     
     
@@ -118,15 +122,18 @@ public class Ticket {
         this.lugar = lugar;
     }
     
+    //PROBAR ESTE CODIGO
+    
     //boletas compradas para el evento con dicha descripción anterior
     public String buscarBoletas(){
-        return("select distinct tick_type,ttype_cost" +
-        "from ticket_type " +
+        return("SELECT DISTINCT tick_type,ttype_cost,count(TICKET_ID)" +
+        "FROM ticket_type " +
         "INNER JOIN event ON TICKET_TYPE.EVENT_ID = event.EVENT_ID" +
         "INNER JOIN place ON event.place_id = place.place_id" +
-        "AND place.place_name = "+lugar +
+        "AND place.place_name = "+ lugar +
         " INNER JOIN TICKET ON TICKET.TTYPE_ID = TICKET_TYPE.TTYPE_ID" +
-        "AND ticket.PERSON_ID = "+person_id);
+        "AND ticket.PERSON_ID = "+ person_id +
+        "GROUP BY tick_type ");
     
     }
         

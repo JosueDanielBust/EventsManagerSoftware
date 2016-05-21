@@ -10,15 +10,16 @@ import MainInterfaces.DBAccess;
  * @author Nicolas
  */
 public class ClientMenu extends javax.swing.JFrame {
-    private String idp;
+    private String id_person;
     private DBAccess dba;
     /**
      * Creates new form ClientMenu
      */
     public ClientMenu(DBAccess db,String id) {
-        this.idp=id;
+        this.id_person=id;
         dba=db;
         initComponents();
+        setVisible(true);
         
     }
 
@@ -35,13 +36,14 @@ public class ClientMenu extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
         Tickets_Comprados = new javax.swing.JButton();
+        User = new javax.swing.JTextField();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setText("Usuario:  ..................");
+        jLabel1.setText("Usuario:");
 
         jButton2.setText("Buscar Eventos");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -56,6 +58,8 @@ public class ClientMenu extends javax.swing.JFrame {
                 Tickets_CompradosActionPerformed(evt);
             }
         });
+
+        User.setEditable(false);
 
         jMenu1.setText("Configuracion");
         jMenuBar1.add(jMenu1);
@@ -78,18 +82,22 @@ public class ClientMenu extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(User, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(User, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jButton2)
                 .addGap(18, 18, 18)
                 .addComponent(Tickets_Comprados)
-                .addContainerGap(44, Short.MAX_VALUE))
+                .addContainerGap(31, Short.MAX_VALUE))
         );
 
         pack();
@@ -100,16 +108,15 @@ public class ClientMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void Tickets_CompradosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Tickets_CompradosActionPerformed
-        BoughtTickets comprados= new BoughtTickets(dba,idp);
-        this.setVisible(false);
-        comprados.setVisible(true);
-        
+        dispose();
+        new BoughtTickets(dba,id_person);     
     }//GEN-LAST:event_Tickets_CompradosActionPerformed
 
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Tickets_Comprados;
+    private javax.swing.JTextField User;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;
