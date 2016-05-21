@@ -58,7 +58,7 @@
                           <Component id="jScrollPane1" alignment="0" min="-2" pref="243" max="-2" attributes="0"/>
                           <Component id="jTF_PType" alignment="0" min="-2" pref="209" max="-2" attributes="0"/>
                           <Component id="jTFLugar" alignment="0" min="-2" pref="209" max="-2" attributes="0"/>
-                          <Component id="jTF_Dir" alignment="0" min="-2" pref="245" max="-2" attributes="0"/>
+                          <Component id="jTFDir" alignment="0" min="-2" pref="245" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="32767" attributes="0"/>
                   </Group>
@@ -122,7 +122,7 @@
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabel10" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jTF_Dir" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jTFDir" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
@@ -142,7 +142,7 @@
         <Property name="text" type="java.lang.String" value="Ciudad"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JTextField" name="jTF_Dir">
+    <Component class="javax.swing.JTextField" name="jTFDir">
       <Properties>
         <Property name="editable" type="boolean" value="false"/>
         <Property name="toolTipText" type="java.lang.String" value=""/>

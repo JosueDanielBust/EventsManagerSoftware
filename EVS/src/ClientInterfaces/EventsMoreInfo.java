@@ -59,9 +59,12 @@ public class EventsMoreInfo extends javax.swing.JFrame {
                    arg = sc2.getString(1);
                jTFNombre.setText(arg);
                
-               //traer el lugar segun id
-               arg=sc.getString(3);
-               comando = ev.consultarETName(arg);
+               
+               
+               
+               //traer el nombre del lugar segun id
+               String place_id=sc.getString(3);
+               comando = ev.consultarLugar(place_id);
                sc2 = dba.consultar(comando);
                
                if(sc2.next())
@@ -69,15 +72,46 @@ public class EventsMoreInfo extends javax.swing.JFrame {
                jTFLugar.setText(arg);
                
                
-               //traer fecha y hora
-               arg=sc.getString(5);
-               comando = ev.(arg);
+               //trer nombre de la ciudad segun id lugar
+               comando = ev.consultarCiudad(place_id);
                sc2 = dba.consultar(comando);
                
                if(sc2.next())
                    arg = sc2.getString(1);
-               .setText(arg);
+               jTFCiudad.setText(arg);
                
+               //trer dirección segun id lugar
+               comando = ev.consultarDir(place_id);
+               sc2 = dba.consultar(comando);
+               
+               if(sc2.next())
+                   arg = sc2.getString(1);
+               jTFDir.setText(arg);
+               
+               
+               //trer tipo de lugar segun id lugar
+               comando = ev.consultarPType(place_id);
+               sc2 = dba.consultar(comando);
+               
+               if(sc2.next())
+                   arg = sc2.getString(1);
+               jTF_PType.setText(arg);
+               
+             
+               //trer restricciones de lugar segun id lugar
+               comando = ev.consultarRestricciones(place_id);
+               sc2 = dba.consultar(comando);
+               
+               if(sc2.next())
+                   arg = sc2.getString(1);
+               jTF_PType.setText(arg);
+               
+               
+               //traer fecha y hora
+               arg=sc.getString(5);
+               String[] hora=arg.split("\\s+");
+               jTFFecha.setText(hora[0]);
+               jTFHora.setText(hora[1]);
              }
         }catch(SQLException e){
             e.printStackTrace();
@@ -97,7 +131,7 @@ public class EventsMoreInfo extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel6 = new javax.swing.JLabel();
-        jTF_Dir = new javax.swing.JTextField();
+        jTFDir = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         jTFCiudad = new javax.swing.JTextField();
@@ -122,8 +156,8 @@ public class EventsMoreInfo extends javax.swing.JFrame {
 
         jLabel6.setText("Ciudad");
 
-        jTF_Dir.setEditable(false);
-        jTF_Dir.setToolTipText("");
+        jTFDir.setEditable(false);
+        jTFDir.setToolTipText("");
 
         jLabel5.setText("Hora");
 
@@ -217,7 +251,7 @@ public class EventsMoreInfo extends javax.swing.JFrame {
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jTF_PType, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jTFLugar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTF_Dir, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jTFDir, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -265,7 +299,7 @@ public class EventsMoreInfo extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel10)
-                    .addComponent(jTF_Dir, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTFDir, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -311,7 +345,7 @@ public class EventsMoreInfo extends javax.swing.JFrame {
     }
 
     public void setjTF_Dir(JTextField jTF_Dir) {
-        this.jTF_Dir = jTF_Dir;
+        this.jTFDir = jTF_Dir;
     }
 
     public void setjTF_PType(JTextField jTF_PType) {
@@ -341,11 +375,11 @@ public class EventsMoreInfo extends javax.swing.JFrame {
     private javax.swing.JTextArea jTA_Rest;
     private javax.swing.JTextField jTFCategoria;
     private javax.swing.JTextField jTFCiudad;
+    private javax.swing.JTextField jTFDir;
     private javax.swing.JTextField jTFFecha;
     private javax.swing.JTextField jTFHora;
     private javax.swing.JTextField jTFLugar;
     private javax.swing.JTextField jTFNombre;
-    private javax.swing.JTextField jTF_Dir;
     private javax.swing.JTextField jTF_PType;
     // End of variables declaration//GEN-END:variables
 }

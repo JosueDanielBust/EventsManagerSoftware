@@ -13,4 +13,37 @@ public class Event {
 private String id,type,place;
 
     public Event(){}
+    
+    
+    public String consultarPorId(String id){
+        return ("SELECT *  FROM EVENT WHERE EVENT_ID = "+id);    
+    }
+    
+    public String consultarEventCategory(String id_c){
+        return ("Select ECATEGORY FROM EVENT_CATEGORY WHERE ECATEGORY_ID = "+id_c);
+    }
+    
+    public String consultarETName(String id_et){
+        return ("Select ETYPE_NAME FROM EVENT_TYPE WHERE ETYPE_ID = "+id_et);
+    }
+    
+    public String consultarLugar(String id_pl){
+        return ("Select PLACE_NAME FROM PLACE WHERE PLACE_ID = "+id_pl);
+    }
+    
+    public String consultarCiudad(String id_ci){
+        return ("Select CITY_NAME FROM PLACE p INNER JOIN CITY c ON p.CITY_ID = c.CITY_ID AND p.PLACE_ID = "+id_ci);
+    }
+     
+    public String consultarDir(String id_dir){
+        return ("Select PLACE_ADDRESS FROM PLACE WHERE PLACE_ID = "+id_dir);
+    }
+    
+    public String consultarPType(String id_pt){
+        return ("Select PLACE_TYPE FROM PLACE pl INNER JOIN PLACE_TYPE pt ON pl.PTYPE_ID = pt.PTYPE_ID WHERE PLACE_ID = "+id_pt);
+    }
+    
+    public String consultarRestricciones(String id_pl){
+        return ("Select ACCESS_RESTRICTIONS FROM PLACE WHERE PLACE_ID = "+id_pl);
+    }
 }

@@ -1,8 +1,9 @@
 package ClientInterfaces;
 
 
-import javax.swing.JComboBox;
+
 import javax.swing.table.DefaultTableModel;
+import javax.swing.JComboBox;
 import java.util.ArrayList;
 import java.sql.*;
 
@@ -10,6 +11,7 @@ import Mundo.Ticket;
 import Mundo.Event;
 
 import MainInterfaces.DBAccess;
+import javax.swing.ComboBoxModel;
 
 /**
  *
@@ -271,7 +273,7 @@ public class BoughtTickets extends javax.swing.JFrame {
     }//GEN-LAST:event_jCBCategoriaActionPerformed
 
     private void MoreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MoreActionPerformed
-        //consultar y sacar en con setText()
+     
         new EventsMoreInfo(dba,id_person,id_event);
     }//GEN-LAST:event_MoreActionPerformed
 
@@ -291,9 +293,9 @@ public class BoughtTickets extends javax.swing.JFrame {
 
     private void jCBEventoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCBEventoActionPerformed
         JComboBox cb = (JComboBox)evt.getSource();
-        String cat= (String)cb.getSelectedItem();
+        String ev= (String)cb.getSelectedItem();
         
-        tk.setEvento(cat);
+        tk.setEvento(ev);
        
         rs=dba.consultar(tk.buscarFecha());      
         jCBFecha = new JComboBox(rsToArray(rs));
@@ -315,20 +317,34 @@ public class BoughtTickets extends javax.swing.JFrame {
         
         tk.setLugar(cat);
         
-        rs=dba.consultar(tk.buscarBoletas());    
         
-        while (rs.next()){
-             Object [] fila = new Object[3]; // Hay tres columnas en la tabla
-              
-            for (int i=0;i<3;i++)
-               fila[i] = rs.getObject(i+1); 
-           
-            jTBoletas.addRow(fila);
-     }
+        DefaultTableModel modelo = new DefaultTableModel();
+        jCBLugar.setModel((ComboBoxModel<String>) modelo);
         
-        rs=dba.consultar(tk.buscarTicketId());
+        try{
+            rs=dba.consultar(tk.buscarBoletas());    
+            ResultSetMetaData rsMD = rs.getMetaData();
+            int nColumnas = rsMD.getColumnCount();
+            
+            while (rs.next()){
+                 Object [] fila = new Object[nColumnas]; // Hay tres columnas en la tabla
+
+                for (int i=0;i<nColumnas;i++)
+                   fila[i] = rs.getObject(i+1); 
+
+                modelo.addRow(fila);
+            }
+            
+            rs=dba.consultar(tk.buscarEventId());
+             if (rs.next()){
+                id_event=rs.getString(1);
+                System.out.println("id_event cambío a: "+id_event);
+             }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
         
-       //sacar las boletas a la tabla
+        
     }//GEN-LAST:event_jCBLugarActionPerformed
 
     public JComboBox<String> getjCBCategoria() {

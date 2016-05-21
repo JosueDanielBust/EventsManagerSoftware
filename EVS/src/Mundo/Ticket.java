@@ -11,7 +11,8 @@ package Mundo;
  */
 public class Ticket {
     private String ticket_id, person_id, ttype_id, ciudad, categoria, evento, fecha, lugar;
-
+    
+    
 
     public Ticket(){}
 
@@ -137,9 +138,17 @@ public class Ticket {
     
     }
         
-    public String buscarTicketId(){
-        
-        return"";
+    public String buscarEventId(){
+        return ("SELECT event_id "+
+                "from event e " +
+                "inner join place p on p.place_id = p.place_id " +
+                "inner join city c on c.city_id = c.city_id " +
+                "inner join event_type et on et.etype_id = e.etype_id " +
+                "AND c.city_name = "+ciudad  +
+                "   AND et.etype_name = "+ evento +
+                " AND e.date_hour = "+ fecha +
+                " And p.place_name = "+ lugar);
+      
     }
     
 }
