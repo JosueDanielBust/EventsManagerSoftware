@@ -18,7 +18,7 @@ import java.sql.*;
  */
 public class EventsMoreInfo extends javax.swing.JFrame {
     private DBAccess dba;
-    private String idp,event_id;
+    private String idp;
     /**
      * Creates new form EventsMoreInfo
      */
@@ -26,24 +26,20 @@ public class EventsMoreInfo extends javax.swing.JFrame {
         initComponents();
         
         //inicializo las variables locales
-        event_id=e_id;
         dba=db;
-        idp=id;
-        
-        
+        idp=id;    
         ResultSet sc2;
-        Event ev=new Event();
         String arg,comando;
         
         //le paso el id para que me devuleva la consulta en un String
-        String sql = ev.consultarPorId(e_id);
+        String sql = Event.consultarPorId(e_id);
         ResultSet sc=dba.consultar(sql);
         try{
              if(sc.next()){
                
                //traer categoria segun id
                arg=sc.getString(1);
-               comando = ev.consultarEventCategory(arg);
+               comando = Event.consultarEventCategory(arg);
                sc2 = dba.consultar(comando);
                
                if(sc2.next())
@@ -52,19 +48,16 @@ public class EventsMoreInfo extends javax.swing.JFrame {
                
                //traer nombre del evento segun id
                arg=sc.getString(2);
-               comando = ev.consultarETName(arg);
+               comando = Event.consultarETName(arg);
                sc2 = dba.consultar(comando);
                
                if(sc2.next())
                    arg = sc2.getString(1);
                jTFNombre.setText(arg);
-               
-               
-               
-               
+                             
                //traer el nombre del lugar segun id
                String place_id=sc.getString(3);
-               comando = ev.consultarLugar(place_id);
+               comando = Event.consultarLugar(place_id);
                sc2 = dba.consultar(comando);
                
                if(sc2.next())
@@ -73,7 +66,7 @@ public class EventsMoreInfo extends javax.swing.JFrame {
                
                
                //trer nombre de la ciudad segun id lugar
-               comando = ev.consultarCiudad(place_id);
+               comando = Event.consultarCiudad(place_id);
                sc2 = dba.consultar(comando);
                
                if(sc2.next())
@@ -81,7 +74,7 @@ public class EventsMoreInfo extends javax.swing.JFrame {
                jTFCiudad.setText(arg);
                
                //trer dirección segun id lugar
-               comando = ev.consultarDir(place_id);
+               comando = Event.consultarDir(place_id);
                sc2 = dba.consultar(comando);
                
                if(sc2.next())
@@ -90,7 +83,7 @@ public class EventsMoreInfo extends javax.swing.JFrame {
                
                
                //trer tipo de lugar segun id lugar
-               comando = ev.consultarPType(place_id);
+               comando = Event.consultarPType(place_id);
                sc2 = dba.consultar(comando);
                
                if(sc2.next())
@@ -99,7 +92,7 @@ public class EventsMoreInfo extends javax.swing.JFrame {
                
              
                //trer restricciones de lugar segun id lugar
-               comando = ev.consultarRestricciones(place_id);
+               comando = Event.consultarRestricciones(place_id);
                sc2 = dba.consultar(comando);
                
                if(sc2.next())
@@ -320,42 +313,6 @@ public class EventsMoreInfo extends javax.swing.JFrame {
         dispose();
         new BoughtTickets(dba,idp);       
     }//GEN-LAST:event_JBSalirActionPerformed
-
-    
-    //setters para los TextField;
-    
-    public void setjTFCiudad(JTextField jTFCiudad) {
-        this.jTFCiudad = jTFCiudad;
-    }
-
-    public void setjTFFecha(JTextField jTFFecha) {
-        this.jTFFecha = jTFFecha;
-    }
-
-    public void setjTFHora(JTextField jTFHora) {
-        this.jTFHora = jTFHora;
-    }
-
-    public void setjTFLugar(JTextField jTFLugar) {
-        this.jTFLugar = jTFLugar;
-    }
-
-    public void setjTFNombre(JTextField jTFNombre) {
-        this.jTFNombre = jTFNombre;
-    }
-
-    public void setjTF_Dir(JTextField jTF_Dir) {
-        this.jTFDir = jTF_Dir;
-    }
-
-    public void setjTF_PType(JTextField jTF_PType) {
-        this.jTF_PType = jTF_PType;
-    }
-
-    public void setjTFcategoria(JTextField jTFcategoria) {
-        this.jTFCategoria = jTFcategoria;
-    }
-
 
     
     

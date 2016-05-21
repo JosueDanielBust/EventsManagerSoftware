@@ -1,7 +1,5 @@
 package ClientInterfaces;
 
-
-
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JComboBox;
 import java.util.ArrayList;
@@ -27,7 +25,7 @@ public class BoughtTickets extends javax.swing.JFrame {
      */
     public BoughtTickets(DBAccess conexion,String id_p) {
         initComponents();
-        setVisible(true);
+        this.setVisible(true);
         id_person=id_p;
         dba=conexion;
        
@@ -37,7 +35,10 @@ public class BoughtTickets extends javax.swing.JFrame {
         jCBCategoria = new JComboBox(rsToArray(rs));
         
     }
-    public BoughtTickets() {}
+    public BoughtTickets() {
+        initComponents();
+        this.setVisible(true);
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -323,27 +324,6 @@ public class BoughtTickets extends javax.swing.JFrame {
         
     }//GEN-LAST:event_jCBLugarActionPerformed
 
-    public JComboBox<String> getjCBCategoria() {
-        return jCBCategoria;
-    }
-
-    public JComboBox<String> getjCBCiudad() {
-        return jCBCiudad;
-    }
-
-    public JComboBox<String> getjCBEvento() {
-        return jCBEvento;
-    }
-
-    public JComboBox<String> getjCBFecha() {
-        return jCBFecha;
-    }
-
-    public JComboBox<String> getjCBLugar() {
-        return jCBLugar;
-    }
-
-    
     
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
