@@ -137,22 +137,22 @@ public class Login extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void registrarseBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registrarseBActionPerformed
-        setVisible(false);
+        dispose();
         new Register(DBA);
     }//GEN-LAST:event_registrarseBActionPerformed
 
     private void ingresarBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ingresarBActionPerformed
-        ResultSet datosUsuario = DBA.consultar("SELECT PASSWORD FROM PERSON WHERE PERSON_EMAIL = '"+correoElectronicoTF.getText()+"';");
-        try {
-            System.out.print(datosUsuario.getObject(0));
-            if(datosUsuario != null && datosUsuario.getString("PASSWORD").equals(String.valueOf(contraseñaTF.getPassword()))){
-                setVisible(false);
+     try {
+            ResultSet datosUsuario = DBA.consultar("SELECT PASSWORD FROM PERSON WHERE PERSON_EMAIL = '"+correoElectronicoTF.getText()+"'");
+            datosUsuario.next();
+            if(datosUsuario.getString("PASSWORD").equals(String.valueOf(contraseñaTF.getPassword()))){
+                dispose();
                 new ClientMenu(DBA,PERSON_ID);
             }else{
                 alertaL.setText("El Correo Electronico y/o la Contraseña es Incorrecta");
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+            alertaL.setText("El Correo Electronico y/o la Contraseña es Incorrecta");
         }
     }//GEN-LAST:event_ingresarBActionPerformed
 

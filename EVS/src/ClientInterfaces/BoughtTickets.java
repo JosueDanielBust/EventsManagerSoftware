@@ -235,24 +235,6 @@ public class BoughtTickets extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    
-    
-    /**
-     * Convierte un ResultSet a un Array
-     * @param datos ResultSet con datos
-     * @return String[] con los datos del Set
-     */
-    public String[] rsToArray(ResultSet datos){
-        ArrayList<String> items = new ArrayList<>(100);    
-        try{
-            while(datos.next()){
-                items.add(datos.getString(1));
-            }
-        }catch(SQLException e){
-            e.printStackTrace();
-        }
-        return items.toArray(new String[items.size()]);
-    }
             
             
     private void SalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SalirActionPerformed
@@ -267,7 +249,7 @@ public class BoughtTickets extends javax.swing.JFrame {
         tk.setCategoria(cat);
        
         rs=dba.consultar(tk.buscarCiudades());      
-        jCBCiudad = new JComboBox(rsToArray(rs));
+        jCBCiudad = new JComboBox(dba.rsToArray(rs));
     }//GEN-LAST:event_jCBCategoriaActionPerformed
 
     private void MoreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MoreActionPerformed
@@ -317,14 +299,7 @@ public class BoughtTickets extends javax.swing.JFrame {
         
         rs=dba.consultar(tk.buscarBoletas());    
         
-        while (rs.next()){
-             Object [] fila = new Object[3]; // Hay tres columnas en la tabla
-              
-            for (int i=0;i<3;i++)
-               fila[i] = rs.getObject(i+1); 
-           
-            jTBoletas.addRow(fila);
-     }
+  
         
         rs=dba.consultar(tk.buscarTicketId());
         
