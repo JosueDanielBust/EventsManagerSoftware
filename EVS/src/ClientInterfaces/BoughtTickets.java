@@ -2,6 +2,7 @@ package ClientInterfaces;
 
 
 import javax.swing.JComboBox;
+import javax.swing.table.DefaultTableModel;
 import java.util.ArrayList;
 import java.sql.*;
 
@@ -15,7 +16,7 @@ import MainInterfaces.DBAccess;
  * @author Nicolas
  */
 public class BoughtTickets extends javax.swing.JFrame {
-    private String id_person;
+    private String id_person,id_event;
     private DBAccess dba;
     private Ticket tk;
     private ResultSet rs;
@@ -56,7 +57,7 @@ public class BoughtTickets extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jCBFecha = new javax.swing.JComboBox<>();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jTBoletas = new javax.swing.JTable();
         jLabel4 = new javax.swing.JLabel();
         jCBCiudad = new javax.swing.JComboBox<>();
         jLabel6 = new javax.swing.JLabel();
@@ -110,25 +111,24 @@ public class BoughtTickets extends javax.swing.JFrame {
             }
         });
 
-        jTable1.setAutoCreateRowSorter(true);
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jTBoletas.setAutoCreateRowSorter(true);
+        jTBoletas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null}
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
             },
             new String [] {
-                "Tipo de Boleta", "Precio"
+                "Tipo de Boleta", "Precio", "Cantidad"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Short.class
+                java.lang.String.class, java.lang.Short.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false
+                false, false, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -139,8 +139,8 @@ public class BoughtTickets extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jTable1.setRowHeight(18);
-        jScrollPane1.setViewportView(jTable1);
+        jTBoletas.setRowHeight(18);
+        jScrollPane1.setViewportView(jTBoletas);
 
         jLabel4.setText("Categoria del Evento");
 
@@ -271,10 +271,8 @@ public class BoughtTickets extends javax.swing.JFrame {
     }//GEN-LAST:event_jCBCategoriaActionPerformed
 
     private void MoreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MoreActionPerformed
-        //hay que pasarle la info
-        Event ev= new Event();
         //consultar y sacar en con setText()
-        new EventsMoreInfo(dba,id_person,ev);
+        new EventsMoreInfo(dba,id_person,id_event);
     }//GEN-LAST:event_MoreActionPerformed
 
     private void jCBCategoriaItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jCBCategoriaItemStateChanged
@@ -316,11 +314,46 @@ public class BoughtTickets extends javax.swing.JFrame {
         String cat= (String)cb.getSelectedItem();
         
         tk.setLugar(cat);
-       
-        rs=dba.consultar(tk.buscarBoletas());      
+        
+        rs=dba.consultar(tk.buscarBoletas());    
+        
+        while (rs.next()){
+             Object [] fila = new Object[3]; // Hay tres columnas en la tabla
+              
+            for (int i=0;i<3;i++)
+               fila[i] = rs.getObject(i+1); 
+           
+            jTBoletas.addRow(fila);
+     }
+        
+        rs=dba.consultar(tk.buscarTicketId());
+        
        //sacar las boletas a la tabla
     }//GEN-LAST:event_jCBLugarActionPerformed
 
+    public JComboBox<String> getjCBCategoria() {
+        return jCBCategoria;
+    }
+
+    public JComboBox<String> getjCBCiudad() {
+        return jCBCiudad;
+    }
+
+    public JComboBox<String> getjCBEvento() {
+        return jCBEvento;
+    }
+
+    public JComboBox<String> getjCBFecha() {
+        return jCBFecha;
+    }
+
+    public JComboBox<String> getjCBLugar() {
+        return jCBLugar;
+    }
+
+    
+    
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton More;
@@ -337,7 +370,7 @@ public class BoughtTickets extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTBoletas;
     private java.util.List list1;
     private javax.persistence.Query query1;
     // End of variables declaration//GEN-END:variables
