@@ -33,7 +33,11 @@ public class BoughtTickets extends javax.swing.JFrame {
      
         rs=dba.consultar(Ticket.buscarCategorias(id_person));      
         jCBCategoria = new JComboBox(rsToArray(rs));
-        
+        jCBCiudad.setEnabled(false);
+        jCBEvento.setEnabled(false);
+        jCBFecha.setEnabled(false);
+        jCBLugar.setEnabled(false);
+    
     }
     public BoughtTickets() {
         initComponents();
@@ -260,14 +264,19 @@ public class BoughtTickets extends javax.swing.JFrame {
 
     private void jCBCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCBCategoriaActionPerformed
         JComboBox cb = (JComboBox)evt.getSource();
-        categoria = (String)cb.getSelectedItem();      
+        categoria = (String)cb.getSelectedItem();       
         rs=dba.consultar(Ticket.buscarCiudades(categoria,id_person));      
         jCBCiudad = new JComboBox(rsToArray(rs));
+        jCBCiudad.setEnabled(true);
+        jCBEvento.setEnabled(false);
+        jCBFecha.setEnabled(false);
+        jCBLugar.setEnabled(false);
     }//GEN-LAST:event_jCBCategoriaActionPerformed
 
     private void MoreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MoreActionPerformed
-           new EventsMoreInfo(dba,id_person,id_event);
-           //cerrar la actual(?)
+        dispose();   
+        new EventsMoreInfo(dba,id_person,id_event);
+           
     }//GEN-LAST:event_MoreActionPerformed
 
     private void jCBCiudadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCBCiudadActionPerformed
@@ -275,6 +284,9 @@ public class BoughtTickets extends javax.swing.JFrame {
         ciudad = (String)cb.getSelectedItem();
         rs=dba.consultar(Ticket.buscarEventos(ciudad,id_person));      
         jCBEvento = new JComboBox(rsToArray(rs));
+        jCBEvento.setEnabled(true);
+        jCBFecha.setEnabled(false);
+        jCBLugar.setEnabled(false);
     }//GEN-LAST:event_jCBCiudadActionPerformed
 
     private void jCBEventoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCBEventoActionPerformed
@@ -282,6 +294,8 @@ public class BoughtTickets extends javax.swing.JFrame {
         evento= (String)cb.getSelectedItem();
         rs=dba.consultar(Ticket.buscarFecha(evento,id_person));      
         jCBFecha = new JComboBox(rsToArray(rs));
+        jCBFecha.setEnabled(true);
+        jCBLugar.setEnabled(false);
     }//GEN-LAST:event_jCBEventoActionPerformed
 
     private void jCBFechaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCBFechaActionPerformed
@@ -289,6 +303,7 @@ public class BoughtTickets extends javax.swing.JFrame {
         fecha= (String)cb.getSelectedItem();
         rs=dba.consultar(Ticket.buscarLugar(fecha,id_person));      
         jCBLugar = new JComboBox(rsToArray(rs));
+        jCBLugar.setEnabled(true);
     }//GEN-LAST:event_jCBFechaActionPerformed
 
     private void jCBLugarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCBLugarActionPerformed
