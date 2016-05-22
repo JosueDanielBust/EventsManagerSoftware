@@ -154,7 +154,7 @@ public class Login extends javax.swing.JFrame {
             ResultSet datosUsuario = dba.funcion("LOGIN_CONFIRMATION(?,?)", JDBCType.NUMERIC, parametros);
             datosUsuario.next();
             dispose();
-            new ClientMenu(dba, datosUsuario.getString("ID"));
+            new ClientMenu(dba);
         } catch (SQLException ex) {
             alertaL.setText("El Correo Electronico o la Contraseña es Incorrecta");
         }

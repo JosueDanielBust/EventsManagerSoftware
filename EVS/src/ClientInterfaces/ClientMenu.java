@@ -1,9 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package ClientInterfaces;
+
 import MainInterfaces.DBAccess;
 import Mundo.Person;
 /**
@@ -11,13 +7,11 @@ import Mundo.Person;
  * @author Nicolas
  */
 public class ClientMenu extends javax.swing.JFrame {
-    private String id_person;
     private DBAccess dba;
     /**
      * Creates new form ClientMenu
      */
-    public ClientMenu(DBAccess db,String id) {
-        this.id_person=id;
+    public ClientMenu(DBAccess db) {
         dba=db;
         initComponents();
         setVisible(true);
@@ -105,12 +99,12 @@ public class ClientMenu extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         dispose();
-        new EventSearch(dba,id_person);
+        new EventSearch(dba);
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void Tickets_CompradosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Tickets_CompradosActionPerformed
         dispose();
-        new BoughtTickets(dba,id_person);     
+        new BoughtTickets(dba);     
     }//GEN-LAST:event_Tickets_CompradosActionPerformed
 
 

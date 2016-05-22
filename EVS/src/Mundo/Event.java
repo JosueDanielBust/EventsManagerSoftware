@@ -13,9 +13,36 @@ import java.sql.SQLException;
  * @author Julian
  */
 public class Event {
+    private static String event_id,ecategoria,ename;
+
+    public static String getEname() {
+        return ename;
+    }
+
+    public static void setEname(String ename) {
+        Event.ename = ename;
+    }  
     
-    public static String consultarPorId(String id){
-        return ("SELECT *  FROM EVENT WHERE EVENT_ID = "+id);    
+    public static String getEvent_id() {
+        return event_id;
+    }
+
+    public static String getCategoria() {
+        return ecategoria;
+    }
+
+    public static void setEvent_id(String event_id) {
+        Event.event_id = event_id;
+    }
+
+    public static void setCategoria(String categoria) {
+        Event.ecategoria = categoria;
+    }
+    
+    
+    
+    public static String consultarPorId(){
+        return ("SELECT *  FROM EVENT WHERE EVENT_ID = "+getEvent_id());    
     }
     
     public static String consultarEventCategory(String id_c){
