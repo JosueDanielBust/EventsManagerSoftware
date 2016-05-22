@@ -1,7 +1,6 @@
 package MainInterfaces;
 
 import AdminInterfaces.Administrator_Panel;
-import ClientInterfaces.ClientConfiguration;
 import ClientInterfaces.ClientMenu;
 import ClientInterfaces.Register;
 import Mundo.Person;
