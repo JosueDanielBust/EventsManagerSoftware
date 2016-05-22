@@ -150,8 +150,8 @@ public class Login extends javax.swing.JFrame {
         parametros.add(Types.NUMERIC);
         parametros.add(Types.NUMERIC);
         try {
-            ArrayList datosUsuario = dba.procedureSearch("LOGIN_CONFIRMATION(?,?,?,?)", parametros);
-            Person.setPERSON_ID((String)datosUsuario.get(0));
+            ArrayList<String> datosUsuario = dba.procedureSearch("LOGIN_CONFIRMATION(?,?,?,?)", parametros);
+            Person.setPERSON_ID(datosUsuario.get(0));
             dispose();
             if (datosUsuario.get(1).equals("2")) {
                 new ClientMenu(dba);

@@ -82,8 +82,8 @@ private Connection conexion;
             if(parametrosIN_OUT.get(i-1) instanceof String){
                 st.setString(i,(String)parametrosIN_OUT.get(i-1));
             }else{
-                salida.add(i);
                 st.registerOutParameter(i,(Integer)parametrosIN_OUT.get(i-1));
+                salida.add(i);
             }
             
         }
