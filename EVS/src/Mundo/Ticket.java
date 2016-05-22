@@ -12,7 +12,7 @@ package Mundo;
 public class Ticket {
      
     public Ticket(){}
-
+    
    
     //tipos de eventos que tienen boletas con este usuario
     public static String buscarCategorias(String person_id){

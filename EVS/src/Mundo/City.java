@@ -1,0 +1,24 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package Mundo;
+
+/**
+ *
+ * @author Nicolas
+ */
+public class City {
+    
+    private static String city_Name;
+
+    public static String getCity_Name() {
+        return city_Name;
+    }
+
+    public static void setCity_Name(String city_Name) {
+        City.city_Name = city_Name;
+    }
+    
+}

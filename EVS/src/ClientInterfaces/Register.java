@@ -27,9 +27,9 @@ public class Register extends javax.swing.JFrame {
      * Creates new form New_Account
      */
     public Register(DBAccess DBA) {
+        this.dba = DBA;
         initComponents();
         setVisible(true);
-        this.dba = DBA;
         valEPS();
     }
 
@@ -38,7 +38,7 @@ public class Register extends javax.swing.JFrame {
      */
     public void valEPS(){
         try {
-            epsCB = new JComboBox(dba.rsToArray(Event.consultarTodasCiudades(dba)));
+            epsCB = new JComboBox(dba.rsToArray(dba.consultar(Event.consultarTodasCiudades())));
         } catch (SQLException ex) {
             alerta.setText("Error: No Existen Las Ciudades");
         }
@@ -228,7 +228,7 @@ public class Register extends javax.swing.JFrame {
             parametros.add((String)epsCB.getSelectedItem());
             parametros.add(2);
             try {
-                dba.procedure("CREATE_ACC_CONFIRMATION(?,?,?,?,?,?,?,?)",parametros);
+                dba.procedureWrite("CREATE_ACC_CONFIRMATION(?,?,?,?,?,?,?,?)",parametros);
                 alerta.setText("Se Creo su Cuenta Exitosamente");
             } catch (SQLException ex) {
                 alerta.setText("La identificacion o el Email ya existe, o algun Campo es Erroneo");

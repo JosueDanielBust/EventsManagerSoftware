@@ -150,11 +150,17 @@ public class Login extends javax.swing.JFrame {
         ArrayList parametros = new ArrayList();
         parametros.add(correoElectronicoTF.getText());
         parametros.add(String.valueOf(contraseñaTF.getPassword()));
+        parametros.add(JDBCType.NUMERIC);
+        parametros.add(JDBCType.NUMERIC);
         try {
-            ResultSet datosUsuario = dba.funcion("LOGIN_CONFIRMATION(?,?)", JDBCType.NUMERIC, parametros);
+            ResultSet datosUsuario = dba.procedureSearch("LOGIN_CONFIRMATION(?,?,?,?)", parametros);
             datosUsuario.next();
             dispose();
-            new ClientMenu(dba, datosUsuario.getString("ID"));
+            if (datosUsuario.getInt("OCCUPATION_ID") == 2) {
+                new ClientMenu(dba, datosUsuario.getString("ID"));
+            } else {
+                
+            }
         } catch (SQLException ex) {
             alertaL.setText("El Correo Electronico o la Contraseña es Incorrecta");
         }

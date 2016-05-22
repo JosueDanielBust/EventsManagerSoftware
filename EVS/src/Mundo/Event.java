@@ -5,18 +5,17 @@
  */
 package Mundo;
 
-import java.sql.ResultSet;
-import MainInterfaces.DBAccess;
-import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.Calendar;
 /**
  *
  * @author Julian
  */
 public class Event {
-private String id,type,place;
+
     
     public static String consultarPorId(String id){
-        return ("SELECT *  FROM EVENT WHERE EVENT_ID = "+id);    
+        return ("SELECT * FROM EVENT WHERE EVENT_ID = "+id);    
     }
     
     public static String consultarEventCategory(String id_c){
@@ -47,8 +46,45 @@ private String id,type,place;
         return ("Select ACCESS_RESTRICTIONS FROM PLACE WHERE PLACE_ID = "+id_pl);
     }
     
-    public static ResultSet consultarTodasCiudades(DBAccess dba) throws SQLException{
-        return dba.consultar("SELECT CITY_NAME FROM CITY");
+    public static String consultarTodasCiudades(){
+        return "SELECT CITY_NAME FROM CITY";
+    }
+    
+    public static String consultarEventCategoryNext(){
+        return  "SELECT ECATEGORY FROM EVENT_CATEGORY"
+                + "INNER JOIN EVENT_TYPE ON EVENT_CATEGORY.ECATEGORY_ID = EVENT_TYPE.ECATEGORY_ID"
+                + "INNER JOIN EVENT ON EVENT_TYPE.ETYPE_ID = EVENT.ETYPE_ID"
+                + consularEventosNext();
+    }
+    
+    public static String preguntaEventCategory(String eventCategory){
+        return "AND ECATEGORY = " + eventCategory;
+    }
+    
+    public static String consultarCiudadNext(String eventCategory){
+        return  "SELECT CITY_NAME FROM CITY"
+                + "INNER JOIN PLACE ON CITY.CITY_ID = PLACE.CITY_ID"
+                + "INNER JOIN EVENT ON PLACE.PLACE_ID = EVENT.PLACE_ID"
+                + consularEventosNext()
+                + "INNER JOIN EVENT_TYPE ON EVENT.ETYPE_ID = EVENT_TYPE.ETYPE_ID"
+                + "INNER JOIN EVENT_CATEGORY ON EVENT_TYPE.ECATEGORY_ID = EVENT_CATEGORY.ECATEGORY_ID"
+                + preguntaEventCategory(eventCategory);
+    }
+    
+    public static String preguntaCiudad(String city_Name){
+        return "AND CITY_NAME = " + city_Name;
+    }
+    
+    public static String consultarNombreEventoNext(String city_Name,String eventCategory){
+        return "SELECT ETYPE_NAME FROM EVENT_TYPE"
+                + "INNER JOIN EVENT_CATEGORY ON EVENT_TYPE.ECATEGORY_ID = EVENT_CATEGORY.ECATEGORY_ID"
+                + preguntaEventCategory(eventCategory)
+                + 
+    }
+    
+    public static String consularEventosNext(){
+        return "AND EVENT.EVENT_ID IN (SELECT EVENT_ID FROM EVENT"
+                + "WHERE DATE_HOUR >= '" + new Timestamp(Calendar.getInstance().getTime().getTime()) + "')";
     }
     
 }

@@ -6,6 +6,10 @@
 package ClientInterfaces;
 import MainInterfaces.DBAccess;
 import Mundo.Person;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 /**
  *
  * @author Nicolas
@@ -20,9 +24,20 @@ public class ClientMenu extends javax.swing.JFrame {
         this.id_person=id;
         dba=db;
         initComponents();
+        mostrarNombre();
         setVisible(true);
     }
 
+    public void mostrarNombre(){
+        try {
+            ResultSet nombre = dba.consultar(Person.consultarNombre(id_person));
+            nombre.next();
+            userNameTF.setText(nombre.getNString("PERSON_NAME"));
+        } catch (SQLException ex) {
+            System.out.println("ERROR: No se pudo Cargar el Nombre del Usuario");
+        }
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -34,9 +49,9 @@ public class ClientMenu extends javax.swing.JFrame {
 
         list1 = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : ((javax.persistence.Query)null).getResultList();
         jLabel1 = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
+        BuscarEventoB = new javax.swing.JButton();
         Tickets_Comprados = new javax.swing.JButton();
-        User = new javax.swing.JTextField();
+        userNameTF = new javax.swing.JTextField();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
@@ -45,10 +60,10 @@ public class ClientMenu extends javax.swing.JFrame {
 
         jLabel1.setText("Usuario:");
 
-        jButton2.setText("Buscar Eventos");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        BuscarEventoB.setText("Buscar Eventos");
+        BuscarEventoB.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                BuscarEventoBActionPerformed(evt);
             }
         });
 
@@ -59,7 +74,7 @@ public class ClientMenu extends javax.swing.JFrame {
             }
         });
 
-        User.setEditable(false);
+        userNameTF.setEditable(false);
 
         jMenu1.setText("Configuracion");
         jMenuBar1.add(jMenu1);
@@ -76,14 +91,14 @@ public class ClientMenu extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 39, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(BuscarEventoB, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(Tickets_Comprados, javax.swing.GroupLayout.DEFAULT_SIZE, 280, Short.MAX_VALUE))
                 .addGap(36, 36, 36))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(User, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(userNameTF, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -92,9 +107,9 @@ public class ClientMenu extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(User, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(userNameTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(jButton2)
+                .addComponent(BuscarEventoB)
                 .addGap(18, 18, 18)
                 .addComponent(Tickets_Comprados)
                 .addContainerGap(31, Short.MAX_VALUE))
@@ -103,10 +118,10 @@ public class ClientMenu extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void BuscarEventoBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BuscarEventoBActionPerformed
         dispose();
         new EventSearch(dba,id_person);
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_BuscarEventoBActionPerformed
 
     private void Tickets_CompradosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Tickets_CompradosActionPerformed
         dispose();
@@ -116,13 +131,13 @@ public class ClientMenu extends javax.swing.JFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton BuscarEventoB;
     private javax.swing.JButton Tickets_Comprados;
-    private javax.swing.JTextField User;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private java.util.List list1;
+    private javax.swing.JTextField userNameTF;
     // End of variables declaration//GEN-END:variables
 }

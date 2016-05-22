@@ -5,9 +5,6 @@
  */
 package Mundo;
 
-import MainInterfaces.DBAccess;
-import java.sql.SQLException;
-
 /**
  *
  * @author Nicolas
@@ -24,10 +21,8 @@ public class Person {
         Person.PERSON_ID = PERSON_ID;
     }
     
-    public static String consultarPassword_Id(DBAccess dba,String correoElectronico) throws SQLException{
-        return "SELECT PASSWORD,PERSON_ID FROM PERSON WHERE PERSON_EMAIL = '"+correoElectronico+"'";
+    public static String consultarNombre(String PERSON_ID){
+        return "SELECT PERSON_NAME FROM PERSON WHERE PERSON_ID = '" + PERSON_ID + "'";
     }
-    
-    
     
 }
