@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.sql.*;
 
 import Mundo.Ticket;
-import Mundo.Event;
 
 import MainInterfaces.DBAccess;
 import javax.swing.ComboBoxModel;
@@ -237,24 +236,6 @@ public class BoughtTickets extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    
-    
-    /**
-     * Convierte un ResultSet a un Array
-     * @param datos ResultSet con datos
-     * @return String[] con los datos del Set
-     */
-    public String[] rsToArray(ResultSet datos){
-        ArrayList<String> items = new ArrayList<>(100);    
-        try{
-            while(datos.next()){
-                items.add(datos.getString(1));
-            }
-        }catch(SQLException e){
-            e.printStackTrace();
-        }
-        return items.toArray(new String[items.size()]);
-    }
             
             
     private void SalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SalirActionPerformed

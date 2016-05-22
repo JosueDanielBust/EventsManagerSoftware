@@ -5,14 +5,15 @@
  */
 package Mundo;
 
+import java.sql.ResultSet;
+import MainInterfaces.DBAccess;
+import java.sql.SQLException;
 /**
  *
  * @author Julian
  */
 public class Event {
-
-    public Event(){}
-    
+private String id,type,place;
     
     public static String consultarPorId(String id){
         return ("SELECT *  FROM EVENT WHERE EVENT_ID = "+id);    
@@ -45,4 +46,9 @@ public class Event {
     public static String consultarRestricciones(String id_pl){
         return ("Select ACCESS_RESTRICTIONS FROM PLACE WHERE PLACE_ID = "+id_pl);
     }
+    
+    public static ResultSet consultarTodasCiudades(DBAccess dba) throws SQLException{
+        return dba.consultar("SELECT CITY_NAME FROM CITY");
+    }
+    
 }

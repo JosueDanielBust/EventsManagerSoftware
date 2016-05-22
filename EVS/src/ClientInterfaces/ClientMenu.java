@@ -5,6 +5,7 @@
  */
 package ClientInterfaces;
 import MainInterfaces.DBAccess;
+import Mundo.Person;
 /**
  *
  * @author Nicolas
@@ -20,7 +21,6 @@ public class ClientMenu extends javax.swing.JFrame {
         dba=db;
         initComponents();
         setVisible(true);
-        
     }
 
     /**

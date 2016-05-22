@@ -6,6 +6,7 @@
 package MainInterfaces;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -52,16 +53,40 @@ private Connection conexion;
      return true;
     }
     
-    public ResultSet consultar(String sql){
-        ResultSet salida = null;
-        try{
-            PreparedStatement st = getConexion().prepareStatement(sql);
-            salida = st.executeQuery();
-          //  salida.next();
-          // System.out.println(salida.getString("PASSWORD"));
-            
-        }catch(SQLException e){}   
+    public ResultSet consultar(String sql) throws SQLException{
+        ResultSet salida;
+        PreparedStatement st = getConexion().prepareStatement(sql);
+        salida = st.executeQuery();         
         return salida;
+    }
+    
+    public ResultSet funcion(String NombreFuncion,SQLType tipoRetorno, ArrayList parametros) throws SQLException{
+        ResultSet salida;
+        CallableStatement st = conexion.prepareCall("{?=call "+ NombreFuncion +"}");
+        st.registerOutParameter(1,tipoRetorno);
+        for(int i = 2; i <= parametros.size();i++) st.setObject(i,parametros.get(i-2));
+        salida = st.executeQuery();
+        return salida;
+    }
+    
+    public void procedure(String NombreProcedure,ArrayList parametros) throws SQLException{
+        CallableStatement st = conexion.prepareCall("{call "+ NombreProcedure +"}");
+        for(int i = 1; i <= parametros.size();i++) st.setObject(i,parametros.get(i-1));
+        st.execute();
+        getConexion().commit();
+    }
+    
+        /**
+     * Convierte un ResultSet a un Array
+     * @param datos ResultSet con datos
+     * @return String[] con los datos del Set
+     */
+    public String[] rsToArray(ResultSet datos) throws SQLException{
+        ArrayList<String> items = new ArrayList(100);    
+        while(datos.next()){
+            items.add(datos.getString(1));
+        }
+        return items.toArray(new String[items.size()]);
     }
  
 }
