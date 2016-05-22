@@ -32,9 +32,10 @@ public class EventsMoreInfo extends javax.swing.JFrame {
         String arg,comando;
         
         //le paso el id para que me devuleva la consulta en un String
-        String sql = Event.consultarPorId(e_id);
-        ResultSet sc=dba.consultar(sql);
+        
         try{
+            String sql = Event.consultarPorId(e_id);
+            ResultSet sc=dba.consultar(sql);
              if(sc.next()){
                
                //traer categoria segun id

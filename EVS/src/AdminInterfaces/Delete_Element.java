@@ -10,6 +10,7 @@ import java.util.HashMap;
 import MainInterfaces.DBAccess;
 import Mundo.DeleteElement;
 import java.sql.ResultSet;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -150,10 +151,13 @@ public class Delete_Element extends javax.swing.JFrame {
         
         tabla = (String)cb.getSelectedItem();
         tabla  = tablas.get(tabla);
-        statement = DeleteElement.consultarElementos(tabla);       
-        rs=dba.consultar(statement);      
-        
-        jCBElemento = new JComboBox(dba.rsToArray(rs));
+        try{
+            statement = DeleteElement.consultarElementos(tabla);       
+            rs=dba.consultar(statement);       
+            jCBElemento = new JComboBox(dba.rsToArray(rs));
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null,"Error: "+e.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+        }
         jCBElemento.setEnabled(true);
     }//GEN-LAST:event_jCBCategoriaActionPerformed
 
@@ -167,43 +171,6 @@ public class Delete_Element extends javax.swing.JFrame {
        resultado =dba.ejecutar(statement); 
     }//GEN-LAST:event_jButton2ActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Delete_Element.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Delete_Element.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Delete_Element.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Delete_Element.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Delete_Element().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;

@@ -1,5 +1,6 @@
 package ClientInterfaces;
 
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JComboBox;
 import java.util.ArrayList;
@@ -29,10 +30,14 @@ public class BoughtTickets extends javax.swing.JFrame {
         dba=conexion;
        
         //traer las categorias disponibles al comboBox
-     
-        rs=dba.consultar(Ticket.buscarCategorias(id_person));      
-        jCBCategoria = new JComboBox(dba.rsToArray(rs));
-        jCBCiudad.setEnabled(false);
+        try{
+            rs=dba.consultar(Ticket.buscarCategorias(id_person));      
+            jCBCategoria = new JComboBox(dba.rsToArray(rs));
+        }catch(Exception e){
+	  JOptionPane.showMessageDialog(null,e.getMessage(),"Mensaje de Error",JOptionPane.ERROR_MESSAGE);
+        }
+            
+            jCBCiudad.setEnabled(false);
         jCBEvento.setEnabled(false);
         jCBFecha.setEnabled(false);
         jCBLugar.setEnabled(false);
@@ -245,9 +250,13 @@ public class BoughtTickets extends javax.swing.JFrame {
 
     private void jCBCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCBCategoriaActionPerformed
         JComboBox cb = (JComboBox)evt.getSource();
-        categoria = (String)cb.getSelectedItem();       
-        rs=dba.consultar(Ticket.buscarCiudades(categoria,id_person));      
-        jCBCiudad = new JComboBox(dba.rsToArray(rs));
+        categoria = (String)cb.getSelectedItem();    
+        try{
+            rs=dba.consultar(Ticket.buscarCiudades(categoria,id_person));      
+            jCBCiudad = new JComboBox(dba.rsToArray(rs));
+         }catch(Exception e){
+            JOptionPane.showMessageDialog(null,"Error: "+e.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+        }
         jCBCiudad.setEnabled(true);
         jCBEvento.setEnabled(false);
         jCBFecha.setEnabled(false);
@@ -263,8 +272,14 @@ public class BoughtTickets extends javax.swing.JFrame {
     private void jCBCiudadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCBCiudadActionPerformed
         JComboBox cb = (JComboBox)evt.getSource();
         ciudad = (String)cb.getSelectedItem();
-        rs=dba.consultar(Ticket.buscarEventos(ciudad,id_person));      
-        jCBEvento = new JComboBox(dba.rsToArray(rs));
+            
+        try{
+            rs=dba.consultar(Ticket.buscarEventos(ciudad,id_person));      
+            jCBEvento = new JComboBox(dba.rsToArray(rs));
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null,"Error: "+e.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+        }
+        
         jCBEvento.setEnabled(true);
         jCBFecha.setEnabled(false);
         jCBLugar.setEnabled(false);
@@ -273,8 +288,15 @@ public class BoughtTickets extends javax.swing.JFrame {
     private void jCBEventoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCBEventoActionPerformed
         JComboBox cb = (JComboBox)evt.getSource();
         evento= (String)cb.getSelectedItem();
-        rs=dba.consultar(Ticket.buscarFecha(evento,id_person));      
-        jCBFecha = new JComboBox(dba.rsToArray(rs));
+        
+        try{
+            rs=dba.consultar(Ticket.buscarFecha(evento,id_person)); 
+            jCBFecha = new JComboBox(dba.rsToArray(rs));
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null,"Error: "+e.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+        }
+        
+     
         jCBFecha.setEnabled(true);
         jCBLugar.setEnabled(false);
     }//GEN-LAST:event_jCBEventoActionPerformed
