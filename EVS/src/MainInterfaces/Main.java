@@ -5,8 +5,6 @@
  */
 package MainInterfaces;
 
-import Mundo.Person;
-
 /**
  *
  * @author Nicolas

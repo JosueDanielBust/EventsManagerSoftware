@@ -149,8 +149,8 @@ public class Login extends javax.swing.JFrame {
     private void ingresarBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ingresarBActionPerformed
         dispose();
         new ClientMenu(dba);
-        String pass;
-        ArrayList parametros = new ArrayList();
+        //String pass;
+        //ArrayList parametros = new ArrayList();
         //parametros.add(correoElectronicoTF.getText());
        
        // parametros.add(String.valueOf(contraseñaTF.getPassword()));
@@ -160,7 +160,7 @@ public class Login extends javax.swing.JFrame {
             if(datosUsuario.next());
              pass = datosUsuario.getString(1);
             dispose();
-            new ClientMenu(dba);
+            new ClientMenu2(dba);
         } catch (SQLException ex) {
             alertaL.setText("El Correo Electronico o la Contraseña es Incorrecta");
         }
