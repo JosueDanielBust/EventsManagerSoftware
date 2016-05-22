@@ -5,6 +5,7 @@
  */
 package ClientInterfaces;
 import MainInterfaces.DBAccess;
+import MainInterfaces.Login;
 import Mundo.Person;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,13 +14,11 @@ import java.sql.SQLException;
  * @author Nicolas
  */
 public final class ClientMenu extends javax.swing.JFrame {
-    private String id_person;
     private DBAccess dba;
     /**
      * Creates new form ClientMenu
      */
-    public ClientMenu(DBAccess db,String id) {
-        this.id_person=id;
+    public ClientMenu(DBAccess db) {
         dba=db;
         initComponents();
         mostrarNombre();
@@ -28,7 +27,7 @@ public final class ClientMenu extends javax.swing.JFrame {
 
     public void mostrarNombre(){
         try {
-            ResultSet nombre = dba.consultar(Person.consultarNombre(id_person));
+            ResultSet nombre = dba.consultar(Person.consultarNombre());
             nombre.next();
             userNameTF.setText(nombre.getNString("PERSON_NAME"));
         } catch (SQLException ex) {
@@ -45,13 +44,14 @@ public final class ClientMenu extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        list1 = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : ((javax.persistence.Query)null).getResultList();
         jLabel1 = new javax.swing.JLabel();
         BuscarEventoB = new javax.swing.JButton();
         Tickets_Comprados = new javax.swing.JButton();
         userNameTF = new javax.swing.JTextField();
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
-        jMenu2 = new javax.swing.JMenu();
+        configuracionMB = new javax.swing.JMenu();
+        cerrarSesionMB = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -73,11 +73,21 @@ public final class ClientMenu extends javax.swing.JFrame {
 
         userNameTF.setEditable(false);
 
-        jMenu1.setText("Configuracion");
-        jMenuBar1.add(jMenu1);
+        configuracionMB.setText("Configuracion");
+        configuracionMB.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                configuracionMBActionPerformed(evt);
+            }
+        });
+        jMenuBar1.add(configuracionMB);
 
-        jMenu2.setText("Cerrar Sesion");
-        jMenuBar1.add(jMenu2);
+        cerrarSesionMB.setText("Cerrar Sesion");
+        cerrarSesionMB.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cerrarSesionMBActionPerformed(evt);
+            }
+        });
+        jMenuBar1.add(cerrarSesionMB);
 
         setJMenuBar(jMenuBar1);
 
@@ -122,18 +132,29 @@ public final class ClientMenu extends javax.swing.JFrame {
 
     private void Tickets_CompradosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Tickets_CompradosActionPerformed
         dispose();
-        new BoughtTickets(dba,id_person);     
+        new BoughtTickets(dba);     
     }//GEN-LAST:event_Tickets_CompradosActionPerformed
+
+    private void cerrarSesionMBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cerrarSesionMBActionPerformed
+        dispose();
+        new Login(dba);
+    }//GEN-LAST:event_cerrarSesionMBActionPerformed
+
+    private void configuracionMBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_configuracionMBActionPerformed
+        dispose();
+        new ClientConfiguration(dba);
+    }//GEN-LAST:event_configuracionMBActionPerformed
 
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BuscarEventoB;
     private javax.swing.JButton Tickets_Comprados;
+    private javax.swing.JMenu cerrarSesionMB;
+    private javax.swing.JMenu configuracionMB;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
+    private java.util.List list1;
     private javax.swing.JTextField userNameTF;
     // End of variables declaration//GEN-END:variables
 }

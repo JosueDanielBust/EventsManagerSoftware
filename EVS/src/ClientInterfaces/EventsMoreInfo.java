@@ -18,23 +18,21 @@ import java.sql.*;
  */
 public class EventsMoreInfo extends javax.swing.JFrame {
     private DBAccess dba;
-    private String idp;
     /**
      * Creates new form EventsMoreInfo
      */
-    public EventsMoreInfo(DBAccess db,String id,String e_id) {
+    public EventsMoreInfo(DBAccess db) {
         initComponents();
         
         //inicializo las variables locales
-        dba=db;
-        idp=id;    
+        dba=db;  
         ResultSet sc2;
         String arg,comando;
         
         //le paso el id para que me devuleva la consulta en un String
         
         try{
-            String sql = Event.consultarPorId(e_id);
+            String sql = Event.consultarPorId();
             ResultSet sc=dba.consultar(sql);
              if(sc.next()){
                
@@ -312,7 +310,7 @@ public class EventsMoreInfo extends javax.swing.JFrame {
 
     private void JBSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBSalirActionPerformed
         dispose();
-        new BoughtTickets(dba,idp);       
+        new BoughtTickets(dba);       
     }//GEN-LAST:event_JBSalirActionPerformed
 
     

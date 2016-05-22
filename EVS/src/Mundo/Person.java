@@ -21,7 +21,7 @@ public class Person {
         Person.PERSON_ID = PERSON_ID;
     }
     
-    public static String consultarNombre(String PERSON_ID){
+    public static String consultarNombre(){
         return "SELECT PERSON_NAME FROM PERSON WHERE PERSON_ID = '" + PERSON_ID + "'";
     }
     

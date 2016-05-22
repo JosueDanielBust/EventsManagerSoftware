@@ -4,6 +4,7 @@ import AdminInterfaces.Administrator_Panel;
 import ClientInterfaces.ClientConfiguration;
 import ClientInterfaces.ClientMenu;
 import ClientInterfaces.Register;
+import Mundo.Person;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
@@ -27,6 +28,7 @@ public class Login extends javax.swing.JFrame {
      */
     public Login(DBAccess dba) {
         this.dba = dba;
+        Person.setPERSON_ID(null);
         initComponents();
         setVisible(true);
     }
@@ -89,7 +91,6 @@ public class Login extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(alerta, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(alertaL)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -100,6 +101,8 @@ public class Login extends javax.swing.JFrame {
                                     .addComponent(correoElectronicoTF))))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(alertaL)
+                        .addGap(34, 34, 34)
                         .addComponent(registrarseB)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(ingresarB, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -126,10 +129,10 @@ public class Login extends javax.swing.JFrame {
                 .addComponent(alerta)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(alertaL)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(registrarseB)
-                    .addComponent(ingresarB))
+                    .addComponent(ingresarB, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(registrarseB, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -149,9 +152,10 @@ public class Login extends javax.swing.JFrame {
         parametros.add(Types.NUMERIC);
         try {
             ArrayList datosUsuario = dba.procedureSearch("LOGIN_CONFIRMATION(?,?,?,?)", parametros);
+            Person.setPERSON_ID((String)datosUsuario.get(0));
             dispose();
             if (datosUsuario.get(1).equals("2")) {
-                new ClientMenu(dba,(String)datosUsuario.get(0));
+                new ClientMenu(dba);
             } else {
                 new Administrator_Panel(dba);
             }

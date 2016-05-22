@@ -4,8 +4,13 @@ import MainInterfaces.DBAccess;
 import MainInterfaces.Login;
 import Mundo.Event;
 import java.sql.SQLException;
+import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -28,20 +33,21 @@ public class Register extends javax.swing.JFrame {
         this.dba = DBA;
         initComponents();
         setVisible(true);
-        valEPS();
+        LlenarEps();
     }
 
     /**
      * Metdodo que llena la ComboBox epsCB con los valores de su consulta
      */
-    public void valEPS(){
-        try {
-            epsCB = new JComboBox(dba.rsToArray(dba.consultar(Event.consultarTodasCiudades())));
-        } catch (SQLException ex) {
-            alerta.setText("Error: No Existen Las Ciudades");
+    public void LlenarEps(){
+        try{
+            ResultSet rs=dba.consultar("SELECT EPS FROM EPS");
+            epsCB.setModel(new DefaultComboBoxModel(dba.rsToArray(rs)));
+            }catch(Exception e){
+                alerta.setText("Error al Cargar las EPS");
         }
-          
     }
+    
     
     /**
      * This method is called from within the constructor to initialize the form.
