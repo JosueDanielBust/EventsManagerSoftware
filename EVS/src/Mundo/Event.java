@@ -13,7 +13,6 @@ import java.sql.SQLException;
  * @author Julian
  */
 public class Event {
-private String id,type,place;
     
     public static String consultarPorId(String id){
         return ("SELECT *  FROM EVENT WHERE EVENT_ID = "+id);    
