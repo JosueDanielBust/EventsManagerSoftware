@@ -10,7 +10,6 @@ package Mundo;
  * @author Julian
  */
 public class Ticket {
-     
     public Ticket(){}
 
    
