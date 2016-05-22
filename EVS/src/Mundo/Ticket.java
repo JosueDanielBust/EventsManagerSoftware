@@ -95,7 +95,7 @@ public class Ticket {
     
     //boletas compradas para el evento con dicha descripción anterior
     public static String buscarBoletas(String lugar,String fecha,String ciudad){
-        return("SELECT DISTINCT tick_type,ttype_cost,count(TICKET_ID)" +
+        return("SELECT tick_type,ttype_cost" +
         " FROM ticket_type " +
         " INNER JOIN event ON TICKET_TYPE.EVENT_ID = event.EVENT_ID" +
         " INNER JOIN place ON event.place_id = place.place_id" +
@@ -104,8 +104,7 @@ public class Ticket {
         preguntaPersona() +
         " AND city.city_name = "+ ciudad + 
         preguntaEname() +  
-        preguntaCategoria() +               
-        " GROUP BY tick_type ");
+        preguntaCategoria());
     
     }
         
