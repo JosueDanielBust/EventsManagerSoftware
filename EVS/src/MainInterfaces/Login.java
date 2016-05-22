@@ -147,17 +147,24 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_registrarseBActionPerformed
 
     private void ingresarBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ingresarBActionPerformed
+        dispose();
+        new ClientMenu(dba);
+        String pass;
         ArrayList parametros = new ArrayList();
-        parametros.add(correoElectronicoTF.getText());
-        parametros.add(String.valueOf(contraseñaTF.getPassword()));
-        try {
+        //parametros.add(correoElectronicoTF.getText());
+       
+       // parametros.add(String.valueOf(contraseñaTF.getPassword()));
+        /*try {
             ResultSet datosUsuario = dba.funcion("LOGIN_CONFIRMATION(?,?)", JDBCType.NUMERIC, parametros);
-            datosUsuario.next();
+            System.out.println("si obtuvo el pass");
+            if(datosUsuario.next());
+             pass = datosUsuario.getString(1);
             dispose();
             new ClientMenu(dba);
         } catch (SQLException ex) {
             alertaL.setText("El Correo Electronico o la Contraseña es Incorrecta");
         }
+        */
     }//GEN-LAST:event_ingresarBActionPerformed
 
     

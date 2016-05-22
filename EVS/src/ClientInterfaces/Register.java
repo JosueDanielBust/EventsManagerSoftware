@@ -4,10 +4,13 @@ import MainInterfaces.DBAccess;
 import MainInterfaces.Login;
 import Mundo.Event;
 import java.sql.SQLException;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -27,10 +30,11 @@ public class Register extends javax.swing.JFrame {
      * Creates new form New_Account
      */
     public Register(DBAccess DBA) {
+        this.dba = DBA;
         initComponents();
         setVisible(true);
-        this.dba = DBA;
-        valEPS();
+        LlenarEps();
+        //valEPS();
     }
 
     /**
@@ -44,6 +48,16 @@ public class Register extends javax.swing.JFrame {
         }
           
     }
+    
+    public void LlenarEps(){
+        try{
+            ResultSet rs=dba.consultar("SELECT EPS FROM EPS");
+            epsCB.setModel(new DefaultComboBoxModel(dba.rsToArray(rs)));
+             }catch(Exception e){
+	JOptionPane.showMessageDialog(null,e.getMessage(),"Mensaje de Error",JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
     
     /**
      * This method is called from within the constructor to initialize the form.
