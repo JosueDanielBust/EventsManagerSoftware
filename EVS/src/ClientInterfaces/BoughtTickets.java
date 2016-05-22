@@ -45,10 +45,7 @@ public class BoughtTickets extends javax.swing.JFrame {
         jCBLugar.setEnabled(false);
     
     }
-    public BoughtTickets() {
-        initComponents();
-        this.setVisible(true);
-    }
+ 
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -122,21 +119,21 @@ public class BoughtTickets extends javax.swing.JFrame {
         jTBoletas.setAutoCreateRowSorter(true);
         jTBoletas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
             },
             new String [] {
-                "Tipo de Boleta", "Precio", "Cantidad"
+                "Tipo de Boleta", "Precio"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Short.class, java.lang.Object.class
+                java.lang.String.class, java.lang.Short.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, true
+                false, false
             };
 
             public Class getColumnClass(int columnIndex) {
