@@ -8,13 +8,11 @@ import MainInterfaces.DBAccess;
 import Mundo.Person;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 /**
  *
  * @author Nicolas
  */
-public class ClientMenu extends javax.swing.JFrame {
+public final class ClientMenu extends javax.swing.JFrame {
     private String id_person;
     private DBAccess dba;
     /**
@@ -47,7 +45,6 @@ public class ClientMenu extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        list1 = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : ((javax.persistence.Query)null).getResultList();
         jLabel1 = new javax.swing.JLabel();
         BuscarEventoB = new javax.swing.JButton();
         Tickets_Comprados = new javax.swing.JButton();
@@ -120,7 +117,7 @@ public class ClientMenu extends javax.swing.JFrame {
 
     private void BuscarEventoBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BuscarEventoBActionPerformed
         dispose();
-        new EventSearch(dba,id_person);
+        new EventSearch(dba);
     }//GEN-LAST:event_BuscarEventoBActionPerformed
 
     private void Tickets_CompradosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Tickets_CompradosActionPerformed
@@ -137,7 +134,6 @@ public class ClientMenu extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
-    private java.util.List list1;
     private javax.swing.JTextField userNameTF;
     // End of variables declaration//GEN-END:variables
 }

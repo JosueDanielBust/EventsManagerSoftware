@@ -5,10 +5,11 @@
  */
 package ClientInterfaces;
 import MainInterfaces.DBAccess;
-import Mundo.City;
 import Mundo.Event;
-import Mundo.EventCategory;
+import java.sql.JDBCType;
 import java.sql.SQLException;
+import java.sql.Types;
+import java.util.ArrayList;
 import javax.swing.JComboBox;
 /**
  *
@@ -16,15 +17,14 @@ import javax.swing.JComboBox;
  */
 public class EventSearch extends javax.swing.JFrame {
     DBAccess dba;
-    String person_id;
+    String categoriaEvento, ciudad, nombreEvento, direccionLugar;
     
     /**
      * Creates new form EventSearch
      */
-    public EventSearch(DBAccess db,String id_person) {
+    public EventSearch(DBAccess db) {
         initComponents();
         dba=db;
-        person_id=id_person;
         buscarCategoriasEvento();
     }
 
@@ -73,6 +73,11 @@ public class EventSearch extends javax.swing.JFrame {
         });
 
         nombreEventoCB.setEditable(true);
+        nombreEventoCB.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nombreEventoCBActionPerformed(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jLabel1.setText("Busqueda de Eventos");
@@ -212,28 +217,53 @@ public class EventSearch extends javax.swing.JFrame {
     }//GEN-LAST:event_salirBActionPerformed
 
     private void direccionLugarCBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_direccionLugarCBActionPerformed
-        // TODO add your handling code here:
+        direccionLugar = (String)direccionLugarCB.getSelectedItem();  
+        ArrayList parametros = new ArrayList();
+        parametros.add(categoriaEvento);
+        parametros.add(ciudad);
+        parametros.add(nombreEvento);
+        parametros.add(direccionLugar);
+        parametros.add(Types.NUMERIC);
+        parametros.add(Types.TIMESTAMP);
+        try {         
+            ArrayList datosEvento = dba.procedureSearch("EVENT_SEARCH(?,?,?,?,?,?)", parametros);   
+            String fecha = (String)datosEvento.get(1);
+            System.out.println(fecha);
+           
+        } catch (SQLException ex) {
+            System.out.println("ERROR: No se pudo cargar los nombres del los eventos en la busqueda de los eventos");
+        }
     }//GEN-LAST:event_direccionLugarCBActionPerformed
 
     private void ciudadCBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ciudadCBActionPerformed
         try {
-            City.setCity_Name((String)ciudadCB.getSelectedItem());
-            nombreEventoCB = new JComboBox(dba.rsToArray(dba.consultar(Event.consultarNombreEventoNext())));    
+            ciudad = (String)ciudadCB.getSelectedItem();
+            nombreEventoCB = new JComboBox(dba.rsToArray(dba.consultar(Event.consultarNombreEventoNext(ciudad,categoriaEvento))));    
             nombreEventoCB.setEnabled(true);
         } catch (SQLException ex) {
-            System.out.println("ERROR: No se pudo cargar las cuidades en la busqueda de los eventos");
+            System.out.println("ERROR: No se pudo cargar los nombres del los eventos en la busqueda de los eventos");
         }
     }//GEN-LAST:event_ciudadCBActionPerformed
 
     private void categoriaEventoCBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_categoriaEventoCBActionPerformed
         try {
-            EventCategory.setEC_Name((String)categoriaEventoCB.getSelectedItem());
-            ciudadCB = new JComboBox(dba.rsToArray(dba.consultar(Event.consultarCiudadNext())));    
+            categoriaEvento = (String)categoriaEventoCB.getSelectedItem();
+            ciudadCB = new JComboBox(dba.rsToArray(dba.consultar(Event.consultarCiudadNext(categoriaEvento))));    
             ciudadCB.setEnabled(true);
         } catch (SQLException ex) {
             System.out.println("ERROR: No se pudo cargar las cuidades en la busqueda de los eventos");
         }
     }//GEN-LAST:event_categoriaEventoCBActionPerformed
+
+    private void nombreEventoCBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nombreEventoCBActionPerformed
+        try {
+            nombreEvento = (String)nombreEventoCB.getSelectedItem();
+            nombreEventoCB = new JComboBox(dba.rsToArray(dba.consultar(Event.consultarDireccionLugarNext(nombreEvento, ciudad, categoriaEvento))));    
+            nombreEventoCB.setEnabled(true);
+        } catch (SQLException ex) {
+            System.out.println("ERROR: No se pudo cargar las direcciones de los lugares en la busqueda de los eventos");
+        }
+    }//GEN-LAST:event_nombreEventoCBActionPerformed
 
     
     // Variables declaration - do not modify//GEN-BEGIN:variables

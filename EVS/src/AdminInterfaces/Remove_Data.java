@@ -1,20 +1,31 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package AdminInterfaces;
 
-/**
- *
- * @author Julian
- */
-public class Remove_Data extends javax.swing.JFrame {
+import javax.swing.JComboBox;
+import java.util.HashMap;
+import MainInterfaces.DBAccess;
+import Mundo.DeleteElement;
+import java.sql.ResultSet;
+import javax.swing.JOptionPane;
 
-    /**
-     * Creates new form Add_PlaceType
-     */
-    public Remove_Data() {
+public class Remove_Data extends javax.swing.JFrame {
+    private DBAccess dba;
+    private ResultSet rs;
+    private String tabla,elemento,statement;
+    private boolean resultado;
+    
+    private static final HashMap<String,String> tablas = new HashMap<String,String>(){{
+            put("Ciudad", "CITY");
+            put("EPS","EPS" );
+            put("Ocupación","OCCUPATION" );
+            put("Categoría evento", "EVENT_CATEGORY");
+            put("Tipo de lugar", "PLACE_TYPE");
+    }};
+    
+    public Remove_Data(DBAccess dba) {
+        this.dba = dba;
+        String categorias[]={"Ciudad","EPS","Ocupación","Categoría evento","Tipo de lugar"};       
+        selDataCategory = new JComboBox(categorias);
+        selData.setEnabled(false);
         initComponents();
     }
 
@@ -29,11 +40,11 @@ public class Remove_Data extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        buttonRemove = new javax.swing.JButton();
+        selData = new javax.swing.JComboBox<>();
         jLabel3 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox<>();
-        jButton1 = new javax.swing.JButton();
+        selDataCategory = new javax.swing.JComboBox<>();
+        buttonExit = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -43,23 +54,38 @@ public class Remove_Data extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel2.setText("Elemento");
 
-        jButton2.setText("Eliminar");
+        buttonRemove.setText("Eliminar");
+        buttonRemove.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonRemoveActionPerformed(evt);
+            }
+        });
 
-        jComboBox1.setEditable(true);
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Medellin" }));
+        selData.setEditable(true);
+        selData.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Medellin" }));
+        selData.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                selDataActionPerformed(evt);
+            }
+        });
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel3.setText("Categoría ");
 
-        jComboBox2.setEditable(true);
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Ciudad", "EPS", "Ocupacion", "Categoria de evento", "Categoria de Lugar" }));
-        jComboBox2.addActionListener(new java.awt.event.ActionListener() {
+        selDataCategory.setEditable(true);
+        selDataCategory.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Ciudad", "EPS", "Ocupacion", "Categoria de evento", "Categoria de Lugar" }));
+        selDataCategory.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox2ActionPerformed(evt);
+                selDataCategoryActionPerformed(evt);
             }
         });
 
-        jButton1.setText("Atrás");
+        buttonExit.setText("Atrás");
+        buttonExit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonExitActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -78,13 +104,13 @@ public class Remove_Data extends javax.swing.JFrame {
                             .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 73, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jComboBox2, 0, 199, Short.MAX_VALUE)
-                            .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(selDataCategory, 0, 199, Short.MAX_VALUE)
+                            .addComponent(selData, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(36, 36, 36))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(buttonRemove, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(buttonExit, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(63, 63, 63))))
         );
         layout.setVerticalGroup(
@@ -97,39 +123,59 @@ public class Remove_Data extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel3)
-                            .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(selDataCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(49, 49, 49))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(61, 61, 61)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(selData, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel2))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(buttonRemove, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(buttonExit, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(25, 25, 25))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jComboBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox2ActionPerformed
+    private void selDataCategoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selDataCategoryActionPerformed
+        JComboBox cb = (JComboBox)evt.getSource();
+        
+        tabla = (String)cb.getSelectedItem();
+        tabla  = tablas.get(tabla);
+        try{
+            statement = DeleteElement.consultarElementos(tabla);       
+            rs=dba.consultar(statement);       
+            selData = new JComboBox(dba.rsToArray(rs));
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null,"Error: "+e.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+        }
+        selData.setEnabled(true);
+    }//GEN-LAST:event_selDataCategoryActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
+    private void selDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selDataActionPerformed
+        JComboBox cb = (JComboBox)evt.getSource();
+        elemento = (String)cb.getSelectedItem();
+    }//GEN-LAST:event_selDataActionPerformed
 
+    private void buttonRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonRemoveActionPerformed
+        statement = DeleteElement.eliminarElemento(tabla,elemento);
+        resultado = dba.ejecutar(statement);
+    }//GEN-LAST:event_buttonRemoveActionPerformed
+
+    private void buttonExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonExitActionPerformed
+        dispose();
+    }//GEN-LAST:event_buttonExitActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
+    private javax.swing.JButton buttonExit;
+    private javax.swing.JButton buttonRemove;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JComboBox<String> selData;
+    private javax.swing.JComboBox<String> selDataCategory;
     // End of variables declaration//GEN-END:variables
 }

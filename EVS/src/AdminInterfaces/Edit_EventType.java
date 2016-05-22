@@ -5,7 +5,7 @@ import Mundo.Admin.EventCategory;
 import Mundo.Admin.EventType;
 import java.sql.*;
 import java.util.ArrayList;
-import javax.swing.JComboBox;
+import javax.swing.*;
 
 public class Edit_EventType extends javax.swing.JFrame {
     DBAccess dba;
@@ -16,10 +16,14 @@ public class Edit_EventType extends javax.swing.JFrame {
         
         initComponents();
         
-        EventCategory EventCategory = new EventCategory();
-        ResultSet rsEventCategory = dba.consultar(EventCategory.getCategories());
-        String[] arrayEventCategory = rsToArray(rsEventCategory);
-        selCategories = new JComboBox(arrayEventCategory);
+        try {
+            EventCategory EventCategory = new EventCategory();
+            ResultSet rsEventCategory = dba.consultar(EventCategory.getCategories());
+            String[] arrayEventCategory = rsToArray(rsEventCategory);
+            selCategories = new JComboBox(arrayEventCategory);
+        } catch(Exception e){
+            JOptionPane.showMessageDialog(null,e.getMessage(),"Mensaje de Error",JOptionPane.ERROR_MESSAGE);
+        }
     }
     
     public String[] rsToArray(ResultSet data){
@@ -205,89 +209,67 @@ public class Edit_EventType extends javax.swing.JFrame {
     private void selCategoriesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selCategoriesActionPerformed
         String ECATEGORY_ID = (String)selCategories.getSelectedItem();
         
-        EventCategory EventCategory = new EventCategory();
-        ECATEGORY_ID = EventCategory.getID(ECATEGORY_ID);
-        ResultSet RSEventCategory = dba.consultar(ECATEGORY_ID);
-        ECATEGORY_ID = getDataFromRS(RSEventCategory);
-        
-        EventType EventType = new EventType();
-        ResultSet rsEventType = dba.consultar(EventType.getEvents(ECATEGORY_ID));
-        String[] arrayEventType = rsToArray(rsEventType);
-        selName = new JComboBox(arrayEventType);
+        try {
+            EventCategory EventCategory = new EventCategory();
+            ECATEGORY_ID = EventCategory.getID(ECATEGORY_ID);
+            ResultSet RSEventCategory = dba.consultar(ECATEGORY_ID);
+            ECATEGORY_ID = getDataFromRS(RSEventCategory);
+
+            EventType EventType = new EventType();
+            ResultSet rsEventType = dba.consultar(EventType.getEvents(ECATEGORY_ID));
+            String[] arrayEventType = rsToArray(rsEventType);
+            selName = new JComboBox(arrayEventType);
+        } catch(Exception e){
+            JOptionPane.showMessageDialog(null,e.getMessage(),"Mensaje de Error",JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_selCategoriesActionPerformed
 
     private void selNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selNameActionPerformed
         String RESTRICTIONS = (String)selName.getSelectedItem();
         
-        EventType EventType = new EventType();
-        RESTRICTIONS = EventType.getRestrictions(RESTRICTIONS);
-        ResultSet RSEventType = dba.consultar(RESTRICTIONS);
-        RESTRICTIONS = getDataFromRS(RSEventType);
+        try {
+            EventType EventType = new EventType();
+            RESTRICTIONS = EventType.getRestrictions(RESTRICTIONS);
+            ResultSet RSEventType = dba.consultar(RESTRICTIONS);
+            RESTRICTIONS = getDataFromRS(RSEventType);
+        } catch(Exception e){
+            JOptionPane.showMessageDialog(null,e.getMessage(),"Mensaje de Error",JOptionPane.ERROR_MESSAGE);
+        }
         
         textRestrictions.setText(RESTRICTIONS);
     }//GEN-LAST:event_selNameActionPerformed
 
     private void buttonRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonRemoveActionPerformed
         String ETYPE_ID = (String)selName.getSelectedItem();
-        
-        EventType EventType = new EventType();
-        ETYPE_ID = EventType.getID(ETYPE_ID);
-        ResultSet RSEventType = dba.consultar(ETYPE_ID);
-        ETYPE_ID = getDataFromRS(RSEventType);
-        
-        Boolean make = dba.ejecutar(EventType.remove(ETYPE_ID));
-        if (make == true) { System.out.println("Operation make it!"); } else { System.out.println("Operation with errors"); }
+        try {
+            EventType EventType = new EventType();
+            ETYPE_ID = EventType.getID(ETYPE_ID);
+            ResultSet RSEventType = dba.consultar(ETYPE_ID);
+            ETYPE_ID = getDataFromRS(RSEventType);
+
+            Boolean make = dba.ejecutar(EventType.remove(ETYPE_ID));
+            if (make == true) { System.out.println("Operation make it!"); } else { System.out.println("Operation with errors"); }
+        } catch(Exception e){
+            JOptionPane.showMessageDialog(null,e.getMessage(),"Mensaje de Error",JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_buttonRemoveActionPerformed
 
     private void buttonEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonEditActionPerformed
         String ETYPE_ID = (String)selName.getSelectedItem();
+        String RESTRICTIONS = textRestrictions.getSelectedText();
         
-        EventType EventType = new EventType();
-        ETYPE_ID = EventType.getID(ETYPE_ID);
-        ResultSet RSEventType = dba.consultar(ETYPE_ID);
-        ETYPE_ID = getDataFromRS(RSEventType);
-        
-        Boolean make = dba.ejecutar(EventType.update());
-        if (make == true) { System.out.println("Operation make it!"); } else { System.out.println("Operation with errors"); }
-    }//GEN-LAST:event_buttonEditActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
         try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Edit_EventType.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Edit_EventType.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Edit_EventType.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Edit_EventType.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
+            EventType EventType = new EventType();
+            ETYPE_ID = EventType.getID(ETYPE_ID);
+            ResultSet RSEventType = dba.consultar(ETYPE_ID);
+            ETYPE_ID = getDataFromRS(RSEventType);
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Edit_EventType().setVisible(true);
-            }
-        });
-    }
+            Boolean make = dba.ejecutar(EventType.update(ETYPE_ID, RESTRICTIONS));
+            if (make == true) { System.out.println("Operation make it!"); } else { System.out.println("Operation with errors"); }
+        } catch(Exception e){
+            JOptionPane.showMessageDialog(null,e.getMessage(),"Mensaje de Error",JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_buttonEditActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buttonEdit;

@@ -7,8 +7,10 @@ package MainInterfaces;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.persistence.Tuple;
 
 public final class DBAccess {
     
@@ -74,16 +76,23 @@ private Connection conexion;
         getConexion().commit();
     }
     
-    public ResultSet procedureSearch(String NombreProcedure, ArrayList parametrosIN_OUT) throws SQLException{
+    public ArrayList<String> procedureSearch(String NombreProcedure, ArrayList parametrosIN_OUT) throws SQLException{
         CallableStatement st = conexion.prepareCall("{call "+ NombreProcedure +"}");
-        for(int i = 1; i <= parametrosIN_OUT.size();i++) {
-            if(parametrosIN_OUT.get(i) instanceof JDBCType){
-               st.registerOutParameter(i,(SQLType)parametrosIN_OUT.get(i-1));
+        ArrayList salida = new ArrayList();
+        for(int i = 1;i <= parametrosIN_OUT.size();i++) {
+            
+            if(parametrosIN_OUT.get(i-1) instanceof String){
+                st.setString(i,(String)parametrosIN_OUT.get(i-1));
             }else{
-               st.setObject(i,parametrosIN_OUT.get(i-1));    
+                salida.add(i);
+                st.registerOutParameter(i,(Integer)parametrosIN_OUT.get(i-1));
             }
+            
         }
-        return st.executeQuery();
+        st.execute();
+        for(int i = 0; i < salida.size();i++) salida.set(i,st.getString((Integer)salida.get(i)));
+        
+        return salida;
     }
     
         /**

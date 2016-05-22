@@ -1,17 +1,12 @@
 package MainInterfaces;
 
+import AdminInterfaces.Administrator_Panel;
+import ClientInterfaces.ClientConfiguration;
 import ClientInterfaces.ClientMenu;
 import ClientInterfaces.Register;
-import Mundo.Person;
-import java.sql.JDBCType;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.SQLType;
 import java.sql.Types;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.eclipse.persistence.platform.database.jdbc.JDBCTypes;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -150,16 +145,15 @@ public class Login extends javax.swing.JFrame {
         ArrayList parametros = new ArrayList();
         parametros.add(correoElectronicoTF.getText());
         parametros.add(String.valueOf(contraseñaTF.getPassword()));
-        parametros.add(JDBCType.NUMERIC);
-        parametros.add(JDBCType.NUMERIC);
+        parametros.add(Types.NUMERIC);
+        parametros.add(Types.NUMERIC);
         try {
-            ResultSet datosUsuario = dba.procedureSearch("LOGIN_CONFIRMATION(?,?,?,?)", parametros);
-            datosUsuario.next();
+            ArrayList datosUsuario = dba.procedureSearch("LOGIN_CONFIRMATION(?,?,?,?)", parametros);
             dispose();
-            if (datosUsuario.getInt("OCCUPATION_ID") == 2) {
-                new ClientMenu(dba, datosUsuario.getString("ID"));
+            if (datosUsuario.get(1).equals("2")) {
+                new ClientMenu(dba,(String)datosUsuario.get(0));
             } else {
-                
+                new Administrator_Panel(dba);
             }
         } catch (SQLException ex) {
             alertaL.setText("El Correo Electronico o la Contraseña es Incorrecta");

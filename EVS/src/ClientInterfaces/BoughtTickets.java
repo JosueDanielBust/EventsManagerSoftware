@@ -3,7 +3,6 @@ package ClientInterfaces;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JComboBox;
-import java.util.ArrayList;
 import java.sql.*;
 
 import Mundo.Ticket;
@@ -37,7 +36,7 @@ public class BoughtTickets extends javax.swing.JFrame {
 	  JOptionPane.showMessageDialog(null,e.getMessage(),"Mensaje de Error",JOptionPane.ERROR_MESSAGE);
         }
             
-            jCBCiudad.setEnabled(false);
+        jCBCiudad.setEnabled(false);
         jCBEvento.setEnabled(false);
         jCBFecha.setEnabled(false);
         jCBLugar.setEnabled(false);
@@ -274,7 +273,7 @@ public class BoughtTickets extends javax.swing.JFrame {
         ciudad = (String)cb.getSelectedItem();
             
         try{
-            rs=dba.consultar(Ticket.buscarEventos(ciudad,id_person));      
+       //     rs=dba.consultar(Ticket.buscarEventos(ciudad,id_person));      
             jCBEvento = new JComboBox(dba.rsToArray(rs));
         }catch(Exception e){
             JOptionPane.showMessageDialog(null,"Error: "+e.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
@@ -290,7 +289,7 @@ public class BoughtTickets extends javax.swing.JFrame {
         evento= (String)cb.getSelectedItem();
         
         try{
-            rs=dba.consultar(Ticket.buscarFecha(evento,id_person)); 
+           // rs=dba.consultar(Ticket.buscarFecha(evento,id_person)); 
             jCBFecha = new JComboBox(dba.rsToArray(rs));
         }catch(Exception e){
             JOptionPane.showMessageDialog(null,"Error: "+e.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
@@ -305,7 +304,7 @@ public class BoughtTickets extends javax.swing.JFrame {
         JComboBox cb = (JComboBox)evt.getSource();
         fecha= (String)cb.getSelectedItem();
         try{
-            rs=dba.consultar(Ticket.buscarLugar(fecha,id_person));      
+          //  rs=dba.consultar(Ticket.buscarLugar(fecha,id_person));      
             jCBLugar = new JComboBox(dba.rsToArray(rs));
         }catch(SQLException e){}
         jCBLugar.setEnabled(true);
@@ -319,7 +318,7 @@ public class BoughtTickets extends javax.swing.JFrame {
         jCBLugar.setModel((ComboBoxModel<String>) modelo);
         
         try{
-            rs=dba.consultar(Ticket.buscarBoletas(lugar,id_person));    
+        //    rs=dba.consultar(Ticket.buscarBoletas(lugar,id_person));    
             ResultSetMetaData rsMD = rs.getMetaData();
             int nColumnas = rsMD.getColumnCount();
             

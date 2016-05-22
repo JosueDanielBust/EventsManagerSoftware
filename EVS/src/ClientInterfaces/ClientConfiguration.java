@@ -16,6 +16,7 @@ public class ClientConfiguration extends javax.swing.JFrame {
      */
     public ClientConfiguration() {
         initComponents();
+        setVisible(true);
     }
 
     /**
