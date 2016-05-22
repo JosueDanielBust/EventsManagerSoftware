@@ -45,13 +45,24 @@ public final class ClientMenu extends javax.swing.JFrame {
     private void initComponents() {
 
         list1 = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : ((javax.persistence.Query)null).getResultList();
+        jMenuBar2 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        jMenu2 = new javax.swing.JMenu();
         jLabel1 = new javax.swing.JLabel();
         BuscarEventoB = new javax.swing.JButton();
         Tickets_Comprados = new javax.swing.JButton();
         userNameTF = new javax.swing.JTextField();
         jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu3 = new javax.swing.JMenu();
         configuracionMB = new javax.swing.JMenu();
-        cerrarSesionMB = new javax.swing.JMenu();
+        configuracionMI = new javax.swing.JMenuItem();
+        cerrarSesionMI = new javax.swing.JMenuItem();
+
+        jMenu1.setText("File");
+        jMenuBar2.add(jMenu1);
+
+        jMenu2.setText("Edit");
+        jMenuBar2.add(jMenu2);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -73,21 +84,31 @@ public final class ClientMenu extends javax.swing.JFrame {
 
         userNameTF.setEditable(false);
 
-        configuracionMB.setText("Configuracion");
-        configuracionMB.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                configuracionMBActionPerformed(evt);
-            }
-        });
-        jMenuBar1.add(configuracionMB);
+        jMenu3.setText("                                                                                        ");
+        jMenu3.setEnabled(false);
+        jMenu3.setHideActionText(true);
+        jMenuBar1.add(jMenu3);
 
-        cerrarSesionMB.setText("Cerrar Sesion");
-        cerrarSesionMB.addActionListener(new java.awt.event.ActionListener() {
+        configuracionMB.setText("Cuenta Online");
+
+        configuracionMI.setText("Configuracion");
+        configuracionMI.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cerrarSesionMBActionPerformed(evt);
+                configuracionMIActionPerformed(evt);
             }
         });
-        jMenuBar1.add(cerrarSesionMB);
+        configuracionMB.add(configuracionMI);
+
+        cerrarSesionMI.setText("Cerrar Sesion");
+        cerrarSesionMI.setToolTipText("");
+        cerrarSesionMI.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cerrarSesionMIActionPerformed(evt);
+            }
+        });
+        configuracionMB.add(cerrarSesionMI);
+
+        jMenuBar1.add(configuracionMB);
 
         setJMenuBar(jMenuBar1);
 
@@ -111,15 +132,15 @@ public final class ClientMenu extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addContainerGap(19, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(userNameTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(userNameTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(BuscarEventoB)
                 .addGap(18, 18, 18)
                 .addComponent(Tickets_Comprados)
-                .addContainerGap(31, Short.MAX_VALUE))
+                .addGap(30, 30, 30))
         );
 
         pack();
@@ -135,25 +156,30 @@ public final class ClientMenu extends javax.swing.JFrame {
         new BoughtTickets(dba);     
     }//GEN-LAST:event_Tickets_CompradosActionPerformed
 
-    private void cerrarSesionMBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cerrarSesionMBActionPerformed
-        dispose();
-        new Login(dba);
-    }//GEN-LAST:event_cerrarSesionMBActionPerformed
-
-    private void configuracionMBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_configuracionMBActionPerformed
+    private void configuracionMIActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_configuracionMIActionPerformed
         dispose();
         new ClientConfiguration(dba);
-    }//GEN-LAST:event_configuracionMBActionPerformed
+    }//GEN-LAST:event_configuracionMIActionPerformed
+
+    private void cerrarSesionMIActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cerrarSesionMIActionPerformed
+        dispose();
+        new Login(dba);
+    }//GEN-LAST:event_cerrarSesionMIActionPerformed
 
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BuscarEventoB;
     private javax.swing.JButton Tickets_Comprados;
-    private javax.swing.JMenu cerrarSesionMB;
+    private javax.swing.JMenuItem cerrarSesionMI;
     private javax.swing.JMenu configuracionMB;
+    private javax.swing.JMenuItem configuracionMI;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuBar jMenuBar2;
     private java.util.List list1;
     private javax.swing.JTextField userNameTF;
     // End of variables declaration//GEN-END:variables
