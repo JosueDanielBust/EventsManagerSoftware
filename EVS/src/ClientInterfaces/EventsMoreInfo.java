@@ -1,7 +1,11 @@
 package ClientInterfaces;
+
 import Mundo.Event;
 import MainInterfaces.DBAccess;
+
 import javax.swing.JTextField;
+import java.sql.*;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -14,15 +18,100 @@ import javax.swing.JTextField;
  */
 public class EventsMoreInfo extends javax.swing.JFrame {
     private DBAccess dba;
-    private String idp,event_id;
+    private String idp;
     /**
      * Creates new form EventsMoreInfo
      */
-    public EventsMoreInfo(DBAccess db,String id,String eid) {
+    public EventsMoreInfo(DBAccess db,String id,String e_id) {
         initComponents();
-        event_id=eid;
+        
+        //inicializo las variables locales
         dba=db;
-        idp=id;
+        idp=id;    
+        ResultSet sc2;
+        String arg,comando;
+        
+        //le paso el id para que me devuleva la consulta en un String
+        
+        try{
+            String sql = Event.consultarPorId(e_id);
+            ResultSet sc=dba.consultar(sql);
+             if(sc.next()){
+               
+               //traer categoria segun id
+               arg=sc.getString(1);
+               comando = Event.consultarEventCategory(arg);
+               sc2 = dba.consultar(comando);
+               
+               if(sc2.next())
+                   arg = sc2.getString(1);
+               jTFCategoria.setText(arg);
+               
+               //traer nombre del evento segun id
+               arg=sc.getString(2);
+               comando = Event.consultarETName(arg);
+               sc2 = dba.consultar(comando);
+               
+               if(sc2.next())
+                   arg = sc2.getString(1);
+               jTFNombre.setText(arg);
+                             
+               //traer el nombre del lugar segun id
+               String place_id=sc.getString(3);
+               comando = Event.consultarLugar(place_id);
+               sc2 = dba.consultar(comando);
+               
+               if(sc2.next())
+                   arg = sc2.getString(1);
+               jTFLugar.setText(arg);
+               
+               
+               //trer nombre de la ciudad segun id lugar
+               comando = Event.consultarCiudad(place_id);
+               sc2 = dba.consultar(comando);
+               
+               if(sc2.next())
+                   arg = sc2.getString(1);
+               jTFCiudad.setText(arg);
+               
+               //trer dirección segun id lugar
+               comando = Event.consultarDir(place_id);
+               sc2 = dba.consultar(comando);
+               
+               if(sc2.next())
+                   arg = sc2.getString(1);
+               jTFDir.setText(arg);
+               
+               
+               //trer tipo de lugar segun id lugar
+               comando = Event.consultarPType(place_id);
+               sc2 = dba.consultar(comando);
+               
+               if(sc2.next())
+                   arg = sc2.getString(1);
+               jTF_PType.setText(arg);
+               
+             
+               //trer restricciones de lugar segun id lugar
+               comando = Event.consultarRestricciones(place_id);
+               sc2 = dba.consultar(comando);
+               
+               if(sc2.next())
+                   arg = sc2.getString(1);
+               jTF_PType.setText(arg);
+               
+               
+               //traer fecha y hora
+               arg=sc.getString(5);
+               String[] hora=arg.split("\\s+");
+               jTFFecha.setText(hora[0]);
+               jTFHora.setText(hora[1]);
+             }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+       
+       
         //mostrar todos los datos de evento
     }
 
@@ -36,7 +125,7 @@ public class EventsMoreInfo extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel6 = new javax.swing.JLabel();
-        jTF_Dir = new javax.swing.JTextField();
+        jTFDir = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         jTFCiudad = new javax.swing.JTextField();
@@ -51,7 +140,7 @@ public class EventsMoreInfo extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         jTFLugar = new javax.swing.JTextField();
         jTFNombre = new javax.swing.JTextField();
-        jTFcategoria = new javax.swing.JTextField();
+        jTFCategoria = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jTF_PType = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
@@ -61,8 +150,8 @@ public class EventsMoreInfo extends javax.swing.JFrame {
 
         jLabel6.setText("Ciudad");
 
-        jTF_Dir.setEditable(false);
-        jTF_Dir.setToolTipText("");
+        jTFDir.setEditable(false);
+        jTFDir.setToolTipText("");
 
         jLabel5.setText("Hora");
 
@@ -105,7 +194,7 @@ public class EventsMoreInfo extends javax.swing.JFrame {
         jTFNombre.setEditable(false);
         jTFNombre.setToolTipText("");
 
-        jTFcategoria.setEditable(false);
+        jTFCategoria.setEditable(false);
 
         jLabel3.setText("Nombre");
 
@@ -144,7 +233,7 @@ public class EventsMoreInfo extends javax.swing.JFrame {
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(jTFcategoria, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jTFCategoria, javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(jTFNombre, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jTFCiudad, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -156,7 +245,7 @@ public class EventsMoreInfo extends javax.swing.JFrame {
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jTF_PType, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jTFLugar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTF_Dir, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jTFDir, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -176,7 +265,7 @@ public class EventsMoreInfo extends javax.swing.JFrame {
                 .addGap(35, 35, 35)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel14)
-                    .addComponent(jTFcategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTFCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTFNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -204,7 +293,7 @@ public class EventsMoreInfo extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel10)
-                    .addComponent(jTF_Dir, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTFDir, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -227,42 +316,6 @@ public class EventsMoreInfo extends javax.swing.JFrame {
     }//GEN-LAST:event_JBSalirActionPerformed
 
     
-    //setters para los TextField;
-    
-    public void setjTFCiudad(JTextField jTFCiudad) {
-        this.jTFCiudad = jTFCiudad;
-    }
-
-    public void setjTFFecha(JTextField jTFFecha) {
-        this.jTFFecha = jTFFecha;
-    }
-
-    public void setjTFHora(JTextField jTFHora) {
-        this.jTFHora = jTFHora;
-    }
-
-    public void setjTFLugar(JTextField jTFLugar) {
-        this.jTFLugar = jTFLugar;
-    }
-
-    public void setjTFNombre(JTextField jTFNombre) {
-        this.jTFNombre = jTFNombre;
-    }
-
-    public void setjTF_Dir(JTextField jTF_Dir) {
-        this.jTF_Dir = jTF_Dir;
-    }
-
-    public void setjTF_PType(JTextField jTF_PType) {
-        this.jTF_PType = jTF_PType;
-    }
-
-    public void setjTFcategoria(JTextField jTFcategoria) {
-        this.jTFcategoria = jTFcategoria;
-    }
-
-
-    
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton JBSalir;
@@ -278,13 +331,13 @@ public class EventsMoreInfo extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jTA_Rest;
+    private javax.swing.JTextField jTFCategoria;
     private javax.swing.JTextField jTFCiudad;
+    private javax.swing.JTextField jTFDir;
     private javax.swing.JTextField jTFFecha;
     private javax.swing.JTextField jTFHora;
     private javax.swing.JTextField jTFLugar;
     private javax.swing.JTextField jTFNombre;
-    private javax.swing.JTextField jTF_Dir;
     private javax.swing.JTextField jTF_PType;
-    private javax.swing.JTextField jTFcategoria;
     // End of variables declaration//GEN-END:variables
 }
