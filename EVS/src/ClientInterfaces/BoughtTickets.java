@@ -274,7 +274,7 @@ public class BoughtTickets extends javax.swing.JFrame {
         ciudad = (String)cb.getSelectedItem();
             
         try{
-            rs=dba.consultar(Ticket.buscarEventos(ciudad,id_person));      
+            rs=dba.consultar(Ticket.buscarEventos(ciudad));      
             jCBEvento = new JComboBox(dba.rsToArray(rs));
         }catch(Exception e){
             JOptionPane.showMessageDialog(null,"Error: "+e.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
