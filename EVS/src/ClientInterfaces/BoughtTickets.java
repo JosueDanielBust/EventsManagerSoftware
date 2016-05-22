@@ -26,9 +26,10 @@ public class BoughtTickets extends javax.swing.JFrame {
      * Creates new form BoughtTickets
      */
     public BoughtTickets(DBAccess conexion) {
+         dba=conexion;
         initComponents();
         this.setVisible(true);
-        dba=conexion;
+       
        
         //traer las categorias disponibles al comboBox
         try{

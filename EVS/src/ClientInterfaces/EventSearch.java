@@ -17,6 +17,7 @@ public class EventSearch extends javax.swing.JFrame {
     public EventSearch(DBAccess db) {
         initComponents();
         dba=db;
+        setVisible(true);
     }
     
    public EventSearch(){
