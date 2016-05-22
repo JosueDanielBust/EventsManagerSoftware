@@ -96,7 +96,7 @@ public class Administrator_Panel extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
     private void buttonPlaceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonPlaceActionPerformed
-        new Search_places(dba);
+        new Search_Places(dba);
     }//GEN-LAST:event_buttonPlaceActionPerformed
 
     private void buttonExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonExitActionPerformed

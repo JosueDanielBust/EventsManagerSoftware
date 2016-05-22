@@ -10,7 +10,7 @@ import Mundo.Admin.PlaceType;
 import Mundo.Admin.TicketType;
 import java.sql.*;
 import java.util.ArrayList;
-import javax.swing.JComboBox;
+import javax.swing.*;
 
 public class New_Event extends javax.swing.JFrame {
     DBAccess dba;
@@ -20,30 +20,34 @@ public class New_Event extends javax.swing.JFrame {
         this.dba = dba;
         initComponents();
         
-        City City = new City();
-        ResultSet rsCity = dba.consultar(City.getCiudades());
-        String[] arrayCity = rsToArray(rsCity);
-        selCity = new JComboBox(arrayCity);
-        
-        Place Place = new Place();
-        ResultSet rsPlace = dba.consultar(Place.getPlaces());
-        String[] arrayPlace = rsToArray(rsPlace);
-        selPlace = new JComboBox(arrayPlace);
-        
-        PlaceType PlaceType = new PlaceType();
-        ResultSet rsPlaceType = dba.consultar(PlaceType.getPlacesTypes());
-        String[] arrayPlaceType = rsToArray(rsPlaceType);
-        selPlaceType = new JComboBox(arrayPlaceType);
-        
-        EventCategory EventCategory = new EventCategory();
-        ResultSet rsEventCategory = dba.consultar(EventCategory.getCategories());
-        String[] arrayEventCategory = rsToArray(rsEventCategory);
-        selCategory = new JComboBox(arrayEventCategory);
-        
-        TicketType TicketType = new TicketType();
-        ResultSet rsTicketType = dba.consultar(TicketType.getTicketTypes());
-        String[] arrayTicketType = rsToArray(rsTicketType);
-        selTicketType = new JComboBox(arrayTicketType);
+        try {
+            City City = new City();
+            ResultSet rsCity = dba.consultar(City.getCiudades());
+            String[] arrayCity = rsToArray(rsCity);
+            selCity = new JComboBox(arrayCity);
+
+            Place Place = new Place();
+            ResultSet rsPlace = dba.consultar(Place.getPlaces());
+            String[] arrayPlace = rsToArray(rsPlace);
+            selPlace = new JComboBox(arrayPlace);
+
+            PlaceType PlaceType = new PlaceType();
+            ResultSet rsPlaceType = dba.consultar(PlaceType.getPlacesTypes());
+            String[] arrayPlaceType = rsToArray(rsPlaceType);
+            selPlaceType = new JComboBox(arrayPlaceType);
+
+            EventCategory EventCategory = new EventCategory();
+            ResultSet rsEventCategory = dba.consultar(EventCategory.getCategories());
+            String[] arrayEventCategory = rsToArray(rsEventCategory);
+            selCategory = new JComboBox(arrayEventCategory);
+
+            TicketType TicketType = new TicketType();
+            ResultSet rsTicketType = dba.consultar(TicketType.getTicketTypes());
+            String[] arrayTicketType = rsToArray(rsTicketType);
+            selTicketType = new JComboBox(arrayTicketType);
+        } catch(Exception e){
+            JOptionPane.showMessageDialog(null,e.getMessage(),"Mensaje de Error",JOptionPane.ERROR_MESSAGE);
+        }
     }
     
     public String[] rsToArray(ResultSet data){
@@ -445,55 +449,63 @@ public class New_Event extends javax.swing.JFrame {
         String ECATEGORY_ID = (String)selCategory.getSelectedItem();
         String RESTRICTIONS = textRestrictions.getSelectedText();
         
-        Place Place = new Place();
-        PLACE_ID = Place.getID(PLACE_ID);
-        ResultSet RSPlace = dba.consultar(PLACE_ID);
-        PLACE_ID = getDataFromRS(RSPlace);
-        
-        PlaceType PlaceType = new PlaceType();
-        PTYPE_ID = PlaceType.getID(PTYPE_ID);
-        ResultSet RSPlaceType = dba.consultar(PTYPE_ID);
-        PTYPE_ID = getDataFromRS(RSPlaceType);
-        
-        EventCategory EventCategory = new EventCategory();
-        ECATEGORY_ID = EventCategory.getID(ECATEGORY_ID);
-        ResultSet RSEventCategory = dba.consultar(ECATEGORY_ID);
-        ECATEGORY_ID = getDataFromRS(RSEventCategory);
-        
-        Boolean make;
-        
-        EventType EventType = new EventType(ETYPE_NAME, RESTRICTIONS, ECATEGORY_ID);
-        make = dba.ejecutar(EventType.create());
-        if (make == true) { System.out.println("Operation make it!"); } else { System.out.println("Operation with errors"); }
-        ResultSet RSEventTypeLastID = dba.consultar(EventType.getLastIndex());
-        String EVENT_TYPE_LAST_ID = getDataFromRS(RSEventTypeLastID);
-        
-        Event Event = new Event(EVENT_TYPE_LAST_ID, PLACE_ID, "0", DATE_HOUR);
-        make = dba.ejecutar(Event.create());
-        if (make == true) { System.out.println("Operation make it!"); } else { System.out.println("Operation with errors"); }
-        ResultSet RSEventLastID = dba.consultar(Event.getLastIndex());
-        String EVENT_LAST_ID = getDataFromRS(RSEventLastID);
-        
-        TicketType TicketType = new TicketType();
-        for (int i = 0; i > TicketsList.size()-1; i++) {
-            String[] Object = TicketsList.get(i);
-            make = dba.ejecutar(TicketType.create(Object[0], Object[1], EVENT_LAST_ID, Object[2]));
+        try {
+            Place Place = new Place();
+            PLACE_ID = Place.getID(PLACE_ID);
+            ResultSet RSPlace = dba.consultar(PLACE_ID);
+            PLACE_ID = getDataFromRS(RSPlace);
+
+            PlaceType PlaceType = new PlaceType();
+            PTYPE_ID = PlaceType.getID(PTYPE_ID);
+            ResultSet RSPlaceType = dba.consultar(PTYPE_ID);
+            PTYPE_ID = getDataFromRS(RSPlaceType);
+
+            EventCategory EventCategory = new EventCategory();
+            ECATEGORY_ID = EventCategory.getID(ECATEGORY_ID);
+            ResultSet RSEventCategory = dba.consultar(ECATEGORY_ID);
+            ECATEGORY_ID = getDataFromRS(RSEventCategory);
+
+            Boolean make;
+
+            EventType EventType = new EventType(ETYPE_NAME, RESTRICTIONS, ECATEGORY_ID);
+            make = dba.ejecutar(EventType.create());
             if (make == true) { System.out.println("Operation make it!"); } else { System.out.println("Operation with errors"); }
+            ResultSet RSEventTypeLastID = dba.consultar(EventType.getLastIndex());
+            String EVENT_TYPE_LAST_ID = getDataFromRS(RSEventTypeLastID);
+
+            Event Event = new Event(EVENT_TYPE_LAST_ID, PLACE_ID, "0", DATE_HOUR);
+            make = dba.ejecutar(Event.create());
+            if (make == true) { System.out.println("Operation make it!"); } else { System.out.println("Operation with errors"); }
+            ResultSet RSEventLastID = dba.consultar(Event.getLastIndex());
+            String EVENT_LAST_ID = getDataFromRS(RSEventLastID);
+
+            TicketType TicketType = new TicketType();
+            for (int i = 0; i > TicketsList.size()-1; i++) {
+                String[] Object = TicketsList.get(i);
+                make = dba.ejecutar(TicketType.create(Object[0], Object[1], EVENT_LAST_ID, Object[2]));
+                if (make == true) { System.out.println("Operation make it!"); } else { System.out.println("Operation with errors"); }
+            }
+        } catch(Exception e){
+            JOptionPane.showMessageDialog(null,e.getMessage(),"Mensaje de Error",JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_buttonCreateActionPerformed
 
     private void selCityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selCityActionPerformed
         String CITY_ID = (String)selCity.getSelectedItem();
         
-        City pCity = new City();
-        CITY_ID = pCity.getID(CITY_ID);
-        ResultSet RSpCity = dba.consultar(CITY_ID);
-        CITY_ID = getDataFromRS(RSpCity);
-        
-        Place Place = new Place();
-        ResultSet rsPlace = dba.consultar(Place.getPlaces(CITY_ID));
-        String[] arrayPlace = rsToArray(rsPlace);
-        selPlace = new JComboBox(arrayPlace);
+        try {
+            City pCity = new City();
+            CITY_ID = pCity.getID(CITY_ID);
+            ResultSet RSpCity = dba.consultar(CITY_ID);
+            CITY_ID = getDataFromRS(RSpCity);
+
+            Place Place = new Place();
+            ResultSet rsPlace = dba.consultar(Place.getPlaces(CITY_ID));
+            String[] arrayPlace = rsToArray(rsPlace);
+            selPlace = new JComboBox(arrayPlace);
+        } catch(Exception e){
+            JOptionPane.showMessageDialog(null,e.getMessage(),"Mensaje de Error",JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_selCityActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

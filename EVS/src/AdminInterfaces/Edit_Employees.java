@@ -5,7 +5,7 @@ import Mundo.Admin.Occupation;
 import Mundo.Admin.Person;
 import java.sql.*;
 import java.util.ArrayList;
-import javax.swing.JComboBox;
+import javax.swing.*;
 
 public class Edit_Employees extends javax.swing.JFrame {
     DBAccess dba;
@@ -15,15 +15,19 @@ public class Edit_Employees extends javax.swing.JFrame {
         
         initComponents();
         
-        Occupation Occupation = new Occupation();
-        ResultSet rsOccupation = dba.consultar(Occupation.getOccupations());
-        String[] arrayOccupation = rsToArray(rsOccupation);
-        selOccupation = new JComboBox(arrayOccupation);
-        
-        EPS EPS = new EPS();
-        ResultSet rsEPS = dba.consultar(EPS.getEPSs());
-        String[] arrayEPSs = rsToArray(rsEPS);
-        selEPS = new JComboBox(arrayEPSs);
+        try {
+            Occupation Occupation = new Occupation();
+            ResultSet rsOccupation = dba.consultar(Occupation.getOccupations());
+            String[] arrayOccupation = rsToArray(rsOccupation);
+            selOccupation = new JComboBox(arrayOccupation);
+
+            EPS EPS = new EPS();
+            ResultSet rsEPS = dba.consultar(EPS.getEPSs());
+            String[] arrayEPSs = rsToArray(rsEPS);
+            selEPS = new JComboBox(arrayEPSs);
+        } catch(Exception e){
+            JOptionPane.showMessageDialog(null,e.getMessage(),"Mensaje de Error",JOptionPane.ERROR_MESSAGE);
+        }
     }
     
     public String[] rsToArray(ResultSet data){
@@ -172,33 +176,41 @@ public class Edit_Employees extends javax.swing.JFrame {
         String OCCUPATION_ID = (String)selOccupation.getSelectedItem();
         String EPS_ID = (String)selEPS.getSelectedItem();
         
-        Occupation Occupation = new Occupation();
-        OCCUPATION_ID = Occupation.getID(OCCUPATION_ID);
-        ResultSet RSOccupation = dba.consultar(OCCUPATION_ID);
-        OCCUPATION_ID = getDataFromRS(RSOccupation);
-        
-        EPS EPS = new EPS();
-        EPS_ID = EPS.getID(EPS_ID);
-        ResultSet RSEPS = dba.consultar(EPS_ID);
-        EPS_ID = getDataFromRS(RSEPS);
-        
-        Person Person = new Person(PERSON_ID, OCCUPATION_ID, EPS_ID);
-        Boolean make = dba.ejecutar(Person.update());
-        if (make == true) { System.out.println("Operation make it!"); } else { System.out.println("Operation with errors"); }
+        try {
+            Occupation Occupation = new Occupation();
+            OCCUPATION_ID = Occupation.getID(OCCUPATION_ID);
+            ResultSet RSOccupation = dba.consultar(OCCUPATION_ID);
+            OCCUPATION_ID = getDataFromRS(RSOccupation);
+
+            EPS EPS = new EPS();
+            EPS_ID = EPS.getID(EPS_ID);
+            ResultSet RSEPS = dba.consultar(EPS_ID);
+            EPS_ID = getDataFromRS(RSEPS);
+
+            Person Person = new Person(PERSON_ID, OCCUPATION_ID, EPS_ID);
+            Boolean make = dba.ejecutar(Person.update());
+            if (make == true) { System.out.println("Operation make it!"); } else { System.out.println("Operation with errors"); }
+        } catch(Exception e){
+            JOptionPane.showMessageDialog(null,e.getMessage(),"Mensaje de Error",JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_buttonEditActionPerformed
 
     private void buttonSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonSearchActionPerformed
         String PERSON_ID = textPersonID.getSelectedText();
         
-        Occupation Occupation = new Occupation();
-        ResultSet rsOccupation = dba.consultar(Occupation.getOccupation(PERSON_ID));
-        String[] arrayOccupation = rsToArray(rsOccupation);
-        selOccupation = new JComboBox(arrayOccupation);
-        
-        EPS EPS = new EPS();
-        ResultSet rsEPS = dba.consultar(EPS.getEPS(PERSON_ID));
-        String[] arrayEPSs = rsToArray(rsEPS);
-        selEPS = new JComboBox(arrayEPSs);
+        try {
+            Occupation Occupation = new Occupation();
+            ResultSet rsOccupation = dba.consultar(Occupation.getOccupation(PERSON_ID));
+            String[] arrayOccupation = rsToArray(rsOccupation);
+            selOccupation = new JComboBox(arrayOccupation);
+
+            EPS EPS = new EPS();
+            ResultSet rsEPS = dba.consultar(EPS.getEPS(PERSON_ID));
+            String[] arrayEPSs = rsToArray(rsEPS);
+            selEPS = new JComboBox(arrayEPSs);
+        } catch(Exception e){
+            JOptionPane.showMessageDialog(null,e.getMessage(),"Mensaje de Error",JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_buttonSearchActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

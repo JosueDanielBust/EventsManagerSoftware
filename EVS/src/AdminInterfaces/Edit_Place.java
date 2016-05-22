@@ -5,7 +5,7 @@ import Mundo.Admin.Place;
 import Mundo.Admin.PlaceType;
 import java.util.*;
 import java.sql.*;
-import javax.swing.JComboBox;
+import javax.swing.*;
 
 public class Edit_Place extends javax.swing.JFrame {
     private String PLACE_ID;
@@ -19,15 +19,19 @@ public class Edit_Place extends javax.swing.JFrame {
         initComponents();
         if (this.edit == false) { labelTitle.setText("Crear Lugar"); } else { labelTitle.setText("Modificar Lugar"); }
         
-        City City = new City();
-        ResultSet rsCity = dba.consultar(City.getCiudades());
-        String[] arrayCity = rsToArray(rsCity);
-        selplacecity = new JComboBox(arrayCity);
-        
-        PlaceType PlaceType = new PlaceType();
-        ResultSet rsPlaceType = dba.consultar(PlaceType.getPlacesTypes());
-        String[] arrayPlaceType = rsToArray(rsPlaceType);
-        selplacetype = new JComboBox(arrayPlaceType);
+        try {
+            City City = new City();
+            ResultSet rsCity = dba.consultar(City.getCiudades());
+            String[] arrayCity = rsToArray(rsCity);
+            selplacecity = new JComboBox(arrayCity);
+
+            PlaceType PlaceType = new PlaceType();
+            ResultSet rsPlaceType = dba.consultar(PlaceType.getPlacesTypes());
+            String[] arrayPlaceType = rsToArray(rsPlaceType);
+            selplacetype = new JComboBox(arrayPlaceType);
+        } catch(Exception e){
+            JOptionPane.showMessageDialog(null,e.getMessage(),"Mensaje de Error",JOptionPane.ERROR_MESSAGE);
+        }
     }
     
     public Edit_Place(DBAccess dba, String PLACE_ID, Boolean edit) {
@@ -36,53 +40,57 @@ public class Edit_Place extends javax.swing.JFrame {
         this.edit = edit;
         initComponents();
         if (this.edit == false) { labelTitle.setText("Crear Lugar"); } else { labelTitle.setText("Modificar Lugar"); }
+        
+        try {
+            City City = new City();
+            ResultSet rsCity = dba.consultar(City.getCiudades());
+            String[] arrayCity = rsToArray(rsCity);
+            selplacecity = new JComboBox(arrayCity);
 
-        City City = new City();
-        ResultSet rsCity = dba.consultar(City.getCiudades());
-        String[] arrayCity = rsToArray(rsCity);
-        selplacecity = new JComboBox(arrayCity);
-        
-        PlaceType PlaceType = new PlaceType();
-        ResultSet rsPlaceType = dba.consultar(PlaceType.getPlacesTypes());
-        String[] arrayPlaceType = rsToArray(rsPlaceType);
-        selplacetype = new JComboBox(arrayPlaceType);
-        
-        Place Place = new Place();
-        
-        String PLACE_NAME = Place.getName(PLACE_ID);
-        ResultSet RSpName = dba.consultar(PLACE_NAME);
-        PLACE_NAME = getDataFromRS(RSpName);
-        textplacename.setText(PLACE_NAME);
-        
-        String PLACE_PHONE = Place.getPhone(PLACE_ID);
-        ResultSet RSpPhone = dba.consultar(PLACE_PHONE);
-        PLACE_PHONE = getDataFromRS(RSpPhone);
-        textplacephone.setText(PLACE_PHONE);
-        
-        String ACCESS_RESTRICTIONS = Place.getRestrictions(PLACE_ID);
-        ResultSet RSpRestrictions = dba.consultar(ACCESS_RESTRICTIONS);
-        ACCESS_RESTRICTIONS = getDataFromRS(RSpRestrictions);
-        textplacerestrictions.setText(ACCESS_RESTRICTIONS);
-        
-        String PLACE_ADDRESS = Place.getPhone(PLACE_ID);
-        ResultSet RSpAddress = dba.consultar(PLACE_ADDRESS);
-        PLACE_ADDRESS = getDataFromRS(RSpAddress);
-        textplaceaddress.setText(PLACE_ADDRESS);
-        
-        String CAPACITY = Place.getCapacity(PLACE_ID);
-        ResultSet RSpCapacity = dba.consultar(CAPACITY);
-        CAPACITY = getDataFromRS(RSpCapacity);
-        textplacecapacity.setText(CAPACITY);
-        
-        String CITY_NAME = Place.getCity(PLACE_ID);
-        ResultSet RSpCity = dba.consultar(CITY_NAME);
-        CITY_NAME = getDataFromRS(RSpCity);
-        selplacecity.setSelectedItem(CITY_NAME);
-        
-        String PLACE_TYPE = Place.getPType(PLACE_ID);
-        ResultSet RSpType = dba.consultar(PLACE_TYPE);
-        PLACE_TYPE = getDataFromRS(RSpType);
-        selplacetype.setSelectedItem(PLACE_TYPE);
+            PlaceType PlaceType = new PlaceType();
+            ResultSet rsPlaceType = dba.consultar(PlaceType.getPlacesTypes());
+            String[] arrayPlaceType = rsToArray(rsPlaceType);
+            selplacetype = new JComboBox(arrayPlaceType);
+
+            Place Place = new Place();
+
+            String PLACE_NAME = Place.getName(PLACE_ID);
+            ResultSet RSpName = dba.consultar(PLACE_NAME);
+            PLACE_NAME = getDataFromRS(RSpName);
+            textplacename.setText(PLACE_NAME);
+
+            String PLACE_PHONE = Place.getPhone(PLACE_ID);
+            ResultSet RSpPhone = dba.consultar(PLACE_PHONE);
+            PLACE_PHONE = getDataFromRS(RSpPhone);
+            textplacephone.setText(PLACE_PHONE);
+
+            String ACCESS_RESTRICTIONS = Place.getRestrictions(PLACE_ID);
+            ResultSet RSpRestrictions = dba.consultar(ACCESS_RESTRICTIONS);
+            ACCESS_RESTRICTIONS = getDataFromRS(RSpRestrictions);
+            textplacerestrictions.setText(ACCESS_RESTRICTIONS);
+
+            String PLACE_ADDRESS = Place.getPhone(PLACE_ID);
+            ResultSet RSpAddress = dba.consultar(PLACE_ADDRESS);
+            PLACE_ADDRESS = getDataFromRS(RSpAddress);
+            textplaceaddress.setText(PLACE_ADDRESS);
+
+            String CAPACITY = Place.getCapacity(PLACE_ID);
+            ResultSet RSpCapacity = dba.consultar(CAPACITY);
+            CAPACITY = getDataFromRS(RSpCapacity);
+            textplacecapacity.setText(CAPACITY);
+
+            String CITY_NAME = Place.getCity(PLACE_ID);
+            ResultSet RSpCity = dba.consultar(CITY_NAME);
+            CITY_NAME = getDataFromRS(RSpCity);
+            selplacecity.setSelectedItem(CITY_NAME);
+
+            String PLACE_TYPE = Place.getPType(PLACE_ID);
+            ResultSet RSpType = dba.consultar(PLACE_TYPE);
+            PLACE_TYPE = getDataFromRS(RSpType);
+            selplacetype.setSelectedItem(PLACE_TYPE);
+        } catch(Exception e){
+            JOptionPane.showMessageDialog(null,e.getMessage(),"Mensaje de Error",JOptionPane.ERROR_MESSAGE);
+        }
     }
     
     public String[] rsToArray(ResultSet data){
@@ -271,25 +279,29 @@ public class Edit_Place extends javax.swing.JFrame {
         String PTYPE_ID = (String)selplacetype.getSelectedItem();
         String CITY_ID = (String)selplacecity.getSelectedItem();
         
-        PlaceType pType = new PlaceType();
-        PTYPE_ID = pType.getID(PTYPE_ID);
-        ResultSet RSpType = dba.consultar(PTYPE_ID);
-        PTYPE_ID = getDataFromRS(RSpType);
-        
-        City pCity = new City();
-        CITY_ID = pCity.getID(CITY_ID);
-        ResultSet RSpCity = dba.consultar(CITY_ID);
-        CITY_ID = getDataFromRS(RSpCity);
-        
-        Boolean make;
-        if (edit == true) {
-            Place PlaceUpdate = new Place(PLACE_ID, PLACE_NAME, PLACE_PHONE, ACCESS_RESTRICTIONS, PLACE_ADDRESS, CAPACITY, PTYPE_ID, CITY_ID);
-            make = dba.ejecutar(PlaceUpdate.update());
-        } else {
-            Place PlaceCreate = new Place(PLACE_NAME, PLACE_PHONE, ACCESS_RESTRICTIONS, PLACE_ADDRESS, CAPACITY, PTYPE_ID, CITY_ID);
-            make = dba.ejecutar(PlaceCreate.create());
+        try {
+            PlaceType pType = new PlaceType();
+            PTYPE_ID = pType.getID(PTYPE_ID);
+            ResultSet RSpType = dba.consultar(PTYPE_ID);
+            PTYPE_ID = getDataFromRS(RSpType);
+
+            City pCity = new City();
+            CITY_ID = pCity.getID(CITY_ID);
+            ResultSet RSpCity = dba.consultar(CITY_ID);
+            CITY_ID = getDataFromRS(RSpCity);
+
+            Boolean make;
+            if (edit == true) {
+                Place PlaceUpdate = new Place(PLACE_ID, PLACE_NAME, PLACE_PHONE, ACCESS_RESTRICTIONS, PLACE_ADDRESS, CAPACITY, PTYPE_ID, CITY_ID);
+                make = dba.ejecutar(PlaceUpdate.update());
+            } else {
+                Place PlaceCreate = new Place(PLACE_NAME, PLACE_PHONE, ACCESS_RESTRICTIONS, PLACE_ADDRESS, CAPACITY, PTYPE_ID, CITY_ID);
+                make = dba.ejecutar(PlaceCreate.create());
+            }
+            if (make == true) { System.out.println("Operation make it!"); } else { System.out.println("Operation with errors"); }
+        } catch(Exception e){
+            JOptionPane.showMessageDialog(null,e.getMessage(),"Mensaje de Error",JOptionPane.ERROR_MESSAGE);
         }
-        if (make == true) { System.out.println("Operation make it!"); } else { System.out.println("Operation with errors"); }
     }//GEN-LAST:event_buttonUpdateActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

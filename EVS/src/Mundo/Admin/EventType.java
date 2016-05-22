@@ -3,6 +3,7 @@ package Mundo.Admin;
 public class EventType {
     String ETYPE_ID, ETYPE_NAME, RESTRICTIONS, ECATEGORY_ID;
     
+    public EventType(){}
     public EventType(String ETYPE_NAME, String RESTRICTIONS, String ECATEGORY_ID){
         this.ETYPE_ID = ETYPE_ID;
         this.RESTRICTIONS = RESTRICTIONS;
