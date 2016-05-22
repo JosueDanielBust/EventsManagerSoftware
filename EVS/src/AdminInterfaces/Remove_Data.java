@@ -5,43 +5,19 @@
  */
 package AdminInterfaces;
 
-import javax.swing.JComboBox;
-import java.util.HashMap;
-import MainInterfaces.DBAccess;
-import Mundo.DeleteElement;
-import java.sql.ResultSet;
-import javax.swing.JOptionPane;
-
 /**
  *
  * @author Julian
  */
-public class Delete_Element extends javax.swing.JFrame {
-    private DBAccess dba;
-    private ResultSet rs;
-    private String tabla,elemento,statement;
-    private boolean resultado;
-    
-    private static final HashMap<String,String> tablas = new HashMap<String,String>(){{
-            put("Ciudad", "CITY");
-            put("EPS","EPS" );
-            put("Ocupación","OCCUPATION" );
-            put("Categoría evento", "EVENT_CATEGORY");
-            put("Tipo de lugar", "PLACE_TYPE");
-    }};
-   
-    
-    
+public class Remove_Data extends javax.swing.JFrame {
+
     /**
      * Creates new form Add_PlaceType
      */
-    public Delete_Element(DBAccess db) {
-        dba=db;
-        String categorias[]={"Ciudad","EPS","Ocupación","Categoría evento","Tipo de lugar"};       
-        jCBCategoria = new JComboBox(categorias);
-        jCBElemento.setEnabled(false);
+    public Remove_Data() {
         initComponents();
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -54,9 +30,9 @@ public class Delete_Element extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
-        jCBElemento = new javax.swing.JComboBox<>();
+        jComboBox1 = new javax.swing.JComboBox<>();
         jLabel3 = new javax.swing.JLabel();
-        jCBCategoria = new javax.swing.JComboBox<>();
+        jComboBox2 = new javax.swing.JComboBox<>();
         jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -68,26 +44,18 @@ public class Delete_Element extends javax.swing.JFrame {
         jLabel2.setText("Elemento");
 
         jButton2.setText("Eliminar");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
 
-        jCBElemento.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Medellin" }));
-        jCBElemento.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCBElementoActionPerformed(evt);
-            }
-        });
+        jComboBox1.setEditable(true);
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Medellin" }));
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel3.setText("Categoría ");
 
-        jCBCategoria.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Ciudad", "EPS", "Ocupacion", "Categoria de evento", "Categoria de Lugar" }));
-        jCBCategoria.addActionListener(new java.awt.event.ActionListener() {
+        jComboBox2.setEditable(true);
+        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Ciudad", "EPS", "Ocupacion", "Categoria de evento", "Categoria de Lugar" }));
+        jComboBox2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCBCategoriaActionPerformed(evt);
+                jComboBox2ActionPerformed(evt);
             }
         });
 
@@ -110,8 +78,8 @@ public class Delete_Element extends javax.swing.JFrame {
                             .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 73, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jCBCategoria, 0, 199, Short.MAX_VALUE)
-                            .addComponent(jCBElemento, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jComboBox2, 0, 199, Short.MAX_VALUE)
+                            .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(36, 36, 36))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -129,12 +97,12 @@ public class Delete_Element extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel3)
-                            .addComponent(jCBCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(49, 49, 49))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(61, 61, 61)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jCBElemento, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel2))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -146,37 +114,20 @@ public class Delete_Element extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jCBCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCBCategoriaActionPerformed
-        JComboBox cb = (JComboBox)evt.getSource();
-        
-        tabla = (String)cb.getSelectedItem();
-        tabla  = tablas.get(tabla);
-        try{
-            statement = DeleteElement.consultarElementos(tabla);       
-            rs=dba.consultar(statement);       
-            jCBElemento = new JComboBox(dba.rsToArray(rs));
-        }catch(Exception e){
-            JOptionPane.showMessageDialog(null,"Error: "+e.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
-        }
-        jCBElemento.setEnabled(true);
-    }//GEN-LAST:event_jCBCategoriaActionPerformed
+    private void jComboBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBox2ActionPerformed
 
-    private void jCBElementoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCBElementoActionPerformed
-       JComboBox cb = (JComboBox)evt.getSource();
-       elemento = (String)cb.getSelectedItem();
-    }//GEN-LAST:event_jCBElementoActionPerformed
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-       statement = DeleteElement.eliminarElemento(tabla,elemento);
-       resultado =dba.ejecutar(statement); 
-    }//GEN-LAST:event_jButton2ActionPerformed
+    /**
+     * @param args the command line arguments
+     */
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JComboBox<String> jCBCategoria;
-    private javax.swing.JComboBox<String> jCBElemento;
+    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

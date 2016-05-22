@@ -1,21 +1,40 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package AdminInterfaces;
 
-/**
- *
- * @author Julian
- */
-public class Edit_EventType extends javax.swing.JFrame {
+import MainInterfaces.DBAccess;
+import Mundo.Admin.EventCategory;
+import Mundo.Admin.EventType;
+import java.sql.*;
+import java.util.ArrayList;
+import javax.swing.JComboBox;
 
-    /**
-     * Creates new form Add_Event
-     */
-    public Edit_EventType() {
+public class Edit_EventType extends javax.swing.JFrame {
+    DBAccess dba;
+
+    
+    public Edit_EventType(DBAccess dba) {
+        this.dba = dba;
+        
         initComponents();
+        
+        EventCategory EventCategory = new EventCategory();
+        ResultSet rsEventCategory = dba.consultar(EventCategory.getCategories());
+        String[] arrayEventCategory = rsToArray(rsEventCategory);
+        selCategories = new JComboBox(arrayEventCategory);
+    }
+    
+    public String[] rsToArray(ResultSet data){
+        ArrayList<String> items = new ArrayList<>(100);    
+        try {
+        while(data.next()){ items.add(data.getString(1)); }
+        } catch(SQLException e){}
+        return items.toArray(new String[items.size()]);
+    }
+    
+    public String getDataFromRS(ResultSet data) {
+        try{
+            if(data.next()){ return data.getString(1); }
+        } catch(SQLException e) {}
+        return "";
     }
 
     /**
@@ -31,14 +50,14 @@ public class Edit_EventType extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        textRestrictions = new javax.swing.JTextArea();
         jLabel4 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jComboBox2 = new javax.swing.JComboBox<>();
-        jButton4 = new javax.swing.JButton();
+        selCategories = new javax.swing.JComboBox<>();
+        buttonEdit = new javax.swing.JButton();
+        buttonExit = new javax.swing.JButton();
+        buttonRemove = new javax.swing.JButton();
+        selName = new javax.swing.JComboBox<>();
+        buttonNewEvent = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -52,27 +71,57 @@ public class Edit_EventType extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel3.setText("Restricciones");
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jTextArea1.setText("Solo mayores de edad");
-        jScrollPane1.setViewportView(jTextArea1);
+        textRestrictions.setColumns(20);
+        textRestrictions.setRows(5);
+        textRestrictions.setText("Solo mayores de edad");
+        jScrollPane1.setViewportView(textRestrictions);
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel4.setText("Categoría");
 
-        jComboBox1.setEditable(true);
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Concierto", "Conferencia" }));
+        selCategories.setEditable(true);
+        selCategories.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Concierto", "Conferencia" }));
+        selCategories.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                selCategoriesActionPerformed(evt);
+            }
+        });
 
-        jButton1.setText("Aceptar");
+        buttonEdit.setText("Aceptar");
+        buttonEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonEditActionPerformed(evt);
+            }
+        });
 
-        jButton2.setText("Cancelar");
+        buttonExit.setText("Cancelar");
+        buttonExit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonExitActionPerformed(evt);
+            }
+        });
 
-        jButton3.setText("Eliminar");
+        buttonRemove.setText("Eliminar");
+        buttonRemove.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonRemoveActionPerformed(evt);
+            }
+        });
 
-        jComboBox2.setEditable(true);
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Rock al Parque" }));
+        selName.setEditable(true);
+        selName.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Rock al Parque" }));
+        selName.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                selNameActionPerformed(evt);
+            }
+        });
 
-        jButton4.setText("Programar Evento");
+        buttonNewEvent.setText("Programar Evento");
+        buttonNewEvent.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonNewEventActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -90,19 +139,19 @@ public class Edit_EventType extends javax.swing.JFrame {
                                     .addComponent(jLabel2))
                                 .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jComboBox2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(selCategories, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(selName, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jButton2)
+                                .addComponent(buttonExit)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButton3)
+                                .addComponent(buttonRemove)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButton1)
+                                .addComponent(buttonEdit)
                                 .addGap(10, 10, 10)))
                         .addGap(28, 28, 28))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jButton4)
+                        .addComponent(buttonNewEvent)
                         .addGap(106, 106, 106))))
             .addGroup(layout.createSequentialGroup()
                 .addGap(78, 78, 78)
@@ -120,30 +169,87 @@ public class Edit_EventType extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(selCategories, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(selName, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(25, 25, 25)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
-                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(buttonNewEvent, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 8, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(buttonEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(buttonRemove, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(buttonExit, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(23, 23, 23))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void buttonExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonExitActionPerformed
+        dispose();
+    }//GEN-LAST:event_buttonExitActionPerformed
+
+    private void buttonNewEventActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonNewEventActionPerformed
+        new New_Event(dba);
+    }//GEN-LAST:event_buttonNewEventActionPerformed
+
+    private void selCategoriesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selCategoriesActionPerformed
+        String ECATEGORY_ID = (String)selCategories.getSelectedItem();
+        
+        EventCategory EventCategory = new EventCategory();
+        ECATEGORY_ID = EventCategory.getID(ECATEGORY_ID);
+        ResultSet RSEventCategory = dba.consultar(ECATEGORY_ID);
+        ECATEGORY_ID = getDataFromRS(RSEventCategory);
+        
+        EventType EventType = new EventType();
+        ResultSet rsEventType = dba.consultar(EventType.getEvents(ECATEGORY_ID));
+        String[] arrayEventType = rsToArray(rsEventType);
+        selName = new JComboBox(arrayEventType);
+    }//GEN-LAST:event_selCategoriesActionPerformed
+
+    private void selNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selNameActionPerformed
+        String RESTRICTIONS = (String)selName.getSelectedItem();
+        
+        EventType EventType = new EventType();
+        RESTRICTIONS = EventType.getRestrictions(RESTRICTIONS);
+        ResultSet RSEventType = dba.consultar(RESTRICTIONS);
+        RESTRICTIONS = getDataFromRS(RSEventType);
+        
+        textRestrictions.setText(RESTRICTIONS);
+    }//GEN-LAST:event_selNameActionPerformed
+
+    private void buttonRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonRemoveActionPerformed
+        String ETYPE_ID = (String)selName.getSelectedItem();
+        
+        EventType EventType = new EventType();
+        ETYPE_ID = EventType.getID(ETYPE_ID);
+        ResultSet RSEventType = dba.consultar(ETYPE_ID);
+        ETYPE_ID = getDataFromRS(RSEventType);
+        
+        Boolean make = dba.ejecutar(EventType.remove(ETYPE_ID));
+        if (make == true) { System.out.println("Operation make it!"); } else { System.out.println("Operation with errors"); }
+    }//GEN-LAST:event_buttonRemoveActionPerformed
+
+    private void buttonEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonEditActionPerformed
+        String ETYPE_ID = (String)selName.getSelectedItem();
+        
+        EventType EventType = new EventType();
+        ETYPE_ID = EventType.getID(ETYPE_ID);
+        ResultSet RSEventType = dba.consultar(ETYPE_ID);
+        ETYPE_ID = getDataFromRS(RSEventType);
+        
+        Boolean make = dba.ejecutar(EventType.update());
+        if (make == true) { System.out.println("Operation make it!"); } else { System.out.println("Operation with errors"); }
+    }//GEN-LAST:event_buttonEditActionPerformed
 
     /**
      * @param args the command line arguments
@@ -184,18 +290,18 @@ public class Edit_EventType extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
+    private javax.swing.JButton buttonEdit;
+    private javax.swing.JButton buttonExit;
+    private javax.swing.JButton buttonNewEvent;
+    private javax.swing.JButton buttonRemove;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JComboBox<String> selCategories;
+    private javax.swing.JComboBox<String> selName;
+    private javax.swing.JTextArea textRestrictions;
     // End of variables declaration//GEN-END:variables
 }
