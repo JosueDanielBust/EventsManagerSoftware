@@ -31,7 +31,7 @@ public class BoughtTickets extends javax.swing.JFrame {
         //traer las categorias disponibles al comboBox
      
         rs=dba.consultar(Ticket.buscarCategorias(id_person));      
-        jCBCategoria = new JComboBox(rsToArray(rs));
+        jCBCategoria = new JComboBox(dba.rsToArray(rs));
         jCBCiudad.setEnabled(false);
         jCBEvento.setEnabled(false);
         jCBFecha.setEnabled(false);
@@ -247,7 +247,7 @@ public class BoughtTickets extends javax.swing.JFrame {
         JComboBox cb = (JComboBox)evt.getSource();
         categoria = (String)cb.getSelectedItem();       
         rs=dba.consultar(Ticket.buscarCiudades(categoria,id_person));      
-        jCBCiudad = new JComboBox(rsToArray(rs));
+        jCBCiudad = new JComboBox(dba.rsToArray(rs));
         jCBCiudad.setEnabled(true);
         jCBEvento.setEnabled(false);
         jCBFecha.setEnabled(false);
