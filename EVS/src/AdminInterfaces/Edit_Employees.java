@@ -1,21 +1,44 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package AdminInterfaces;
+import MainInterfaces.DBAccess;
+import Mundo.Admin.EPS;
+import Mundo.Admin.Occupation;
+import Mundo.Admin.Person;
+import java.sql.*;
+import java.util.ArrayList;
+import javax.swing.JComboBox;
 
-/**
- *
- * @author Julian
- */
 public class Edit_Employees extends javax.swing.JFrame {
+    DBAccess dba;
 
-    /**
-     * Creates new form Empleados
-     */
-    public Edit_Employees() {
+    public Edit_Employees(DBAccess dba) {
+        this.dba = dba;
+        
         initComponents();
+        
+        Occupation Occupation = new Occupation();
+        ResultSet rsOccupation = dba.consultar(Occupation.getOccupations());
+        String[] arrayOccupation = rsToArray(rsOccupation);
+        selOccupation = new JComboBox(arrayOccupation);
+        
+        EPS EPS = new EPS();
+        ResultSet rsEPS = dba.consultar(EPS.getEPSs());
+        String[] arrayEPSs = rsToArray(rsEPS);
+        selEPS = new JComboBox(arrayEPSs);
+    }
+    
+    public String[] rsToArray(ResultSet data){
+        ArrayList<String> items = new ArrayList<>(100);    
+        try {
+        while(data.next()){ items.add(data.getString(1)); }
+        } catch(SQLException e){}
+        return items.toArray(new String[items.size()]);
+    }
+    
+    public String getDataFromRS(ResultSet data) {
+        try{
+            if(data.next()){ return data.getString(1); }
+        } catch(SQLException e) {}
+        return "";
     }
 
     /**
@@ -29,14 +52,14 @@ public class Edit_Employees extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        textPersonID = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jComboBox2 = new javax.swing.JComboBox<>();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        selOccupation = new javax.swing.JComboBox<>();
+        selEPS = new javax.swing.JComboBox<>();
+        buttonExit = new javax.swing.JButton();
+        buttonEdit = new javax.swing.JButton();
+        buttonSearch = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -46,7 +69,7 @@ public class Edit_Employees extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel2.setText("Identificación");
 
-        jTextField1.setText("1234555");
+        textPersonID.setText("1234555");
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel3.setText("EPS ");
@@ -54,27 +77,32 @@ public class Edit_Employees extends javax.swing.JFrame {
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel4.setText("Ocupación ");
 
-        jComboBox1.setEditable(true);
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Administrador", "Usuario" }));
+        selOccupation.setEditable(true);
+        selOccupation.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Administrador", "Usuario" }));
 
-        jComboBox2.setEditable(true);
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "SaludCoop", "Sura", "Cafesalud", "Caprecom" }));
+        selEPS.setEditable(true);
+        selEPS.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "SaludCoop", "Sura", "Cafesalud", "Caprecom" }));
 
-        jButton1.setText("Atrás");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        buttonExit.setText("Salir");
+        buttonExit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                buttonExitActionPerformed(evt);
             }
         });
 
-        jButton2.setText("Modificar");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        buttonEdit.setText("Modificar");
+        buttonEdit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                buttonEditActionPerformed(evt);
             }
         });
 
-        jButton3.setText("Buscar");
+        buttonSearch.setText("Buscar");
+        buttonSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonSearchActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -89,11 +117,11 @@ public class Edit_Employees extends javax.swing.JFrame {
                         .addGap(51, 51, 51)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jButton2)
+                                .addComponent(buttonEdit)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(buttonExit, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(buttonSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel2)
@@ -101,10 +129,10 @@ public class Edit_Employees extends javax.swing.JFrame {
                                     .addComponent(jLabel4))
                                 .addGap(31, 31, 31)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jComboBox1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(selOccupation, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(jTextField1)
-                                        .addComponent(jComboBox2, javax.swing.GroupLayout.Alignment.TRAILING, 0, 183, Short.MAX_VALUE)))))))
+                                        .addComponent(textPersonID)
+                                        .addComponent(selEPS, javax.swing.GroupLayout.Alignment.TRAILING, 0, 183, Short.MAX_VALUE)))))))
                 .addContainerGap(79, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -115,33 +143,63 @@ public class Edit_Employees extends javax.swing.JFrame {
                 .addGap(27, 27, 27)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(textPersonID, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(19, 19, 19)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(selOccupation, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(selEPS, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(32, 32, 32)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(buttonEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(buttonExit, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(buttonSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(27, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void buttonExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonExitActionPerformed
+        dispose();
+    }//GEN-LAST:event_buttonExitActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+    private void buttonEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonEditActionPerformed
+        String PERSON_ID = textPersonID.getSelectedText();
+        String OCCUPATION_ID = (String)selOccupation.getSelectedItem();
+        String EPS_ID = (String)selEPS.getSelectedItem();
+        
+        Occupation Occupation = new Occupation();
+        OCCUPATION_ID = Occupation.getID(OCCUPATION_ID);
+        ResultSet RSOccupation = dba.consultar(OCCUPATION_ID);
+        OCCUPATION_ID = getDataFromRS(RSOccupation);
+        
+        EPS EPS = new EPS();
+        EPS_ID = EPS.getID(EPS_ID);
+        ResultSet RSEPS = dba.consultar(EPS_ID);
+        EPS_ID = getDataFromRS(RSEPS);
+        
+        Person Person = new Person(PERSON_ID, OCCUPATION_ID, EPS_ID);
+        Boolean make = dba.ejecutar(Person.update());
+        if (make == true) { System.out.println("Operation make it!"); } else { System.out.println("Operation with errors"); }
+    }//GEN-LAST:event_buttonEditActionPerformed
+
+    private void buttonSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonSearchActionPerformed
+        String PERSON_ID = textPersonID.getSelectedText();
+        
+        Occupation Occupation = new Occupation();
+        ResultSet rsOccupation = dba.consultar(Occupation.getOccupation(PERSON_ID));
+        String[] arrayOccupation = rsToArray(rsOccupation);
+        selOccupation = new JComboBox(arrayOccupation);
+        
+        EPS EPS = new EPS();
+        ResultSet rsEPS = dba.consultar(EPS.getEPS(PERSON_ID));
+        String[] arrayEPSs = rsToArray(rsEPS);
+        selEPS = new JComboBox(arrayEPSs);
+    }//GEN-LAST:event_buttonSearchActionPerformed
 
     /**
      * @param args the command line arguments
@@ -180,15 +238,15 @@ public class Edit_Employees extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
+    private javax.swing.JButton buttonEdit;
+    private javax.swing.JButton buttonExit;
+    private javax.swing.JButton buttonSearch;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JComboBox<String> selEPS;
+    private javax.swing.JComboBox<String> selOccupation;
+    private javax.swing.JTextField textPersonID;
     // End of variables declaration//GEN-END:variables
 }
