@@ -11,8 +11,34 @@ package Mundo;
  */
 
 public class Event {
-    private static String event_id,ecategoria,eName;
+    private static String event_id,ecategoria,eName,ciudad,direccion,fecha;
 
+    public static String getCiudad() {
+        return ciudad;
+    }
+
+    public static String getDireccion() {
+        return direccion;
+    }
+
+    public static String getFecha() {
+        return fecha;
+    }
+
+    public static void setCiudad(String ciudad) {
+        Event.ciudad = ciudad;
+    }
+
+    public static void setDireccion(String direccion) {
+        Event.direccion = direccion;
+    }
+
+    public static void setFecha(String fecha) {
+        Event.fecha = fecha;
+    }
+
+    
+    
     public static String getEname() {
         return eName;
     }
@@ -111,6 +137,19 @@ public class Event {
                 + preguntaCiudad(city_Name);
     }
     
+    public static String consultarFechas(String categoria, String ciudad, String nombre,String direccion){
+        return  ("SELECT DATE_HOUR " +
+                "FROM EVENT " +
+                "INNER JOIN EVENT_TYPE ON EVENT.ETYPE_ID = EVENT_TYPE.ETYPE_ID " +
+                "INNER JOIN EVENT_CATEGORY ON EVENT_TYPE.ECATEGORY_ID = EVENT_CATEGORY.ECATEGORY_ID " +
+                "INNER JOIN PLACE ON EVENT.PLACE_ID = PLACE.PLACE_ID " +
+                "INNER JOIN CITY ON PLACE.CITY_ID = CITY.CITY_ID " +
+                "AND EVENT_CATEGORY.ECATEGORY = '"+ categoria+"'"+
+                " AND CITY.CITY_NAME = '"+ciudad+"'" +
+                " AND EVENT_TYPE.ETYPE_NAME = '"+nombre+"'"+
+                " AND PLACE.PLACE_ADDRESS = '"+direccion+"'");
+    }
+    
     public static String preguntaNombreEvento(String nombreEvento){
         return " AND ETYPE_NAME = '" + nombreEvento + "' ";
     }
@@ -133,10 +172,14 @@ public class Event {
         return " AND PLACE_ADDRESS = '" + direccionLugar + "' ";
     }
     
-    
-    
     public static String consularEventosNext(){
         return " AND DATE_HOUR >= SYSDATE ";
     }
     
+    /*
+    public static String consultarIdEvento(){
+        return (""
+                + "");
+    }
+    * /
 }
