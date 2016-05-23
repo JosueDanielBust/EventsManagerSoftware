@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package ClientInterfaces;
 
 import MainInterfaces.DBAccess;
@@ -19,14 +15,14 @@ import javax.swing.JOptionPane;
  * @author Nicolas
  */
 public class EventSearch extends javax.swing.JFrame {
-    String categoriaEvento, ciudad, nombreEvento, direccionLugar,hora;
-    
+
+
     /**
      * Creates new form EventSearch
      */
     public EventSearch() {
         initComponents();
-        buscarCategoriasEvento();    
+        buscarCategoriasEvento();       
         setVisible(true);
     }
 
@@ -34,7 +30,13 @@ public class EventSearch extends javax.swing.JFrame {
         try {
             String sqlc=Event.consultarEventCategoryNext();
             String [] array = DBAccess.rsToArray(DBAccess.consultar(sqlc));
+            
             categoriaEventoCB.setModel(new DefaultComboBoxModel(array));           
+            categoriaEventoCB.setEnabled(true);
+            ciudadCB.setEnabled(false);
+            nombreEventoCB.setEnabled(false);
+            direccionLugarCB.setEnabled(false);
+            fechaEventoCB.setEnabled(false);
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null,ex.getMessage(),"Mensaje de Error",JOptionPane.ERROR_MESSAGE);
         }     
@@ -56,8 +58,6 @@ public class EventSearch extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        horaEventoCB = new javax.swing.JTextField();
         salirB = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
         direccionLugarCB = new javax.swing.JComboBox<>();
@@ -90,10 +90,6 @@ public class EventSearch extends javax.swing.JFrame {
         jLabel3.setText("Nombre del Evento");
 
         jLabel5.setText("Fecha del Evento");
-
-        jLabel6.setText("Hora");
-
-        horaEventoCB.setEditable(false);
 
         salirB.setText("Atrás");
         salirB.addActionListener(new java.awt.event.ActionListener() {
@@ -161,65 +157,57 @@ public class EventSearch extends javax.swing.JFrame {
                             .addComponent(direccionLugarCB, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(categoriaEventoCB, 0, 161, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel5)
-                                    .addComponent(jLabel6))
-                                .addGap(68, 68, 68))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(fechaEventoCB, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jToggleButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(horaEventoCB, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(salirB, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(0, 0, Short.MAX_VALUE)))))
+                        .addComponent(jLabel5)
+                        .addGap(68, 68, 68)
+                        .addComponent(fechaEventoCB, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGap(16, 16, 16))
             .addGroup(layout.createSequentialGroup()
                 .addGap(54, 54, 54)
                 .addComponent(jLabel1)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 63, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(31, 31, 31)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jToggleButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(salirB, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(151, 151, 151)
-                .addComponent(jLabel4)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel8)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel9)
-                    .addComponent(categoriaEventoCB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(15, 15, 15)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(ciudadCB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
-                .addGap(21, 21, 21)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(nombreEventoCB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(21, 21, 21)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(direccionLugarCB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel7))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(fechaEventoCB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(horaEventoCB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(47, 47, 47)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(151, 151, 151)
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
+                        .addComponent(jLabel8)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel9)
+                            .addComponent(categoriaEventoCB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(15, 15, 15)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(ciudadCB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel2))
+                        .addGap(21, 21, 21)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel3)
+                            .addComponent(nombreEventoCB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(21, 21, 21)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(direccionLugarCB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel7))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel5)
+                            .addComponent(fechaEventoCB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(65, 65, 65)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jToggleButton1)
                     .addComponent(jButton3))
@@ -237,21 +225,15 @@ public class EventSearch extends javax.swing.JFrame {
     }//GEN-LAST:event_salirBActionPerformed
 
     private void direccionLugarCBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_direccionLugarCBActionPerformed
-        direccionLugar = (String)direccionLugarCB.getSelectedItem();  
+        String direccionLugar = (String)direccionLugarCB.getSelectedItem();  
+        Event.setDireccion(direccionLugar);
         try {         
-            //ArrayList datosEvento = dba.procedureSearch("EVENT_SEARCH(?,?,?,?,?,?)", parametros);   
-            //String fecha = (String)datosEvento.get(1);
-            
-            String sqlc=Event.consultarFechas(categoriaEvento,ciudad,nombreEvento,direccionLugar);
+  
+            String sqlc=Event.consultarFechasEventoNext();
             String [] array = DBAccess.rsToArray(DBAccess.consultar(sqlc));         
-            horaEventoCB.setText(array[0].substring(11)); 
-            
-            for(int i = 0;i<array.length;i++){
-                array[i]=array[i].substring(0,10);                 
-            }
-            
+              
             fechaEventoCB.setModel(new DefaultComboBoxModel(array));   
-            
+            fechaEventoCB.setEnabled(true);
            
         } catch (SQLException ex) {
            JOptionPane.showMessageDialog(null,ex.getMessage(),"Mensaje de Error",JOptionPane.ERROR_MESSAGE);
@@ -260,12 +242,16 @@ public class EventSearch extends javax.swing.JFrame {
 
     private void ciudadCBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ciudadCBActionPerformed
         try {
-            ciudad = (String)ciudadCB.getSelectedItem();
-            String []array = DBAccess.rsToArray(DBAccess.consultar(Event.consultarNombreEventoNext(ciudad,categoriaEvento)));    
+
+            String ciudad = (String)ciudadCB.getSelectedItem();
+            String []array = DBAccess.rsToArray(DBAccess.consultar(Event.consultarNombreEventoNext()));    
+            Event.setCiudad(ciudad);
+  
             nombreEventoCB.setModel(new DefaultComboBoxModel(array));
             
             nombreEventoCB.setEnabled(true);
             direccionLugarCB.setEnabled(false);
+            fechaEventoCB.setEnabled(false);
         } catch (SQLException ex) {
            JOptionPane.showMessageDialog(null,ex.getMessage(),"Mensaje de Error",JOptionPane.ERROR_MESSAGE);
         }
@@ -273,14 +259,17 @@ public class EventSearch extends javax.swing.JFrame {
 
     private void categoriaEventoCBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_categoriaEventoCBActionPerformed
         try {
-            categoriaEvento = (String)categoriaEventoCB.getSelectedItem();
-            String sqlc=Event.consultarCiudadNext(categoriaEvento);
-            String [] array = DBAccess.rsToArray(DBAccess.consultar(sqlc));    
-            ciudadCB.setModel(new DefaultComboBoxModel(array));
-            
+
+            String categoriaEvento = (String)categoriaEventoCB.getSelectedItem();
+            Event.setCategoria(categoriaEvento);
+            String sqlc=Event.consultarCiudadNext();
+            String [] array = DBAccess.rsToArray(DBAccess.consultar(sqlc));      
+
+            ciudadCB.setModel(new DefaultComboBoxModel(array));           
             ciudadCB.setEnabled(true);
             nombreEventoCB.setEnabled(false);
             direccionLugarCB.setEnabled(false);
+            fechaEventoCB.setEnabled(false);
                 
         } catch (SQLException ex) {
            JOptionPane.showMessageDialog(null,ex.getMessage(),"Mensaje de Error",JOptionPane.ERROR_MESSAGE);
@@ -289,10 +278,15 @@ public class EventSearch extends javax.swing.JFrame {
 
     private void nombreEventoCBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nombreEventoCBActionPerformed
         try {
-            nombreEvento = (String)nombreEventoCB.getSelectedItem();
-            String sqlc= Event.consultarDireccionLugarNext(nombreEvento, ciudad, categoriaEvento);
+
+            String nombreEvento = (String)nombreEventoCB.getSelectedItem();
+            Event.setEname(nombreEvento);
+             String sqlc= Event.consultarDireccionLugarNext();
             direccionLugarCB.setModel(new DefaultComboBoxModel((DBAccess.rsToArray(DBAccess.consultar(sqlc)))));    
+     
             direccionLugarCB.setEnabled(true);
+            fechaEventoCB.setEnabled(false);
+           
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null,ex.getMessage(),"Mensaje de Error",JOptionPane.ERROR_MESSAGE);
         }
@@ -305,7 +299,8 @@ public class EventSearch extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void fechaEventoCBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fechaEventoCBActionPerformed
-       Event.setFecha(hora);
+        String fecha=(String)nombreEventoCB.getSelectedItem();
+        Event.setFecha(fecha);
         Event.setEvent_id(Ticket.buscarIdEvent());
     }//GEN-LAST:event_fechaEventoCBActionPerformed
 
@@ -320,14 +315,12 @@ public class EventSearch extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> ciudadCB;
     private javax.swing.JComboBox<String> direccionLugarCB;
     private javax.swing.JComboBox<String> fechaEventoCB;
-    private javax.swing.JTextField horaEventoCB;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
