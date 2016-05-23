@@ -1,46 +1,50 @@
 package AdminInterfaces;
 
 import MainInterfaces.DBAccess;
-import Mundo.Admin.EventCategory;
-import Mundo.Admin.EventType;
+import Mundo.EventCategory;
+import Mundo.EventType;
 import java.sql.*;
 import java.util.ArrayList;
 import javax.swing.*;
 
 public class Edit_EventType extends javax.swing.JFrame {
-    DBAccess dba;
 
+    boolean edit;
     
-    public Edit_EventType(DBAccess dba) {
-        this.dba = dba;
-        
+    public Edit_EventType(boolean edit) {
+        this.edit = edit;
         initComponents();
-        
+        setVisible(true);
+        if(edit){
+            editar();
+        }else{
+            nuevo();
+        }
+    }
+
+    public void editar(){
+        ArrayList parametros = new ArrayList();
+        parametros.add(EventType.getETYPE_ID());
+        for(int i = 0; i < 3; i++) parametros.add(Types.VARCHAR);
         try {
-            EventCategory EventCategory = new EventCategory();
-            ResultSet rsEventCategory = dba.consultar(EventCategory.getCategories());
-            String[] arrayEventCategory = rsToArray(rsEventCategory);
-            selCategories = new JComboBox(arrayEventCategory);
-        } catch(Exception e){
-            JOptionPane.showMessageDialog(null,e.getMessage(),"Mensaje de Error",JOptionPane.ERROR_MESSAGE);
+            ArrayList<String> datosUsuario = DBAccess.procedureIN_OUT("ETYPE_INFORMATION(?,?,?,?)", parametros);
+            selCategories.setModel(new DefaultComboBoxModel(DBAccess.llenarCB(datosUsuario.get(0), DBAccess.rsToArray(DBAccess.consultar(EventCategory.getAllCategories())))));
+            selName.setModel(new DefaultComboBoxModel(DBAccess.llenarCB(datosUsuario.get(1), DBAccess.rsToArray(DBAccess.consultar(EventType.getAllNames())))));
+            textRestrictions.setText(datosUsuario.get(2));
+        } catch (SQLException ex) {
+             JOptionPane.showMessageDialog(null,"ERROR: Al cargar la informacion de evento");
         }
     }
     
-    public String[] rsToArray(ResultSet data){
-        ArrayList<String> items = new ArrayList<>(100);    
+    public void nuevo(){
         try {
-        while(data.next()){ items.add(data.getString(1)); }
-        } catch(SQLException e){}
-        return items.toArray(new String[items.size()]);
+            selCategories.setModel(new DefaultComboBoxModel(DBAccess.rsToArray(DBAccess.consultar(EventCategory.getAllCategories()))));
+            selName.setModel(new DefaultComboBoxModel(DBAccess.rsToArray(DBAccess.consultar(EventType.getAllNames()))));
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null,"ERROR: Al cargar los tipos y/o categorias del evento");
+        }
     }
     
-    public String getDataFromRS(ResultSet data) {
-        try{
-            if(data.next()){ return data.getString(1); }
-        } catch(SQLException e) {}
-        return "";
-    }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -59,10 +63,7 @@ public class Edit_EventType extends javax.swing.JFrame {
         selCategories = new javax.swing.JComboBox<>();
         buttonEdit = new javax.swing.JButton();
         buttonExit = new javax.swing.JButton();
-        buttonRemove = new javax.swing.JButton();
         selName = new javax.swing.JComboBox<>();
-        buttonNewEvent = new javax.swing.JButton();
-        jSeparator1 = new javax.swing.JSeparator();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -77,19 +78,10 @@ public class Edit_EventType extends javax.swing.JFrame {
 
         textRestrictions.setColumns(20);
         textRestrictions.setRows(5);
-        textRestrictions.setText("Solo mayores de edad");
         jScrollPane1.setViewportView(textRestrictions);
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel4.setText("Categoría");
-
-        selCategories.setEditable(true);
-        selCategories.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Concierto", "Conferencia" }));
-        selCategories.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                selCategoriesActionPerformed(evt);
-            }
-        });
 
         buttonEdit.setText("Aceptar");
         buttonEdit.addActionListener(new java.awt.event.ActionListener() {
@@ -105,27 +97,7 @@ public class Edit_EventType extends javax.swing.JFrame {
             }
         });
 
-        buttonRemove.setText("Eliminar");
-        buttonRemove.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonRemoveActionPerformed(evt);
-            }
-        });
-
         selName.setEditable(true);
-        selName.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Rock al Parque" }));
-        selName.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                selNameActionPerformed(evt);
-            }
-        });
-
-        buttonNewEvent.setText("Programar Evento");
-        buttonNewEvent.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonNewEventActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -133,38 +105,24 @@ public class Edit_EventType extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(21, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jLabel4)
-                                    .addComponent(jLabel2))
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(selCategories, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(selName, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(buttonExit)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(buttonRemove)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(buttonEdit)
-                                .addGap(10, 10, 10)))
-                        .addGap(28, 28, 28))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(buttonNewEvent)
-                        .addGap(106, 106, 106))))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(buttonExit)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel3)
+                        .addComponent(jLabel4)
+                        .addComponent(jLabel2)))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(selCategories, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(selName, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(buttonEdit))
+                .addGap(28, 28, 28))
             .addGroup(layout.createSequentialGroup()
                 .addGap(78, 78, 78)
                 .addComponent(jLabel1)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jSeparator1)
-                .addGap(28, 28, 28))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -183,14 +141,9 @@ public class Edit_EventType extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
-                .addComponent(buttonNewEvent, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 8, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(buttonEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(buttonRemove, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(buttonExit, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(23, 23, 23))
         );
@@ -200,88 +153,57 @@ public class Edit_EventType extends javax.swing.JFrame {
 
     private void buttonExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonExitActionPerformed
         dispose();
+        new Search_EventType();
     }//GEN-LAST:event_buttonExitActionPerformed
 
-    private void buttonNewEventActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonNewEventActionPerformed
-        new New_Event(dba);
-    }//GEN-LAST:event_buttonNewEventActionPerformed
-
-    private void selCategoriesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selCategoriesActionPerformed
-        String ECATEGORY_ID = (String)selCategories.getSelectedItem();
-        
-        try {
-            EventCategory EventCategory = new EventCategory();
-            ECATEGORY_ID = EventCategory.getID(ECATEGORY_ID);
-            ResultSet RSEventCategory = dba.consultar(ECATEGORY_ID);
-            ECATEGORY_ID = getDataFromRS(RSEventCategory);
-
-            EventType EventType = new EventType();
-            ResultSet rsEventType = dba.consultar(EventType.getEvents(ECATEGORY_ID));
-            String[] arrayEventType = rsToArray(rsEventType);
-            selName = new JComboBox(arrayEventType);
-        } catch(Exception e){
-            JOptionPane.showMessageDialog(null,e.getMessage(),"Mensaje de Error",JOptionPane.ERROR_MESSAGE);
-        }
-    }//GEN-LAST:event_selCategoriesActionPerformed
-
-    private void selNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selNameActionPerformed
-        String RESTRICTIONS = (String)selName.getSelectedItem();
-        
-        try {
-            EventType EventType = new EventType();
-            RESTRICTIONS = EventType.getRestrictions(RESTRICTIONS);
-            ResultSet RSEventType = dba.consultar(RESTRICTIONS);
-            RESTRICTIONS = getDataFromRS(RSEventType);
-        } catch(Exception e){
-            JOptionPane.showMessageDialog(null,e.getMessage(),"Mensaje de Error",JOptionPane.ERROR_MESSAGE);
-        }
-        
-        textRestrictions.setText(RESTRICTIONS);
-    }//GEN-LAST:event_selNameActionPerformed
-
-    private void buttonRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonRemoveActionPerformed
-        String ETYPE_ID = (String)selName.getSelectedItem();
-        try {
-            EventType EventType = new EventType();
-            ETYPE_ID = EventType.getID(ETYPE_ID);
-            ResultSet RSEventType = dba.consultar(ETYPE_ID);
-            ETYPE_ID = getDataFromRS(RSEventType);
-
-            Boolean make = dba.ejecutar(EventType.remove(ETYPE_ID));
-            if (make == true) { System.out.println("Operation make it!"); } else { System.out.println("Operation with errors"); }
-        } catch(Exception e){
-            JOptionPane.showMessageDialog(null,e.getMessage(),"Mensaje de Error",JOptionPane.ERROR_MESSAGE);
-        }
-    }//GEN-LAST:event_buttonRemoveActionPerformed
-
     private void buttonEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonEditActionPerformed
-        String ETYPE_ID = (String)selName.getSelectedItem();
-        String RESTRICTIONS = textRestrictions.getSelectedText();
-        
-        try {
-            EventType EventType = new EventType();
-            ETYPE_ID = EventType.getID(ETYPE_ID);
-            ResultSet RSEventType = dba.consultar(ETYPE_ID);
-            ETYPE_ID = getDataFromRS(RSEventType);
-
-            Boolean make = dba.ejecutar(EventType.update(ETYPE_ID, RESTRICTIONS));
-            if (make == true) { System.out.println("Operation make it!"); } else { System.out.println("Operation with errors"); }
-        } catch(Exception e){
-            JOptionPane.showMessageDialog(null,e.getMessage(),"Mensaje de Error",JOptionPane.ERROR_MESSAGE);
+        ArrayList parametros = new ArrayList();
+        if(edit){
+            parametros.add(EventType.getETYPE_ID());
+            parametros.add((String)selCategories.getSelectedItem());
+            parametros.add((String)selName.getSelectedItem());
+            parametros.add(textRestrictions.getText());
+            try {
+                DBAccess.procedureIN("CHANGE_ETYPE_INFO(?,?,?,?)",parametros);
+                JOptionPane.showMessageDialog(null,"Se hiso las modificaciones Exitosamente");
+                dispose();
+                new Search_EventType();
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null,"No se pudo modificar el tipo de evento, los datos solicitados ya esta en uso o algun dato es erroneo");
+                try {
+                    DBAccess.getConexion().rollback();
+                } catch (SQLException ex1) {
+                    System.out.println("Error: Cargar la Base de Datos desde las ediciones de los tipos de eventos");
+                }
+            }  
+        }else{
+            parametros.add((String)selCategories.getSelectedItem());
+            parametros.add((String)selName.getSelectedItem());
+            parametros.add(textRestrictions.getText());
+            try {
+                DBAccess.procedureIN("CREATE_ETYPE(?,?,?)",parametros);
+                JOptionPane.showMessageDialog(null,"Se creo el tipo de evento Exitosamente");
+                dispose();
+                new Search_EventType();
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null,"No se pudo crear el tipo de evento, los datos solicitados ya esta en uso o algun dato es erroneo");
+                try {
+                    DBAccess.getConexion().rollback();
+                } catch (SQLException ex1) {
+                    System.out.println("Error: Cargar la Base de Datos desde la creacion de los tipos de evento");
+                }
+            }
         }
     }//GEN-LAST:event_buttonEditActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buttonEdit;
     private javax.swing.JButton buttonExit;
-    private javax.swing.JButton buttonNewEvent;
-    private javax.swing.JButton buttonRemove;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JComboBox<String> selCategories;
     private javax.swing.JComboBox<String> selName;
     private javax.swing.JTextArea textRestrictions;
