@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package Mundo;
 
 /**
@@ -110,7 +106,7 @@ public class Ticket {
 
     //PROBAR ESTE CODIGO
     
-    //boletas compradas para el evento con dicha descripción anterior
+    //boletas compradas para el evento con dicha descripciÃ³n anterior
     public static String buscarBoletas(){
         return("SELECT tick_type,ttype_cost" +
         " FROM ticket_type " +

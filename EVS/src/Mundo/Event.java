@@ -105,74 +105,89 @@ public class Event {
         return  "SELECT ECATEGORY FROM EVENT_CATEGORY"
                 + " INNER JOIN EVENT_TYPE ON EVENT_CATEGORY.ECATEGORY_ID = EVENT_TYPE.ECATEGORY_ID"
                 + " INNER JOIN EVENT ON EVENT_TYPE.ETYPE_ID = EVENT.ETYPE_ID "
-                + consularEventosNext();
+                + consultarEventosNext();
     }
     
-    public static String preguntaEventCategory(String eventCategory){
-        return " AND ECATEGORY = '" + eventCategory + "' ";
+    public static String preguntaEventCategory(){
+        return " AND ECATEGORY = '" + ecategoria + "' ";
     }
     
-    public static String consultarCiudadNext(String eventCategory){
+    public static String consultarCiudadNext(){
         return  "SELECT CITY_NAME FROM CITY "
                 + "INNER JOIN PLACE ON CITY.CITY_ID = PLACE.CITY_ID "
                 + "INNER JOIN EVENT ON PLACE.PLACE_ID = EVENT.PLACE_ID "
-                + consularEventosNext()
+                + consultarEventosNext()
                 + " INNER JOIN EVENT_TYPE ON EVENT.ETYPE_ID = EVENT_TYPE.ETYPE_ID "
                 + " INNER JOIN EVENT_CATEGORY ON EVENT_TYPE.ECATEGORY_ID = EVENT_CATEGORY.ECATEGORY_ID "
-                + preguntaEventCategory(eventCategory);
+                + preguntaEventCategory();
     }
     
-    public static String preguntaCiudad(String city_Name){
-        return " AND CITY_NAME = '" + city_Name + "' ";
+    public static String preguntaCiudad(){
+        return " AND CITY_NAME = '" + ciudad + "' ";
     }
     
-    public static String consultarNombreEventoNext(String city_Name,String eventCategory){
+    public static String consultarNombreEventoNext(){
         return "SELECT ETYPE_NAME FROM EVENT_TYPE "
                 + "INNER JOIN EVENT_CATEGORY ON EVENT_TYPE.ECATEGORY_ID = EVENT_CATEGORY.ECATEGORY_ID "
-                + preguntaEventCategory(eventCategory)
+                + preguntaEventCategory()
                 + " INNER JOIN EVENT ON EVENT_TYPE.ETYPE_ID = EVENT.ETYPE_ID "
-                + consularEventosNext()
+                + consultarEventosNext()
                 + " INNER JOIN PLACE ON EVENT.PLACE_ID = PLACE.PLACE_ID "
                 + " INNER JOIN CITY ON PLACE.CITY_ID = CITY.CITY_ID"
-                + preguntaCiudad(city_Name);
+                + preguntaCiudad();
     }
     
-    public static String consultarFechas(String categoria, String ciudad, String nombre,String direccion){
+    public static String consultarFechas(){
         return  ("SELECT DATE_HOUR " +
                 "FROM EVENT " +
                 "INNER JOIN EVENT_TYPE ON EVENT.ETYPE_ID = EVENT_TYPE.ETYPE_ID " +
                 "INNER JOIN EVENT_CATEGORY ON EVENT_TYPE.ECATEGORY_ID = EVENT_CATEGORY.ECATEGORY_ID " +
                 "INNER JOIN PLACE ON EVENT.PLACE_ID = PLACE.PLACE_ID " +
                 "INNER JOIN CITY ON PLACE.CITY_ID = CITY.CITY_ID " +
-                "AND EVENT_CATEGORY.ECATEGORY = '"+ categoria+"'"+
+                "AND EVENT_CATEGORY.ECATEGORY = '"+ ecategoria+"'"+
                 " AND CITY.CITY_NAME = '"+ciudad+"'" +
-                " AND EVENT_TYPE.ETYPE_NAME = '"+nombre+"'"+
+                " AND EVENT_TYPE.ETYPE_NAME = '"+eName+"'"+
                 " AND PLACE.PLACE_ADDRESS = '"+direccion+"'");
     }
     
-    public static String preguntaNombreEvento(String nombreEvento){
-        return " AND ETYPE_NAME = '" + nombreEvento + "' ";
+     public static String consultarFechasEventoNext(){
+        return  ("SELECT DATE_HOUR " +
+                "FROM EVENT " +
+                "INNER JOIN EVENT_TYPE ON EVENT.ETYPE_ID = EVENT_TYPE.ETYPE_ID " +
+                "INNER JOIN EVENT_CATEGORY ON EVENT_TYPE.ECATEGORY_ID = EVENT_CATEGORY.ECATEGORY_ID " +
+                "INNER JOIN PLACE ON EVENT.PLACE_ID = PLACE.PLACE_ID " +
+                "INNER JOIN CITY ON PLACE.CITY_ID = CITY.CITY_ID " +
+                "AND EVENT_CATEGORY.ECATEGORY = '"+ ecategoria+"'"+
+                " AND CITY.CITY_NAME = '"+ciudad+"'" +
+                " AND EVENT_TYPE.ETYPE_NAME = '"+eName+"'"+
+                " AND PLACE.PLACE_ADDRESS = '"+direccion+"' "
+                + consultarEventosNext());
+    }
+    
+    
+    public static String preguntaNombreEvento(){
+        return " AND ETYPE_NAME = '" + eName + "' ";
     }
     
     
     
-    public static String consultarDireccionLugarNext(String nombreEvento ,String city_Name,String eventCategory){
+    public static String consultarDireccionLugarNext(){
         return "SELECT PLACE_ADDRESS FROM PLACE "
                 + "INNER JOIN CITY ON PLACE.CITY_ID = CITY.CITY_ID "
-                + preguntaCiudad(city_Name)
+                + preguntaCiudad()
                 + " INNER JOIN EVENT ON PLACE.PLACE_ID = EVENT.PLACE_ID "
-                + consularEventosNext()
+                + consultarEventosNext()
                 + " INNER JOIN EVENT_TYPE ON EVENT.ETYPE_ID = EVENT_TYPE.ETYPE_ID "
-                + preguntaNombreEvento(nombreEvento)
+                + preguntaNombreEvento()
                 + " INNER JOIN EVENT_CATEGORY ON EVENT_TYPE.ECATEGORY_ID = EVENT_CATEGORY.ECATEGORY_ID "
-                + preguntaEventCategory(eventCategory);
+                + preguntaEventCategory();
     }
     
-    public static String preguntaDireccionLugarNext(String direccionLugar){
-        return " AND PLACE_ADDRESS = '" + direccionLugar + "' ";
+    public static String preguntaDireccionLugarNext(){
+        return " AND PLACE_ADDRESS = '" + direccion + "' ";
     }
     
-    public static String consularEventosNext(){
+    public static String consultarEventosNext(){
         return " AND DATE_HOUR >= SYSDATE ";
     }
     
