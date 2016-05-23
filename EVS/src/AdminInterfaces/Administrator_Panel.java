@@ -4,9 +4,7 @@ import MainInterfaces.DBAccess;
 import MainInterfaces.Login;
 
 public class Administrator_Panel extends javax.swing.JFrame {
-    DBAccess dba;
-    public Administrator_Panel(DBAccess dba) { 
-        this.dba = dba; 
+    public Administrator_Panel() { 
         initComponents();
         setVisible(true);
     }
@@ -101,7 +99,8 @@ public class Administrator_Panel extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
     private void buttonPlaceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonPlaceActionPerformed
-        new Search_Places(dba);
+       dispose();
+        new Search_Places();
     }//GEN-LAST:event_buttonPlaceActionPerformed
 
     private void buttonExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonExitActionPerformed
@@ -110,11 +109,13 @@ public class Administrator_Panel extends javax.swing.JFrame {
     }//GEN-LAST:event_buttonExitActionPerformed
 
     private void buttonPersonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonPersonActionPerformed
-        new Edit_Employees(dba);
+        dispose();
+        new Edit_Employees(null);
     }//GEN-LAST:event_buttonPersonActionPerformed
 
     private void buttonRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonRemoveActionPerformed
-        new Remove_Data(dba);
+        dispose();
+        new Remove_Data(null);
     }//GEN-LAST:event_buttonRemoveActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -1,45 +1,49 @@
 package AdminInterfaces;
 
 import MainInterfaces.DBAccess;
-import Mundo.Admin.City;
-import Mundo.Admin.Place;
-import Mundo.Admin.PlaceType;
+import Mundo.Place;
+import Mundo.PlaceType;
+import Mundo.Event;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 
 public class Search_Places extends javax.swing.JFrame {
-    DBAccess dba;
     
-    public Search_Places(DBAccess dba) {
-        this.dba = dba;
+    private String CITY;
+    private String PTYPE; 
+    private String PLACE_NAME;
+    private String ADDRESS;
+    
+    public Search_Places() {
         initComponents();
         setVisible(true);
+        llenarCiudades();
+    }
+    
+    public void llenarCiudades(){
         try {
-            City City = new City();
-            ResultSet rsCity = dba.consultar(City.getCiudades());
-            String[] arrayCity = rsToArray(rsCity);
+            ResultSet rsCity = DBAccess.consultar(Event.consultarTodasCiudades());
+            String[] arrayCity = DBAccess.rsToArray(rsCity);
             selCity.setModel(new DefaultComboBoxModel(arrayCity));
         } catch(Exception e){
-            JOptionPane.showMessageDialog(null,e.getMessage(),"Mensaje de Error",JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null,"ERROR: No se pudo Cargar las Ciudades");
         }
     }
-    
-    public String[] rsToArray(ResultSet data){
-        ArrayList<String> items = new ArrayList<>(100);    
-        try {
-        while(data.next()){ items.add(data.getString(1)); }
-        } catch(SQLException e){}
-        return items.toArray(new String[items.size()]);
-    }
-    
-    public String getDataFromRS(ResultSet data) {
-        try{
-            if(data.next()){ return data.getString(1); }
-        } catch(SQLException e) {}
-        return "";
-    }
 
+    public void setLugarId() throws SQLException{
+        ArrayList parametros = new ArrayList();
+        parametros.add(CITY);
+        parametros.add(PTYPE);
+        parametros.add(PLACE_NAME);
+        parametros.add((String)direccionCB.getSelectedItem());
+        parametros.add(Types.NUMERIC);
+        ArrayList<String> datosLugar = DBAccess.procedureIN_OUT("PLACE_SEARCH(?,?,?,?,?)", parametros);
+        Place.setPLACE_ID(datosLugar.get(0));
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -62,7 +66,7 @@ public class Search_Places extends javax.swing.JFrame {
         buttonNew = new javax.swing.JButton();
         buttonRemove = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
-        textAddress = new javax.swing.JTextField();
+        direccionCB = new javax.swing.JComboBox<>();
 
         jButton1.setText("Nuevo lugar");
 
@@ -72,13 +76,13 @@ public class Search_Places extends javax.swing.JFrame {
         jLabel1.setText("Consultar Lugares");
 
         buttonEdit.setText("Editar");
+        buttonEdit.setEnabled(false);
         buttonEdit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 buttonEditActionPerformed(evt);
             }
         });
 
-        selCity.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Bogotá" }));
         selCity.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 selCityActionPerformed(evt);
@@ -88,7 +92,7 @@ public class Search_Places extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel2.setText("Ciudad ");
 
-        selPlaceType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Coliseo" }));
+        selPlaceType.setEnabled(false);
         selPlaceType.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 selPlaceTypeActionPerformed(evt);
@@ -101,7 +105,7 @@ public class Search_Places extends javax.swing.JFrame {
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel4.setText("Lugar");
 
-        selPlace.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "El Campín" }));
+        selPlace.setEnabled(false);
         selPlace.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 selPlaceActionPerformed(evt);
@@ -123,6 +127,7 @@ public class Search_Places extends javax.swing.JFrame {
         });
 
         buttonRemove.setText("Eliminar");
+        buttonRemove.setEnabled(false);
         buttonRemove.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 buttonRemoveActionPerformed(evt);
@@ -132,8 +137,7 @@ public class Search_Places extends javax.swing.JFrame {
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel5.setText("Dirección");
 
-        textAddress.setEditable(false);
-        textAddress.setText("Calle XX # YY-ZZ");
+        direccionCB.setEnabled(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -153,7 +157,7 @@ public class Search_Places extends javax.swing.JFrame {
                             .addComponent(selPlaceType, 0, 185, Short.MAX_VALUE)
                             .addComponent(selCity, 0, 185, Short.MAX_VALUE)
                             .addComponent(selPlace, 0, 185, Short.MAX_VALUE)
-                            .addComponent(textAddress))))
+                            .addComponent(direccionCB, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap(59, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addGap(119, 119, 119)
@@ -190,7 +194,7 @@ public class Search_Places extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(textAddress, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(direccionCB, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(32, 32, 32)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(buttonEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -204,139 +208,85 @@ public class Search_Places extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void buttonEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonEditActionPerformed
-        String CITY_ID = (String)selCity.getSelectedItem();
-        String PTYPE_ID = (String)selPlaceType.getSelectedItem();
-        String PLACE_ID = (String)selPlace.getSelectedItem();
-        
-        try {
-            City pCity = new City();
-            CITY_ID = pCity.getID(CITY_ID);
-            ResultSet RSpCity = dba.consultar(CITY_ID);
-            CITY_ID = getDataFromRS(RSpCity);
-
-            PlaceType pType = new PlaceType();
-            PTYPE_ID = pType.getID(PTYPE_ID);
-            ResultSet RSpType = dba.consultar(PTYPE_ID);
-            PTYPE_ID = getDataFromRS(RSpType);
-
-            Place Place = new Place();
-            PLACE_ID = Place.getID(CITY_ID, PTYPE_ID, PLACE_ID);
-            ResultSet RSplace = dba.consultar(PLACE_ID);
-            PLACE_ID = getDataFromRS(RSplace);
-
-            new Edit_Place(dba, PLACE_ID, true);
-        } catch(Exception e){
-            JOptionPane.showMessageDialog(null,e.getMessage(),"Mensaje de Error",JOptionPane.ERROR_MESSAGE);
+        try {          
+            setLugarId();
+            dispose();
+            new Edit_Place(true);
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null,"Error: No se encuentran lugares");
         }
     }//GEN-LAST:event_buttonEditActionPerformed
 
     private void buttonExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonExitActionPerformed
         dispose();
+        new Administrator_Panel();
     }//GEN-LAST:event_buttonExitActionPerformed
 
     private void buttonNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonNewActionPerformed
-        new Edit_Place(dba, false);
+        dispose();
+        new Edit_Place(false);
     }//GEN-LAST:event_buttonNewActionPerformed
 
     private void buttonRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonRemoveActionPerformed
-        String CITY_ID = (String)selCity.getSelectedItem();
-        String PTYPE_ID = (String)selPlaceType.getSelectedItem();
-        String PLACE_ID = (String)selPlace.getSelectedItem();
-        
-        try {
-            City pCity = new City();
-            CITY_ID = pCity.getID(CITY_ID);
-            ResultSet RSpCity = dba.consultar(CITY_ID);
-            CITY_ID = getDataFromRS(RSpCity);
-
-            PlaceType pType = new PlaceType();
-            PTYPE_ID = pType.getID(PTYPE_ID);
-            ResultSet RSpType = dba.consultar(PTYPE_ID);
-            PTYPE_ID = getDataFromRS(RSpType);
-
-            Place Place = new Place();
-            PLACE_ID = Place.getID(CITY_ID, PTYPE_ID, PLACE_ID);
-            ResultSet RSplace = dba.consultar(PLACE_ID);
-            PLACE_ID = getDataFromRS(RSplace);
-
-            Boolean make = dba.ejecutar(Place.remove(PLACE_ID));
-            if (make == true) { System.out.println("Operation make it!"); } else { System.out.println("Operation with errors"); }
-        } catch(Exception e){
-            JOptionPane.showMessageDialog(null,e.getMessage(),"Mensaje de Error",JOptionPane.ERROR_MESSAGE);
+      try {          
+            setLugarId();
+            ArrayList parametros = new ArrayList();
+            parametros.add(Place.getPLACE_ID());
+            DBAccess.procedureIN("DELETE_PLACE(?)",parametros);
+            JOptionPane.showMessageDialog(null,"Se elimino el lugar exitosamente");
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null,"Error: No se pudo eliminar el lugar, porfavor intentarlo mas tarde");
+          try {
+              DBAccess.getConexion().rollback();
+          } catch (SQLException ex1) {
+               System.out.println("Error: Cargar la Base de Datos al intentar borrar un lugar");
+          }
         }
     }//GEN-LAST:event_buttonRemoveActionPerformed
 
     private void selCityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selCityActionPerformed
-        String CITY_ID = (String)selCity.getSelectedItem();
-        
+        buttonEdit.setEnabled(false);
+        buttonRemove.setEnabled(false);
+        CITY = (String)selCity.getSelectedItem();        
         try {
-            City pCity = new City();
-            CITY_ID = pCity.getID(CITY_ID);
-            ResultSet RSpCity = dba.consultar(CITY_ID);
-            CITY_ID = getDataFromRS(RSpCity);
-
-            PlaceType PlaceType = new PlaceType();
-            ResultSet rsPlaceType = dba.consultar(PlaceType.getPlacesTypesOfCity(CITY_ID));
-            String[] arrayPlaceType = rsToArray(rsPlaceType);
+            ResultSet rs = DBAccess.consultar(PlaceType.getPlacesTypesOfCity(CITY));
+            String[] arrayPlaceType = DBAccess.rsToArray(rs);
             selPlaceType.setModel(new DefaultComboBoxModel(arrayPlaceType));
+            selPlaceType.setEnabled(true);
         } catch(Exception e){
-            JOptionPane.showMessageDialog(null,e.getMessage(),"Mensaje de Error",JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null,"ERROR: No se pudo Cargar los tipos de lugares");
         }
     }//GEN-LAST:event_selCityActionPerformed
 
     private void selPlaceTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selPlaceTypeActionPerformed
-        String CITY_ID = (String)selCity.getSelectedItem();
-        String PTYPE_ID = (String)selPlaceType.getSelectedItem();
+        buttonEdit.setEnabled(false);
+        buttonRemove.setEnabled(false);
+        PTYPE = (String)selPlaceType.getSelectedItem();
         
         try {
-            City pCity = new City();
-            CITY_ID = pCity.getID(CITY_ID);
-            ResultSet RSpCity = dba.consultar(CITY_ID);
-            CITY_ID = getDataFromRS(RSpCity);
-
-            PlaceType pType = new PlaceType();
-            PTYPE_ID = pType.getID(PTYPE_ID);
-            ResultSet RSpType = dba.consultar(PTYPE_ID);
-            PTYPE_ID = getDataFromRS(RSpType);
-
-            Place Place = new Place();
-            ResultSet rsPlace = dba.consultar(Place.getPlaces(PTYPE_ID, CITY_ID));
-            String[] arrayPlace = rsToArray(rsPlace);
-            selPlace = new JComboBox(arrayPlace);
+            ResultSet rsPlace = DBAccess.consultar(Place.getPlaces(PTYPE, CITY));
+            String[] arrayPlace = DBAccess.rsToArray(rsPlace);
+            selPlace.setModel(new DefaultComboBoxModel(arrayPlace));
+            selPlace.setEnabled(true);
         } catch(Exception e){
-            JOptionPane.showMessageDialog(null,e.getMessage(),"Mensaje de Error",JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null,"ERROR: No se pudo Cargar los nombres de los lugares");
         }
     }//GEN-LAST:event_selPlaceTypeActionPerformed
 
     private void selPlaceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selPlaceActionPerformed
-        String CITY_ID = (String)selCity.getSelectedItem();
-        String PTYPE_ID = (String)selPlaceType.getSelectedItem();
-        String PLACE_ID = (String)selPlace.getSelectedItem();
+        PLACE_NAME = (String)selPlace.getSelectedItem();
         
         try {
-            City pCity = new City();
-            CITY_ID = pCity.getID(CITY_ID);
-            ResultSet RSpCity = dba.consultar(CITY_ID);
-            CITY_ID = getDataFromRS(RSpCity);
-
-            PlaceType pType = new PlaceType();
-            PTYPE_ID = pType.getID(PTYPE_ID);
-            ResultSet RSpType = dba.consultar(PTYPE_ID);
-            PTYPE_ID = getDataFromRS(RSpType);
-
-            Place Place = new Place();
-            PLACE_ID = Place.getID(CITY_ID, PTYPE_ID, PLACE_ID);
-            ResultSet RSplace = dba.consultar(PLACE_ID);
-            PLACE_ID = getDataFromRS(RSplace);
-
-            String PLACE_ADDRESS = Place.getAddress(PLACE_ID);
-            ResultSet RSplaceAddress = dba.consultar(PLACE_ADDRESS);
-            PLACE_ADDRESS = getDataFromRS(RSplaceAddress);
-
-            textAddress.setText(PLACE_ADDRESS);
-            textAddress.setEditable(false);
+            ResultSet rsAddress = DBAccess.consultar(Place.getAddress(PLACE_NAME,PTYPE, CITY));
+            String[] arrayAddress = DBAccess.rsToArray(rsAddress);
+            direccionCB.setModel(new DefaultComboBoxModel(arrayAddress));
+            direccionCB.setEnabled(true);
+            if(arrayAddress.length > 0){
+                buttonEdit.setEnabled(true);
+                buttonRemove.setEnabled(true);
+            }
         } catch(Exception e){
-            JOptionPane.showMessageDialog(null,e.getMessage(),"Mensaje de Error",JOptionPane.ERROR_MESSAGE);
+             JOptionPane.showMessageDialog(null,"ERROR: No se pudo Cargar los las direcciones de los lugares");
         }
     }//GEN-LAST:event_selPlaceActionPerformed
 
@@ -345,6 +295,7 @@ public class Search_Places extends javax.swing.JFrame {
     private javax.swing.JButton buttonExit;
     private javax.swing.JButton buttonNew;
     private javax.swing.JButton buttonRemove;
+    private javax.swing.JComboBox<String> direccionCB;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -354,6 +305,5 @@ public class Search_Places extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> selCity;
     private javax.swing.JComboBox<String> selPlace;
     private javax.swing.JComboBox<String> selPlaceType;
-    private javax.swing.JTextField textAddress;
     // End of variables declaration//GEN-END:variables
 }

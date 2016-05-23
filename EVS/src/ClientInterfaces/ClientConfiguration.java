@@ -39,21 +39,10 @@ public class ClientConfiguration extends javax.swing.JFrame {
             correoElectronicoTF.setText(datosUsuario.get(1));
             telefonoTF.setText(datosUsuario.get(2));
             direccionTF.setText(datosUsuario.get(3));
-            epsCB.setModel(new DefaultComboBoxModel(llenarEps(datosUsuario.get(4),DBAccess.rsToArray(DBAccess.consultar("SELECT EPS FROM EPS")))));
+            epsCB.setModel(new DefaultComboBoxModel(DBAccess.llenarCB(datosUsuario.get(4),DBAccess.rsToArray(DBAccess.consultar("SELECT EPS FROM EPS")))));
         } catch (SQLException ex) {
              JOptionPane.showMessageDialog(null,"ERROR: No se pudo cargar la informacion del cliente");
         }
-    }
-    
-    public String[] llenarEps(String epsActual, String[] todasEps){
-        ArrayList<String> eps = new ArrayList();
-        eps.add(epsActual);
-        for (String todasEp : todasEps) {
-            if (!todasEp.equals(epsActual)) {
-                eps.add(todasEp);
-            }
-        }
-        return eps.toArray(new String[eps.size()]);
     }
     
     /**

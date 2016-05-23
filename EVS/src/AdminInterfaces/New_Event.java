@@ -1,7 +1,7 @@
 package AdminInterfaces;
 
 import MainInterfaces.DBAccess;
-import Mundo.Admin.City;
+import Mundo.City;
 import Mundo.Admin.Event;
 import Mundo.Admin.EventCategory;
 import Mundo.Admin.EventType;

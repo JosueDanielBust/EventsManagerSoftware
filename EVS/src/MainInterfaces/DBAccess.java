@@ -92,5 +92,16 @@ private static Connection conexion;
         }
         return items.toArray(new String[items.size()]);
     }
+    
+    public static String[] llenarCB(String actual, String[] todosDatos){
+        ArrayList<String> eps = new ArrayList();
+        eps.add(actual);
+        for (String todasEp : todosDatos) {
+            if (!todasEp.equals(todosDatos)) {
+                eps.add(todasEp);
+            }
+        }
+        return eps.toArray(new String[eps.size()]);
+    }
  
 }

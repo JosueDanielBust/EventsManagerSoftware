@@ -11,14 +11,19 @@ package Mundo;
  */
 public class City {
     
-    private static String city_Name;
-
-    public static String getCity_Name() {
-        return city_Name;
+    public String getID(String CITY_NAME) {
+        String sql = "SELECT CITY_ID FROM CITY C WHERE C.CITY_NAME = " + CITY_NAME;
+        return sql;
     }
-
-    public static void setCity_Name(String city_Name) {
-        City.city_Name = city_Name;
+    
+    public String getType(String CITY_ID){
+        String sql = "SELECT CITY_NAME FROM CITY C WHERE C.CITY_ID = " + CITY_ID;
+        return sql;
+    }
+    
+    public static String getCiudades() {
+        String sql = "SELECT CITY_NAME FROM CITY";
+        return sql;
     }
     
 }

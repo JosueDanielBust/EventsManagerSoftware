@@ -1,112 +1,59 @@
 package AdminInterfaces;
 import MainInterfaces.DBAccess;
-import Mundo.Admin.City;
-import Mundo.Admin.Place;
-import Mundo.Admin.PlaceType;
+import Mundo.City;
+import Mundo.Place;
+import Mundo.PlaceType;
 import java.util.*;
 import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 
 public class Edit_Place extends javax.swing.JFrame {
-    private String PLACE_ID;
-    private DBAccess dba;
     private Boolean edit;
     
-    public Edit_Place(DBAccess dba, Boolean edit) {
-        this.dba = dba;
+    public Edit_Place(Boolean edit) {
         this.edit = edit;
         initComponents();
-        if (this.edit == false) { labelTitle.setText("Crear Lugar"); } else { labelTitle.setText("Modificar Lugar"); }
+        if (!edit) { 
+            labelTitle.setText("Crear Lugar"); 
+            nuevo();
+        } else { 
+            labelTitle.setText("Modificar Lugar");
+            editar();
+        }
         setVisible(true);
-        
+       
+    }
+    
+    public void nuevo(){
         try {
-            City City = new City();
-            ResultSet rsCity = dba.consultar(City.getCiudades());
-            String[] arrayCity = rsToArray(rsCity);
-            selplacecity = new JComboBox(arrayCity);
-
-            PlaceType PlaceType = new PlaceType();
-            ResultSet rsPlaceType = dba.consultar(PlaceType.getPlacesTypes());
-            String[] arrayPlaceType = rsToArray(rsPlaceType);
-            selplacetype = new JComboBox(arrayPlaceType);
-        } catch(Exception e){
-            JOptionPane.showMessageDialog(null,e.getMessage(),"Mensaje de Error",JOptionPane.ERROR_MESSAGE);
+            selplacetype.setModel(new DefaultComboBoxModel(DBAccess.rsToArray(DBAccess.consultar(PlaceType.getAllPlaceTypes()))));
+            selplacecity.setModel(new DefaultComboBoxModel(DBAccess.rsToArray(DBAccess.consultar(City.getCiudades()))));
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null,"ERROR: Al cargar los tipos de lugares y/o las ciudades");
         }
     }
     
-    public Edit_Place(DBAccess dba, String PLACE_ID, Boolean edit) {
-        this.PLACE_ID = PLACE_ID;
-        this.dba = dba;
-        this.edit = edit;
-        initComponents();
-        if (this.edit == false) { labelTitle.setText("Crear Lugar"); } else { labelTitle.setText("Modificar Lugar"); }
-        
+    public void editar(){
+        ArrayList parametros = new ArrayList();
+        parametros.add(Place.getPLACE_ID());
+        for(int i = 0; i < 7; i++) parametros.add(Types.VARCHAR);
         try {
-            City City = new City();
-            ResultSet rsCity = dba.consultar(City.getCiudades());
-            String[] arrayCity = rsToArray(rsCity);
-            selplacecity = new JComboBox(arrayCity);
-
-            PlaceType PlaceType = new PlaceType();
-            ResultSet rsPlaceType = dba.consultar(PlaceType.getPlacesTypes());
-            String[] arrayPlaceType = rsToArray(rsPlaceType);
-            selplacetype = new JComboBox(arrayPlaceType);
-
-            Place Place = new Place();
-
-            String PLACE_NAME = Place.getName(PLACE_ID);
-            ResultSet RSpName = dba.consultar(PLACE_NAME);
-            PLACE_NAME = getDataFromRS(RSpName);
-            textplacename.setText(PLACE_NAME);
-
-            String PLACE_PHONE = Place.getPhone(PLACE_ID);
-            ResultSet RSpPhone = dba.consultar(PLACE_PHONE);
-            PLACE_PHONE = getDataFromRS(RSpPhone);
-            textplacephone.setText(PLACE_PHONE);
-
-            String ACCESS_RESTRICTIONS = Place.getRestrictions(PLACE_ID);
-            ResultSet RSpRestrictions = dba.consultar(ACCESS_RESTRICTIONS);
-            ACCESS_RESTRICTIONS = getDataFromRS(RSpRestrictions);
-            textplacerestrictions.setText(ACCESS_RESTRICTIONS);
-
-            String PLACE_ADDRESS = Place.getPhone(PLACE_ID);
-            ResultSet RSpAddress = dba.consultar(PLACE_ADDRESS);
-            PLACE_ADDRESS = getDataFromRS(RSpAddress);
-            textplaceaddress.setText(PLACE_ADDRESS);
-
-            String CAPACITY = Place.getCapacity(PLACE_ID);
-            ResultSet RSpCapacity = dba.consultar(CAPACITY);
-            CAPACITY = getDataFromRS(RSpCapacity);
-            textplacecapacity.setText(CAPACITY);
-
-            String CITY_NAME = Place.getCity(PLACE_ID);
-            ResultSet RSpCity = dba.consultar(CITY_NAME);
-            CITY_NAME = getDataFromRS(RSpCity);
-            selplacecity.setSelectedItem(CITY_NAME);
-
-            String PLACE_TYPE = Place.getPType(PLACE_ID);
-            ResultSet RSpType = dba.consultar(PLACE_TYPE);
-            PLACE_TYPE = getDataFromRS(RSpType);
-            selplacetype.setSelectedItem(PLACE_TYPE);
-        } catch(Exception e){
-            JOptionPane.showMessageDialog(null,e.getMessage(),"Mensaje de Error",JOptionPane.ERROR_MESSAGE);
+            ArrayList<String> datosUsuario = DBAccess.procedureIN_OUT("PLACE_INFORMATION(?,?,?,?,?,?,?,?)", parametros);
+            textplacename.setText(datosUsuario.get(0));
+            textplacephone.setText(datosUsuario.get(1));
+            textplaceaddress.setText(datosUsuario.get(2));
+            selplacecity.setModel(new DefaultComboBoxModel(DBAccess.llenarCB(datosUsuario.get(3), DBAccess.rsToArray(DBAccess.consultar(City.getCiudades())))));
+            textplacecapacity.setText(datosUsuario.get(4));
+            selplacetype.setModel(new DefaultComboBoxModel(DBAccess.llenarCB(datosUsuario.get(5), DBAccess.rsToArray(DBAccess.consultar(PlaceType.getAllPlaceTypes())))));
+            textplacerestrictions.setText(datosUsuario.get(6));
+        } catch (SQLException ex) {
+             JOptionPane.showMessageDialog(null,"ERROR: Al cargar la informacion de lugar");
         }
     }
     
-    public String[] rsToArray(ResultSet data){
-        ArrayList<String> items = new ArrayList<>(100);    
-        try {
-        while(data.next()){ items.add(data.getString(1)); }
-        } catch(SQLException e){}
-        return items.toArray(new String[items.size()]);
-    }
-    
-    public String getDataFromRS(ResultSet data) {
-        try{
-            if(data.next()){ return data.getString(1); }
-        } catch(SQLException e) {}
-        return "";
-    }
+
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -151,14 +98,12 @@ public class Edit_Place extends javax.swing.JFrame {
 
         jLabel5.setText("Ciudad");
 
-        selplacecity.setEditable(true);
         selplacecity.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         jLabel6.setText("Capacidad");
 
         jLabel7.setText("Tipo de lugar");
 
-        selplacetype.setEditable(true);
         selplacetype.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         textplacerestrictions.setColumns(20);
@@ -191,6 +136,16 @@ public class Edit_Place extends javax.swing.JFrame {
                         .addGap(60, 60, 60)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel5)
+                            .addComponent(jLabel6)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel7)
+                                    .addComponent(jLabel8))
+                                .addGap(47, 47, 47)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(selplacetype, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE)
+                                    .addComponent(textplacecapacity)))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(jLabel3)
@@ -202,26 +157,17 @@ public class Edit_Place extends javax.swing.JFrame {
                                     .addComponent(textplacephone, javax.swing.GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE)
                                     .addComponent(textplacename)
                                     .addComponent(textplaceaddress, javax.swing.GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE)
-                                    .addComponent(selplacecity, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                            .addComponent(jLabel6)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel7)
-                                    .addComponent(jLabel8))
-                                .addGap(47, 47, 47)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(selplacetype, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE)
-                                    .addComponent(textplacecapacity)))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(138, 138, 138)
-                        .addComponent(labelTitle))
+                                    .addComponent(selplacecity, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(101, 101, 101)
                         .addComponent(buttonCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(buttonUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(60, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(labelTitle)
+                .addGap(137, 137, 137))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -271,36 +217,50 @@ public class Edit_Place extends javax.swing.JFrame {
     }//GEN-LAST:event_buttonCancelActionPerformed
 
     private void buttonUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonUpdateActionPerformed
-        String PLACE_NAME = textplacename.getSelectedText();
-        String PLACE_PHONE = textplacephone.getSelectedText();
-        String ACCESS_RESTRICTIONS = textplacerestrictions.getSelectedText();
-        String PLACE_ADDRESS = textplaceaddress.getSelectedText();
-        String CAPACITY = textplacecapacity.getSelectedText();
-        String PTYPE_ID = (String)selplacetype.getSelectedItem();
-        String CITY_ID = (String)selplacecity.getSelectedItem();
-        
-        try {
-            PlaceType pType = new PlaceType();
-            PTYPE_ID = pType.getID(PTYPE_ID);
-            ResultSet RSpType = dba.consultar(PTYPE_ID);
-            PTYPE_ID = getDataFromRS(RSpType);
-
-            City pCity = new City();
-            CITY_ID = pCity.getID(CITY_ID);
-            ResultSet RSpCity = dba.consultar(CITY_ID);
-            CITY_ID = getDataFromRS(RSpCity);
-
-            Boolean make;
-            if (edit == true) {
-                Place PlaceUpdate = new Place(PLACE_ID, PLACE_NAME, PLACE_PHONE, ACCESS_RESTRICTIONS, PLACE_ADDRESS, CAPACITY, PTYPE_ID, CITY_ID);
-                make = dba.ejecutar(PlaceUpdate.update());
-            } else {
-                Place PlaceCreate = new Place(PLACE_NAME, PLACE_PHONE, ACCESS_RESTRICTIONS, PLACE_ADDRESS, CAPACITY, PTYPE_ID, CITY_ID);
-                make = dba.ejecutar(PlaceCreate.create());
-            }
-            if (make == true) { System.out.println("Operation make it!"); } else { System.out.println("Operation with errors"); }
-        } catch(Exception e){
-            JOptionPane.showMessageDialog(null,e.getMessage(),"Mensaje de Error",JOptionPane.ERROR_MESSAGE);
+        ArrayList parametros = new ArrayList();
+        if(edit){
+            parametros.add(Place.getPLACE_ID());
+            parametros.add(textplacename.getText());
+            parametros.add(textplacephone.getText());
+            parametros.add(textplaceaddress.getText());
+            parametros.add(selplacecity.getSelectedItem());
+            parametros.add(textplacecapacity.getText());
+            parametros.add(selplacetype.getSelectedItem());
+            parametros.add(textplacerestrictions.getText());
+            try {
+                DBAccess.procedureIN("CHANGE_PLACE_INFO(?,?,?,?,?,?,?,?)",parametros);
+                JOptionPane.showMessageDialog(null,"Se hiso las modificaciones Exitosamente");
+                dispose();
+                new Search_Places();
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null,"No se pudo modificar el lugar, la direccion solicitada ya esta en uso o algun dato es erroneo");
+                try {
+                    DBAccess.getConexion().rollback();
+                } catch (SQLException ex1) {
+                    System.out.println("Error: Cargar la Base de Datos desde las ediciones de los lugares");
+                }
+            }         
+        }else{
+            parametros.add(textplacename.getText());
+            parametros.add(textplacephone.getText());
+            parametros.add(textplaceaddress.getText());
+            parametros.add((String)selplacecity.getSelectedItem());
+            parametros.add(textplacecapacity.getText());
+            parametros.add((String)selplacetype.getSelectedItem());
+            parametros.add(textplacerestrictions.getText());
+            try {
+                DBAccess.procedureIN("CREATE_PLACE(?,?,?,?,?,?,?)",parametros);
+                JOptionPane.showMessageDialog(null,"Se creo el Lugar Exitosamente");
+                dispose();
+                new Search_Places();
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null,"No se pudo crear el lugar, la direccion solicitada ya esta en uso o algun dato es erroneo");
+                try {
+                    DBAccess.getConexion().rollback();
+                } catch (SQLException ex1) {
+                    System.out.println("Error: Cargar la Base de Datos desde la creacion de los lugares");
+                }
+            } 
         }
     }//GEN-LAST:event_buttonUpdateActionPerformed
 

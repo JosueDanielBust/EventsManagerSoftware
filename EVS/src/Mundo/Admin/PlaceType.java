@@ -21,10 +21,9 @@ public class PlaceType {
     }
     
     public String getPlacesTypesOfCity(String CITY_ID) {
-        String sql = "SELECT PLACE_TYPE FROM PLACE_TYPE PT" +
+        return  "SELECT DISTINCT PLACE_TYPE FROM PLACE_TYPE PT" +
                 "INNER JOIN PLACE P ON PT.PTYPE_ID = P.PTYPE_ID" +
-                "INNER JOIN CITY C ON P.CITY_ID = C.CITY_ID AND C.CITY_ID = " +
-                CITY_ID + "GROUP BY PT.PLACE_TYPE";
-        return sql;
+                "INNER JOIN CITY C ON P.CITY_ID = C.CITY_ID "
+                + "AND C.CITY_ID = " + CITY_ID;
     }
 }
