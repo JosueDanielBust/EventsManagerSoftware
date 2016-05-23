@@ -4,13 +4,20 @@
  * and open the template in the editor.
  */
 package ClientInterfaces;
+
 import MainInterfaces.DBAccess;
 import Mundo.Event;
+
 import java.sql.JDBCType;
 import java.sql.SQLException;
 import java.sql.Types;
+
 import java.util.ArrayList;
+
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
+
+import javax.swing.JOptionPane;
 /**
  *
  * @author Nicolas
@@ -26,14 +33,19 @@ public class EventSearch extends javax.swing.JFrame {
         initComponents();
         dba=db;
         buscarCategoriasEvento();
+        
+        setVisible(true);
     }
 
    public void buscarCategoriasEvento(){
         try {
-            categoriaEventoCB = new JComboBox(dba.rsToArray(dba.consultar(Event.consultarEventCategoryNext())));           
+            String sqlc=Event.consultarEventCategoryNext();
+            System.out.println(sqlc);
+            String [] array=dba.rsToArray(dba.consultar(sqlc));
+            categoriaEventoCB.setModel(new DefaultComboBoxModel(array));           
         } catch (SQLException ex) {
-            System.out.println("ERROR: No se pudo cargar las categorias en la busqueda de los eventos");
-        }
+            JOptionPane.showMessageDialog(null,ex.getMessage(),"Mensaje de Error",JOptionPane.ERROR_MESSAGE);
+        }     
    }
    
     /**
@@ -56,23 +68,21 @@ public class EventSearch extends javax.swing.JFrame {
         fechaEventoCB = new javax.swing.JTextField();
         horaEventoCB = new javax.swing.JTextField();
         salirB = new javax.swing.JButton();
-        buscarTicketsB = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
         direccionLugarCB = new javax.swing.JComboBox<>();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         categoriaEventoCB = new javax.swing.JComboBox<>();
+        jButton3 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        ciudadCB.setEditable(true);
         ciudadCB.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ciudadCBActionPerformed(evt);
             }
         });
 
-        nombreEventoCB.setEditable(true);
         nombreEventoCB.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 nombreEventoCBActionPerformed(evt);
@@ -102,11 +112,8 @@ public class EventSearch extends javax.swing.JFrame {
             }
         });
 
-        buscarTicketsB.setText("Buscar Tickets");
-
         jLabel7.setText("Direccion del Lugar");
 
-        direccionLugarCB.setEditable(true);
         direccionLugarCB.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 direccionLugarCBActionPerformed(evt);
@@ -121,6 +128,13 @@ public class EventSearch extends javax.swing.JFrame {
             }
         });
 
+        jButton3.setText("Buscar Tickets");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -131,8 +145,8 @@ public class EventSearch extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(50, 50, 50)
                         .addComponent(salirB)
-                        .addGap(38, 38, 38)
-                        .addComponent(buscarTicketsB)
+                        .addGap(40, 40, 40)
+                        .addComponent(jButton3)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel4)
@@ -205,7 +219,7 @@ public class EventSearch extends javax.swing.JFrame {
                         .addGap(35, 35, 35)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(salirB)
-                    .addComponent(buscarTicketsB))
+                    .addComponent(jButton3))
                 .addGap(33, 33, 33))
         );
 
@@ -229,50 +243,100 @@ public class EventSearch extends javax.swing.JFrame {
             ArrayList datosEvento = dba.procedureSearch("EVENT_SEARCH(?,?,?,?,?,?)", parametros);   
             String fecha = (String)datosEvento.get(1);
             System.out.println(fecha);
+            fechaEventoCB.setText(fecha.substring(0,10));
+            horaEventoCB.setText(fecha.substring(11));
            
         } catch (SQLException ex) {
-            System.out.println("ERROR: No se pudo cargar los nombres del los eventos en la busqueda de los eventos");
+           JOptionPane.showMessageDialog(null,ex.getMessage(),"Mensaje de Error",JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_direccionLugarCBActionPerformed
 
     private void ciudadCBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ciudadCBActionPerformed
         try {
             ciudad = (String)ciudadCB.getSelectedItem();
-            nombreEventoCB = new JComboBox(dba.rsToArray(dba.consultar(Event.consultarNombreEventoNext(ciudad,categoriaEvento))));    
+            String []array=dba.rsToArray(dba.consultar(Event.consultarNombreEventoNext(ciudad,categoriaEvento)));    
+            nombreEventoCB.setModel(new DefaultComboBoxModel(array));
+            
             nombreEventoCB.setEnabled(true);
+            direccionLugarCB.setEnabled(false);
         } catch (SQLException ex) {
-            System.out.println("ERROR: No se pudo cargar los nombres del los eventos en la busqueda de los eventos");
+           JOptionPane.showMessageDialog(null,ex.getMessage(),"Mensaje de Error",JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_ciudadCBActionPerformed
 
     private void categoriaEventoCBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_categoriaEventoCBActionPerformed
         try {
             categoriaEvento = (String)categoriaEventoCB.getSelectedItem();
-            ciudadCB = new JComboBox(dba.rsToArray(dba.consultar(Event.consultarCiudadNext(categoriaEvento))));    
+            String sqlc=Event.consultarCiudadNext(categoriaEvento);
+            System.out.println(sqlc);
+            String [] array = dba.rsToArray(dba.consultar(sqlc));    
+            ciudadCB.setModel(new DefaultComboBoxModel(array));
+            
             ciudadCB.setEnabled(true);
+            nombreEventoCB.setEnabled(false);
+            direccionLugarCB.setEnabled(false);
+                
         } catch (SQLException ex) {
-            System.out.println("ERROR: No se pudo cargar las cuidades en la busqueda de los eventos");
+           JOptionPane.showMessageDialog(null,ex.getMessage(),"Mensaje de Error",JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_categoriaEventoCBActionPerformed
 
     private void nombreEventoCBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nombreEventoCBActionPerformed
         try {
             nombreEvento = (String)nombreEventoCB.getSelectedItem();
-            nombreEventoCB = new JComboBox(dba.rsToArray(dba.consultar(Event.consultarDireccionLugarNext(nombreEvento, ciudad, categoriaEvento))));    
-            nombreEventoCB.setEnabled(true);
+            String sqlc= Event.consultarDireccionLugarNext(nombreEvento, ciudad, categoriaEvento);
+            System.out.println(sqlc);
+            direccionLugarCB.setModel(new DefaultComboBoxModel((dba.rsToArray(dba.consultar(sqlc)))));    
+            direccionLugarCB.setEnabled(true);
         } catch (SQLException ex) {
-            System.out.println("ERROR: No se pudo cargar las direcciones de los lugares en la busqueda de los eventos");
+            JOptionPane.showMessageDialog(null,ex.getMessage(),"Mensaje de Error",JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_nombreEventoCBActionPerformed
 
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+        public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(DeleteUserConfirm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(DeleteUserConfirm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(DeleteUserConfirm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(DeleteUserConfirm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new EventSearch(new DBAccess());
+            }
+        });
+    }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton buscarTicketsB;
     private javax.swing.JComboBox<String> categoriaEventoCB;
     private javax.swing.JComboBox<String> ciudadCB;
     private javax.swing.JComboBox<String> direccionLugarCB;
     private javax.swing.JTextField fechaEventoCB;
     private javax.swing.JTextField horaEventoCB;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

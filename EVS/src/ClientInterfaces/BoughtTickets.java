@@ -33,8 +33,10 @@ public class BoughtTickets extends javax.swing.JFrame {
        
         //traer las categorias disponibles al comboBox
         try{
-            rs=dba.consultar(Ticket.buscarCategorias());      
-            jCBCategoria.setModel(new DefaultComboBoxModel(dba.rsToArray(rs)));
+            rs=dba.consultar(Ticket.buscarCategorias());  
+            System.out.println("tengo el RS");
+            String[]array= dba.rsToArray(rs);
+            jCBCategoria.setModel(new DefaultComboBoxModel(array));
         }catch(Exception e){
 	  JOptionPane.showMessageDialog(null,e.getMessage(),"Mensaje de Error",JOptionPane.ERROR_MESSAGE);
         }
