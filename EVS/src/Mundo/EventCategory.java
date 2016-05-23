@@ -22,4 +22,8 @@ public class EventCategory {
     }
    
     
+    public static String getAllCategories(){
+        return "SELECT ECATEGORY FROM EVENT_CATEGORY";
+    }
+    
 }
