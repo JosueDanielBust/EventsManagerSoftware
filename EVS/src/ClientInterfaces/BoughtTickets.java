@@ -245,8 +245,7 @@ public class BoughtTickets extends javax.swing.JFrame {
     }//GEN-LAST:event_SalirActionPerformed
 
     private void jCBCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCBCategoriaActionPerformed
-        JComboBox cb = (JComboBox)evt.getSource();
-        String categoria = (String)cb.getSelectedItem();    
+        String categoria = (String)jCBCiudad.getSelectedItem();    
         Event.setCategoria(categoria);
         try{
             ResultSet rs=DBAccess.consultar(Ticket.buscarCiudades());      
