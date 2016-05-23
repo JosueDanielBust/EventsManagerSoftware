@@ -3,6 +3,7 @@ package ClientInterfaces;
 import Mundo.Event;
 import MainInterfaces.DBAccess;
 import java.sql.*;
+import javax.swing.JOptionPane;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -30,9 +31,8 @@ public class EventsMoreInfo extends javax.swing.JFrame {
         ResultSet sc2;
         String arg,comando;
         
-        
+        Event.consultarId();
         //le paso el id para que me devuleva la consulta en un String
-        
         try{
             String sql = Event.consultarPorId();
             ResultSet sc=DBAccess.consultar(sql);
@@ -40,13 +40,15 @@ public class EventsMoreInfo extends javax.swing.JFrame {
                
                //traer categoria segun id
                arg=sc.getString(1);
+               System.out.println(arg);
                comando = Event.consultarEventCategory(arg);
+               System.out.println(arg);
                sc2 = DBAccess.consultar(comando);
                
                if(sc2.next())
                    arg = sc2.getString(1);
                jTFCategoria.setText(arg);
-               
+
                //traer nombre del evento segun id
                arg=sc.getString(2);
                comando = Event.consultarETName(arg);
@@ -64,6 +66,7 @@ public class EventsMoreInfo extends javax.swing.JFrame {
                if(sc2.next())
                    arg = sc2.getString(1);
                jTFLugar.setText(arg);
+              
                
                
                //trer nombre de la ciudad segun id lugar
@@ -98,7 +101,7 @@ public class EventsMoreInfo extends javax.swing.JFrame {
                
                if(sc2.next())
                    arg = sc2.getString(1);
-               jTF_PType.setText(arg);
+                jTA_Rest.setText(arg);
                
                
                //traer fecha y hora

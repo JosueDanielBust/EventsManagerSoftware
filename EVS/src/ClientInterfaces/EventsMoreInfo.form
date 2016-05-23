@@ -41,14 +41,10 @@
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
                           <Component id="jScrollPane1" alignment="0" min="-2" pref="243" max="-2" attributes="0"/>
-                          <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
-                              <Component id="jTFCategoria" alignment="0" max="32767" attributes="0"/>
-                              <Component id="jTFNombre" alignment="0" min="-2" pref="209" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
-                              <Component id="jTFFecha" alignment="0" max="32767" attributes="0"/>
-                              <Component id="jTFHora" alignment="0" min="-2" pref="92" max="-2" attributes="0"/>
-                          </Group>
+                          <Component id="jTFCategoria" alignment="0" max="32767" attributes="0"/>
+                          <Component id="jTFNombre" alignment="0" min="-2" pref="209" max="-2" attributes="0"/>
+                          <Component id="jTFFecha" alignment="0" max="32767" attributes="0"/>
+                          <Component id="jTFHora" alignment="0" min="-2" pref="92" max="-2" attributes="0"/>
                           <Component id="jTFDir" alignment="0" pref="266" max="32767" attributes="0"/>
                           <Component id="jTF_PType" alignment="0" max="32767" attributes="0"/>
                           <Component id="jTFLugar" alignment="0" max="32767" attributes="0"/>
