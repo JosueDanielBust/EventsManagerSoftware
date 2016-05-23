@@ -30,6 +30,7 @@ public class EventsMoreInfo extends javax.swing.JFrame {
         bougth=b;
         ResultSet sc2;
         String arg,comando;
+        Event.consultarId();
         
         //le paso el id para que me devuleva la consulta en un String
         try{
