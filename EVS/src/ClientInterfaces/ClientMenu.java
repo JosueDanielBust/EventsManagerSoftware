@@ -17,12 +17,11 @@ import java.sql.SQLException;
  */
 public class ClientMenu extends javax.swing.JFrame {
     
- private DBAccess dba;
+
     /**
      * Creates new form ClientMenu
      */
-    public ClientMenu(DBAccess db) {
-        dba=db;
+    public ClientMenu() {
         initComponents();
         mostrarNombre();
         setVisible(true);
@@ -30,7 +29,7 @@ public class ClientMenu extends javax.swing.JFrame {
 
     public void mostrarNombre(){
         try {
-            ResultSet nombre = dba.consultar(Person.consultarNombre());
+            ResultSet nombre = DBAccess.consultar(Person.consultarNombre());
             nombre.next();
             userNameTF.setText(nombre.getNString("PERSON_NAME"));
         } catch (SQLException ex) {
@@ -140,22 +139,22 @@ public class ClientMenu extends javax.swing.JFrame {
 
     private void BuscarEventoBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BuscarEventoBActionPerformed
         dispose();
-        new EventSearch(dba);
+        new EventSearch();
     }//GEN-LAST:event_BuscarEventoBActionPerformed
 
     private void Tickets_CompradosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Tickets_CompradosActionPerformed
         dispose();
-        new BoughtTickets(dba);
+        new BoughtTickets();
     }//GEN-LAST:event_Tickets_CompradosActionPerformed
 
     private void configuracionMIActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_configuracionMIActionPerformed
         dispose();
-        new ClientConfiguration(dba);
+        new ClientConfiguration();
     }//GEN-LAST:event_configuracionMIActionPerformed
 
     private void cerrarSesionMIActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cerrarSesionMIActionPerformed
         dispose();
-        new Login(dba);
+        new Login();
     }//GEN-LAST:event_cerrarSesionMIActionPerformed
 
 

@@ -22,6 +22,14 @@ public class Ticket {
     public static String preguntaEname(){
         return (" AND event_type.etype_name =  "+ Event.getEname());
     }
+    
+    public static String preguntaCiudad(){
+        return (" AND city.city_name = "+ Event.getCiudad());
+    }
+    
+    public static String preguntaFecha(){
+        return (" AND event.DATE_HOUR = "+ Event.getFecha());
+    }
    
     //tipos de eventos que tienen boletas con este usuario
     public static String buscarCategorias(){
@@ -42,24 +50,25 @@ public class Ticket {
                 + "inner join place on city.city_id = place.city_id " +
                 "inner join event on event.place_id = place.place_id " +
                 "inner join event_type on event.ETYPE_ID = event_type.ETYPE_ID " +
-                "INNER JOIN EVENT_CATEGORY ON event_type.ECATEGORY_ID = EVENT_CATEGORY.ECATEGORY_ID " +
-                preguntaCategoria()+
+                "INNER JOIN EVENT_CATEGORY ON event_type.ECATEGORY_ID = EVENT_CATEGORY.ECATEGORY_ID " + 
                 " INNER JOIN TICKET_TYPE ON TICKET_TYPE.EVENT_ID = event.EVENT_ID " +
-                "INNER JOIN TICKET ON TICKET.TTYPE_ID = TICKET_TYPE.TTYPE_ID " +
-                preguntaPersona());   
+                " INNER JOIN TICKET ON TICKET.TTYPE_ID = TICKET_TYPE.TTYPE_ID " +
+               preguntaCategoria()+ 
+               preguntaPersona());   
     }
     
     
      //buscamos los eventos en esa ciudad
-    public static String buscarEventos(String ciudad){
+    public static String buscarEventos(){
         return("select ETYPE_NAME from event_type " +
             "inner join event on event.etype_id = event_type.etype_id " +
             "inner join place on event.place_id = place.place_id " +
             "inner join city on place.city_id = city.city_id " +       
             " INNER JOIN TICKET_TYPE ON TICKET_TYPE.EVENT_ID = event.EVENT_ID " +
             "INNER JOIN TICKET ON TICKET.TTYPE_ID = TICKET_TYPE.TTYPE_ID " +
+            "INNER JOIN EVENT_CATEGORY ON event_type.ECATEGORY_ID = EVENT_CATEGORY.ECATEGORY_ID " +
             preguntaPersona() +
-            " AND city.city_name = "+ ciudad + 
+            preguntaCiudad()+
             preguntaCategoria());  
             
     }
@@ -67,57 +76,65 @@ public class Ticket {
     
     //revisar este!!
     //mostramos la fecha y hora del evento seleccionado
-    public static String buscarFecha(String ciudad){
-        return ("select DATE_HOUR from event" +
-        "inner join event_type on event.etype_id = event_type.etype_id " +
-        " INNER JOIN TICKET_TYPE ON TICKET_TYPE.EVENT_ID = event.EVENT_ID " +
-        "INNER JOIN TICKET ON TICKET.TTYPE_ID = TICKET_TYPE.TTYPE_ID " +
-        preguntaPersona() +
-        " AND city.city_name = "+ ciudad + 
-        preguntaEname() +
-        preguntaCategoria());
+    public static String buscarFecha(){
+        return ("select DATE_HOUR from event " +
+                 "inner join place on event.place_id = place.place_id " +
+                " inner join city on place.city_id = city.city_id " + 
+                " inner join event_type on event.etype_id = event_type.etype_id " +
+                " INNER JOIN EVENT_CATEGORY ON event_type.ECATEGORY_ID = EVENT_CATEGORY.ECATEGORY_ID " +
+                " INNER JOIN TICKET_TYPE ON TICKET_TYPE.EVENT_ID = event.EVENT_ID " +
+                " INNER JOIN TICKET ON TICKET.TTYPE_ID = TICKET_TYPE.TTYPE_ID " +     
+                preguntaPersona() +
+                preguntaCiudad() +
+                preguntaEname() +
+                preguntaCategoria());
         
     }
 
     //mostrar el lugar del evento que se realiza en esa fecha
-    public static String buscarLugar(String fecha,String ciudad){
-        return ("inner join event on event.place_id = place.place_id " +
-                "and event.DATE_HOUR = "+fecha +
+    public static String buscarDireccion(){
+        return ("SELECT PLACE_ADDRESS FROM PLACE "+
+                " inner join city on place.city_id = city.city_id " + 
+                " inner join event on event.place_id = place.place_id " +
+                " inner join event_type on event.etype_id = event_type.etype_id " +
+                " INNER JOIN EVENT_CATEGORY ON event_type.ECATEGORY_ID = EVENT_CATEGORY.ECATEGORY_ID " +
                 " INNER JOIN TICKET_TYPE ON TICKET_TYPE.EVENT_ID = event.EVENT_ID " +
                 "INNER JOIN TICKET ON TICKET.TTYPE_ID = TICKET_TYPE.TTYPE_ID " +
                 preguntaPersona() +
-               " AND city.city_name = "+ ciudad + 
+                preguntaCiudad()+
                 preguntaEname()+
+                preguntaFecha()+
                 preguntaCategoria());
+                
     }
 
     //PROBAR ESTE CODIGO
     
     //boletas compradas para el evento con dicha descripción anterior
-    public static String buscarBoletas(String lugar,String fecha,String ciudad){
+    public static String buscarBoletas(){
         return("SELECT tick_type,ttype_cost" +
         " FROM ticket_type " +
         " INNER JOIN event ON TICKET_TYPE.EVENT_ID = event.EVENT_ID" +
+        " inner join event_type on event.etype_id = event_type.etype_id " +
+        " INNER JOIN EVENT_CATEGORY ON event_type.ECATEGORY_ID = EVENT_CATEGORY.ECATEGORY_ID " +
         " INNER JOIN place ON event.place_id = place.place_id" +
-        " AND place.place_name = "+ lugar +
+        " AND place.place_address = "+ Event.getDireccion() +
+        " inner join city on place.city_id = city.city_id " +        
         " INNER JOIN TICKET ON TICKET.TTYPE_ID = TICKET_TYPE.TTYPE_ID" +
         preguntaPersona() +
-        " AND city.city_name = "+ ciudad + 
+        preguntaCiudad() +
         preguntaEname() +  
+        preguntaFecha()+
         preguntaCategoria());
     
     }
         
-    public static String buscarEventId(String ciudad,String fecha,String lugar){
-        return ("SELECT event_id "+
-                "from event e " +
-                "inner join place p on p.place_id = p.place_id " +
-                "inner join city c on c.city_id = c.city_id " +
-                "inner join event_type et on et.etype_id = e.etype_id " +
-                "AND c.city_name = " + ciudad +
-                preguntaEname()+
-                " AND e.date_hour = "+ fecha +
-                " And p.place_name = "+ lugar);
+    public static String buscarIdEvent(){
+        return ("SELECT EVENT_ID FROM V_EVENT "+
+                " WHERE CITY_NAME = '"+Event.getCiudad()+"' "+
+                " AND DATE_HOUR = '"+Event.getFecha()+"' "+
+                " AND PLACE_ADDRESS = '"+Event.getDireccion()+"'"+
+                " AND ETYPE_NAME = '"+Event.getEname()+"'");
       
     }
     

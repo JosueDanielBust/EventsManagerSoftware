@@ -2,8 +2,6 @@ package ClientInterfaces;
 
 import Mundo.Event;
 import MainInterfaces.DBAccess;
-
-import javax.swing.JTextField;
 import java.sql.*;
 
 /*
@@ -17,15 +15,13 @@ import java.sql.*;
  * @author Nicolas
  */
 public class EventsMoreInfo extends javax.swing.JFrame {
-    private DBAccess dba;
     /**
      * Creates new form EventsMoreInfo
      */
-    public EventsMoreInfo(DBAccess db) {
+    public EventsMoreInfo() {
         initComponents();
         
         //inicializo las variables locales
-        dba=db;  
         ResultSet sc2;
         String arg,comando;
         
@@ -33,13 +29,13 @@ public class EventsMoreInfo extends javax.swing.JFrame {
         
         try{
             String sql = Event.consultarPorId();
-            ResultSet sc=dba.consultar(sql);
+            ResultSet sc=DBAccess.consultar(sql);
              if(sc.next()){
                
                //traer categoria segun id
                arg=sc.getString(1);
                comando = Event.consultarEventCategory(arg);
-               sc2 = dba.consultar(comando);
+               sc2 = DBAccess.consultar(comando);
                
                if(sc2.next())
                    arg = sc2.getString(1);
@@ -48,7 +44,7 @@ public class EventsMoreInfo extends javax.swing.JFrame {
                //traer nombre del evento segun id
                arg=sc.getString(2);
                comando = Event.consultarETName(arg);
-               sc2 = dba.consultar(comando);
+               sc2 = DBAccess.consultar(comando);
                
                if(sc2.next())
                    arg = sc2.getString(1);
@@ -57,7 +53,7 @@ public class EventsMoreInfo extends javax.swing.JFrame {
                //traer el nombre del lugar segun id
                String place_id=sc.getString(3);
                comando = Event.consultarLugar(place_id);
-               sc2 = dba.consultar(comando);
+               sc2 = DBAccess.consultar(comando);
                
                if(sc2.next())
                    arg = sc2.getString(1);
@@ -66,7 +62,7 @@ public class EventsMoreInfo extends javax.swing.JFrame {
                
                //trer nombre de la ciudad segun id lugar
                comando = Event.consultarCiudad(place_id);
-               sc2 = dba.consultar(comando);
+               sc2 = DBAccess.consultar(comando);
                
                if(sc2.next())
                    arg = sc2.getString(1);
@@ -74,7 +70,7 @@ public class EventsMoreInfo extends javax.swing.JFrame {
                
                //trer dirección segun id lugar
                comando = Event.consultarDir(place_id);
-               sc2 = dba.consultar(comando);
+               sc2 = DBAccess.consultar(comando);
                
                if(sc2.next())
                    arg = sc2.getString(1);
@@ -83,7 +79,7 @@ public class EventsMoreInfo extends javax.swing.JFrame {
                
                //trer tipo de lugar segun id lugar
                comando = Event.consultarPType(place_id);
-               sc2 = dba.consultar(comando);
+               sc2 = DBAccess.consultar(comando);
                
                if(sc2.next())
                    arg = sc2.getString(1);
@@ -92,7 +88,7 @@ public class EventsMoreInfo extends javax.swing.JFrame {
              
                //trer restricciones de lugar segun id lugar
                comando = Event.consultarRestricciones(place_id);
-               sc2 = dba.consultar(comando);
+               sc2 = DBAccess.consultar(comando);
                
                if(sc2.next())
                    arg = sc2.getString(1);
@@ -310,7 +306,7 @@ public class EventsMoreInfo extends javax.swing.JFrame {
 
     private void JBSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBSalirActionPerformed
         dispose();
-        new BoughtTickets(dba);       
+        new BoughtTickets();       
     }//GEN-LAST:event_JBSalirActionPerformed
 
     

@@ -118,12 +118,10 @@
                   <EmptySpace max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
                       <Component id="epsCB" pref="210" max="32767" attributes="0"/>
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="direccionTF" pref="210" max="32767" attributes="0"/>
-                          <Component id="nombreTF" max="32767" attributes="0"/>
-                          <Component id="telefonoTF" max="32767" attributes="0"/>
-                          <Component id="correoElectronicoTF" max="32767" attributes="0"/>
-                      </Group>
+                      <Component id="direccionTF" pref="210" max="32767" attributes="0"/>
+                      <Component id="nombreTF" max="32767" attributes="0"/>
+                      <Component id="telefonoTF" max="32767" attributes="0"/>
+                      <Component id="correoElectronicoTF" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>

@@ -19,14 +19,11 @@ import javax.swing.JOptionPane;
  * @author Nicolas
  */
 public class Register extends javax.swing.JFrame {
-
-    private DBAccess dba;
     
     /**
      * Creates new form New_Account
      */
-    public Register(DBAccess DBA) {
-        this.dba = DBA;
+    public Register() {
         initComponents();
         setVisible(true);
         LlenarEps();
@@ -37,8 +34,8 @@ public class Register extends javax.swing.JFrame {
      */
     public void LlenarEps(){
         try{
-            ResultSet rs=dba.consultar("SELECT EPS FROM EPS");
-            epsCB.setModel(new DefaultComboBoxModel(dba.rsToArray(rs)));
+            ResultSet rs = DBAccess.consultar("SELECT EPS FROM EPS");
+            epsCB.setModel(new DefaultComboBoxModel(DBAccess.rsToArray(rs)));
             }catch(Exception e){
                  JOptionPane.showMessageDialog(null,"Error: No se puedo cargar las EPS");
         }
@@ -217,14 +214,14 @@ public class Register extends javax.swing.JFrame {
             parametros.add((String)epsCB.getSelectedItem());
             parametros.add(2);
             try {
-                dba.procedureIN("CREATE_ACC_CONFIRMATION(?,?,?,?,?,?,?,?)",parametros);
+                DBAccess.procedureIN("CREATE_ACC_CONFIRMATION(?,?,?,?,?,?,?,?)",parametros);
                 JOptionPane.showMessageDialog(null,"Se creo su cuenta Exitosamente");
                 dispose();
-                new Login(dba);
+                new Login();
             } catch (SQLException ex) {
                  JOptionPane.showMessageDialog(null,"La identificacion o el Email ya Existe, o hay algun campo erroneo");
                 try {    
-                    dba.getConexion().rollback();
+                    DBAccess.getConexion().rollback();
                 } catch (SQLException ex1) {
                     System.out.println("Error: Cargar la Base de Datos desde la creacion de la cuenta");
                 }
@@ -234,7 +231,7 @@ public class Register extends javax.swing.JFrame {
 
     private void atrasBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_atrasBActionPerformed
         dispose();
-        new Login(dba);
+        new Login();
     }//GEN-LAST:event_atrasBActionPerformed
 
 

@@ -17,14 +17,11 @@ import javax.swing.JOptionPane;
  * @author Nicolas
  */
 public class DeleteUserConfirm extends javax.swing.JFrame {
-
-    private DBAccess dba;
     
     /**
      * Creates new form DeleteUserCofirm
      */
-    public DeleteUserConfirm(DBAccess dba) {
-        this.dba = dba;
+    public DeleteUserConfirm() {
         initComponents();
         setVisible(true);
     }
@@ -103,21 +100,21 @@ public class DeleteUserConfirm extends javax.swing.JFrame {
 
     private void cancelarBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelarBActionPerformed
         dispose();
-        new ClientConfiguration(dba);
+        new ClientConfiguration();
     }//GEN-LAST:event_cancelarBActionPerformed
 
     private void aceptarBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aceptarBActionPerformed
         ArrayList parametros = new ArrayList();
         parametros.add(Person.getPERSON_ID());
         try {
-            dba.procedureIN("DELETE_ACCOUNT(?)",parametros);
+            DBAccess.procedureIN("DELETE_ACCOUNT(?)",parametros);
             JOptionPane.showMessageDialog(null,"Se Elimino su Cuenta Exitosamente");
             dispose();
-            new Login(dba);
+            new Login();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null,"Se Produjo un Error al Eliminar la cuenta, Porfavor Intentarlo mas tarde");
             try {
-                dba.getConexion().rollback();
+                DBAccess.getConexion().rollback();
             } catch (SQLException ex1) {
                 System.out.println("Error: Cargar la Base de Datos desde la eliminacion de la cuenta");
             }

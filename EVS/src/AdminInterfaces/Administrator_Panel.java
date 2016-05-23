@@ -106,7 +106,7 @@ public class Administrator_Panel extends javax.swing.JFrame {
 
     private void buttonExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonExitActionPerformed
         dispose();
-        new Login(dba);
+        new Login();
     }//GEN-LAST:event_buttonExitActionPerformed
 
     private void buttonPersonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonPersonActionPerformed

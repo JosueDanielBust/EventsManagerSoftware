@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 package MainInterfaces;
-
+import ClientInterfaces.*;
 /**
  *
  * @author Nicolas

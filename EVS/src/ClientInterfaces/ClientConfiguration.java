@@ -19,13 +19,11 @@ import javax.swing.JOptionPane;
  */
 public class ClientConfiguration extends javax.swing.JFrame {
 
-    private DBAccess dba;
     
     /**
      * Creates new form ClientConfiguration
      */
-    public ClientConfiguration(DBAccess dba) {
-        this.dba = dba;
+    public ClientConfiguration() {
         initComponents();
         llenarInformacion();
         setVisible(true);
@@ -36,12 +34,12 @@ public class ClientConfiguration extends javax.swing.JFrame {
          parametros.add(Person.getPERSON_ID());
          for(int i = 0; i < 6;i++) parametros.add(Types.VARCHAR);
         try {
-            ArrayList<String> datosUsuario = dba.procedureIN_OUT("ACCOUNT_INFORMATION(?,?,?,?,?,?,?)", parametros);
+            ArrayList<String> datosUsuario = DBAccess.procedureIN_OUT("ACCOUNT_INFORMATION(?,?,?,?,?,?,?)", parametros);
             nombreTF.setText(datosUsuario.get(0));
             correoElectronicoTF.setText(datosUsuario.get(1));
             telefonoTF.setText(datosUsuario.get(2));
             direccionTF.setText(datosUsuario.get(3));
-            epsCB.setModel(new DefaultComboBoxModel(llenarEps(datosUsuario.get(4),dba.rsToArray(dba.consultar("SELECT EPS FROM EPS")))));
+            epsCB.setModel(new DefaultComboBoxModel(llenarEps(datosUsuario.get(4),DBAccess.rsToArray(DBAccess.consultar("SELECT EPS FROM EPS")))));
         } catch (SQLException ex) {
              JOptionPane.showMessageDialog(null,"ERROR: No se pudo cargar la informacion del cliente");
         }
@@ -290,8 +288,8 @@ public class ClientConfiguration extends javax.swing.JFrame {
         parametros.add(nuevaContraseña);
         parametros.add(Types.NUMERIC);
         try {
-            ArrayList<String> confirmCambio = dba.procedureIN_OUT("CHANGE_ACC_INFO(?,?,?,?,?,?,?,?,?)", parametros);
-            dba.getConexion().commit();
+            ArrayList<String> confirmCambio = DBAccess.procedureIN_OUT("CHANGE_ACC_INFO(?,?,?,?,?,?,?,?,?)", parametros);
+            DBAccess.getConexion().commit();
             if(confirmCambio.get(0).equals("1") || (contraseñaActual.equals("") && nuevaContraseña.equals(""))){
                 JOptionPane.showMessageDialog(null,"Se han Hecho Exitosamente los Cambios pedidos en las casillas");
             }else{
@@ -300,7 +298,7 @@ public class ClientConfiguration extends javax.swing.JFrame {
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null,"Se produjo un error, ya sea que el Email existe o que se encuentre algun dato erroneo, verificar todos estos");
             try {
-                dba.getConexion().rollback();
+                DBAccess.getConexion().rollback();
             } catch (SQLException ex1) {
                 System.out.println("Error: Cargar la Base de Datos desde la configuracion de la cuenta");
             }
@@ -309,12 +307,12 @@ public class ClientConfiguration extends javax.swing.JFrame {
 
     private void atrasBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_atrasBActionPerformed
         dispose();
-        new ClientMenu(dba);
+        new ClientMenu();
     }//GEN-LAST:event_atrasBActionPerformed
 
     private void borrarUsuarioBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_borrarUsuarioBActionPerformed
         dispose();
-        new DeleteUserConfirm(dba);
+        new DeleteUserConfirm();
     }//GEN-LAST:event_borrarUsuarioBActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

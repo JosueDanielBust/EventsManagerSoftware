@@ -158,7 +158,7 @@ public class Login extends javax.swing.JFrame {
             if (datosUsuario.get(1).equals("2")) {
                 new ClientMenu();
             } else {
-                new Administrator_Panel();
+                new Administrator_Panel(null);
             }
         } catch (SQLException ex) {
              JOptionPane.showMessageDialog(null,"El Correo Electronico o la Contraseña son Incorrectas");
