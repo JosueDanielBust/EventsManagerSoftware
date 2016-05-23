@@ -24,7 +24,7 @@ public class BoughtTickets extends javax.swing.JFrame {
      */
     public BoughtTickets() {
         initComponents();
-        this.setVisible(true);
+        setVisible(true);
        
        
         //traer las categorias disponibles al comboBox
@@ -164,10 +164,6 @@ public class BoughtTickets extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(93, 93, 93)
-                .addComponent(jLabel1)
-                .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
@@ -200,13 +196,17 @@ public class BoughtTickets extends javax.swing.JFrame {
                                         .addGap(0, 0, Short.MAX_VALUE))
                                     .addComponent(jCBDireccion, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
                 .addGap(37, 37, 37))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(102, 102, 102)
+                .addComponent(jLabel1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(25, 25, 25)
                 .addComponent(jLabel1)
-                .addGap(48, 48, 48)
+                .addGap(34, 34, 34)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jCBCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -245,8 +245,7 @@ public class BoughtTickets extends javax.swing.JFrame {
     }//GEN-LAST:event_SalirActionPerformed
 
     private void jCBCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCBCategoriaActionPerformed
-        JComboBox cb = (JComboBox)evt.getSource();
-        String categoria = (String)cb.getSelectedItem();    
+        String categoria = (String)jCBCiudad.getSelectedItem();    
         Event.setCategoria(categoria);
         try{
             ResultSet rs=DBAccess.consultar(Ticket.buscarCiudades());      
@@ -262,7 +261,7 @@ public class BoughtTickets extends javax.swing.JFrame {
 
     private void MoreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MoreActionPerformed
         dispose();   
-        new EventsMoreInfo();
+        new EventsMoreInfo(true);
            
     }//GEN-LAST:event_MoreActionPerformed
 
@@ -333,7 +332,7 @@ public class BoughtTickets extends javax.swing.JFrame {
                 modelo.addRow(fila);
             }
             
-            rs=DBAccess.consultar(Ticket.buscarIdEvent());
+            rs=DBAccess.consultar(Event.buscarIdEvent());
              if (rs.next()){
                 Event.setEvent_id(rs.getString(1));
                 System.out.println("id_event cambío a: "+Event.getEvent_id());
