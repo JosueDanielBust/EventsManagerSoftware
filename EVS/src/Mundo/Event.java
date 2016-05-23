@@ -5,6 +5,11 @@
  */
 package Mundo;
 
+import MainInterfaces.DBAccess;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Julian
@@ -13,7 +18,21 @@ package Mundo;
 public class Event {
     private static String event_id,ecategoria,eName,ciudad,direccion,fecha;
 
-
+    public static void consultarId(){
+        String sqlc= Event.buscarIdEvent();
+        String ide="";
+            
+        try{
+            ResultSet rs= DBAccess.consultar(sqlc);
+            if(rs.next())
+               ide=rs.getString(1);
+            System.out.println("El evento consultado tiene id: "+ide);
+            Event.setEvent_id(ide);
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null,ex.getMessage(),"Mensaje de Error",JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
     public static String consultarPorId(){
         return ("SELECT *  FROM EVENT WHERE EVENT_ID = "+getEvent_id());    
     }
