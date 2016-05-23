@@ -9,7 +9,8 @@ import static Mundo.Event.getEvent_id;
  */
 public class Ticket {
     public Ticket(){}
-
+    
+    
    public static String preguntaPersona(){
        return " AND ticket.PERSON_ID = = "+Person.getPERSON_ID();
    }
@@ -26,7 +27,7 @@ public class Ticket {
     }
     
     public static String preguntaFecha(){
-        return (" AND event.DATE_HOUR = "+ Event.getFecha());
+        return (" AND TO_CHAR(event.DATE_HOUR) = "+ Event.getFecha());
     }
    
     //tipos de eventos que tienen boletas con este usuario
@@ -75,7 +76,7 @@ public class Ticket {
     //revisar este!!
     //mostramos la fecha y hora del evento seleccionado
     public static String buscarFecha(){
-        return ("select DATE_HOUR from event " +
+        return ("select TO_CHAR(DATE_HOUR) from event " +
                  "inner join place on event.place_id = place.place_id " +
                 " inner join city on place.city_id = city.city_id " + 
                 " inner join event_type on event.etype_id = event_type.etype_id " +
@@ -131,7 +132,7 @@ public class Ticket {
         return "Select tt.ttype_cost from "
                  +" TICKET_TYPE tt"
                  +" INNER JOIN EVENT e ON tt.event_id = e.event_id "
-                 +" WHERE event_id = '"+Event.getEvent_id()+"' "
-                + " AND tick_type = '"+tipo+"' ";
+                 +" WHERE tt.event_id = '"+Event.getEvent_id()+"' "
+                + " AND tt.tick_type = '"+tipo+"' ";
     }
 }

@@ -114,7 +114,7 @@
     </Component>
     <Component class="javax.swing.JButton" name="Tickets_Comprados">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Ticketes Comprados"/>
+        <Property name="text" type="java.lang.String" value="Tiquetes Comprados"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="Tickets_CompradosActionPerformed"/>

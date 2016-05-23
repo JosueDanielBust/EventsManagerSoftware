@@ -87,7 +87,7 @@ public class Event {
     }
     
     public static String consultarFechas(){
-        return  ("SELECT DATE_HOUR " +
+        return  ("SELECT TO_CHAR(DATE_HOUR) " +
                 "FROM EVENT " +
                 "INNER JOIN EVENT_TYPE ON EVENT.ETYPE_ID = EVENT_TYPE.ETYPE_ID " +
                 "INNER JOIN EVENT_CATEGORY ON EVENT_TYPE.ECATEGORY_ID = EVENT_CATEGORY.ECATEGORY_ID " +
@@ -100,7 +100,7 @@ public class Event {
     }
     
      public static String consultarFechasEventoNext(){
-        return  ("SELECT DATE_HOUR " +
+        return  ("SELECT TO_CHAR(DATE_HOUR) " +
                 "FROM EVENT " +
                 "INNER JOIN EVENT_TYPE ON EVENT.ETYPE_ID = EVENT_TYPE.ETYPE_ID " +
                 "INNER JOIN EVENT_CATEGORY ON EVENT_TYPE.ECATEGORY_ID = EVENT_CATEGORY.ECATEGORY_ID " +
@@ -137,7 +137,7 @@ public class Event {
     }
     
     public static String consultarEventosNext(){
-        return " AND DATE_HOUR >= SYSDATE ";
+        return " AND DATE_HOUR >= LOCALTIMESTAMP ";
     }
     
     
@@ -145,17 +145,17 @@ public class Event {
      public static String buscarIdEvent(){
         return ("SELECT EVENT_ID FROM V_EVENT "+
                 " WHERE CITY_NAME = '"+Event.getCiudad()+"' "+
-                " AND DATE_HOUR = '"+Event.getFecha()+"' "+
+                " AND TO_CHAR(DATE_HOUR) = '"+Event.getFecha()+"' "+
                 " AND PLACE_ADDRESS = '"+Event.getDireccion()+"'"+
                 " AND ETYPE_NAME = '"+Event.getEname()+"'");
       
     }
     
       public static String buscarTicketTypes(){
-          return("SELECT tick_type "
-                 + " FROM TICKET_TYPE tt"
+          return("SELECT tt.tick_type "
+                 + "FROM TICKET_TYPE tt"
                  +" INNER JOIN EVENT e ON tt.event_id = e.event_id "+
-                  " AND event_id = '"+getEvent_id()+"' ");
+                  " AND e.event_id = '"+getEvent_id()+"' ");
       }
     
     public static String getCiudad() {
