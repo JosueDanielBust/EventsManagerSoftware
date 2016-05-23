@@ -6,6 +6,7 @@ import Mundo.Event;
 import Mundo.Ticket;
 
 import java.sql.SQLException;
+import java.sql.ResultSet;
 
 import javax.swing.DefaultComboBoxModel;
 
@@ -185,7 +186,7 @@ public class EventSearch extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel8)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -212,8 +213,7 @@ public class EventSearch extends javax.swing.JFrame {
                     .addComponent(jToggleButton1)
                     .addComponent(jButton3))
                 .addGap(18, 18, 18)
-                .addComponent(salirB)
-                .addContainerGap())
+                .addComponent(salirB))
         );
 
         pack();
@@ -259,13 +259,12 @@ public class EventSearch extends javax.swing.JFrame {
 
     private void categoriaEventoCBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_categoriaEventoCBActionPerformed
         try {
-
             String categoriaEvento = (String)categoriaEventoCB.getSelectedItem();
             Event.setCategoria(categoriaEvento);
             String sqlc=Event.consultarCiudadNext();
             String [] array = DBAccess.rsToArray(DBAccess.consultar(sqlc));      
-
             ciudadCB.setModel(new DefaultComboBoxModel(array));           
+            
             ciudadCB.setEnabled(true);
             nombreEventoCB.setEnabled(false);
             direccionLugarCB.setEnabled(false);
@@ -278,10 +277,9 @@ public class EventSearch extends javax.swing.JFrame {
 
     private void nombreEventoCBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nombreEventoCBActionPerformed
         try {
-
             String nombreEvento = (String)nombreEventoCB.getSelectedItem();
             Event.setEname(nombreEvento);
-             String sqlc= Event.consultarDireccionLugarNext();
+            String sqlc= Event.consultarDireccionLugarNext();
             direccionLugarCB.setModel(new DefaultComboBoxModel((DBAccess.rsToArray(DBAccess.consultar(sqlc)))));    
      
             direccionLugarCB.setEnabled(true);
@@ -293,20 +291,30 @@ public class EventSearch extends javax.swing.JFrame {
     }//GEN-LAST:event_nombreEventoCBActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-       dispose();
-       
+       dispose();      
        new BuyTicket();
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void fechaEventoCBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fechaEventoCBActionPerformed
-        String fecha=(String)nombreEventoCB.getSelectedItem();
+        String fecha=(String)fechaEventoCB.getSelectedItem();
         Event.setFecha(fecha);
-        Event.setEvent_id(Ticket.buscarIdEvent());
+        String sqlc= Event.buscarIdEvent();
+        String ide="";
+            
+        try{
+            ResultSet rs= DBAccess.consultar(sqlc);
+            if(rs.next())
+               ide=rs.getString(1);
+            System.out.println("El evento consultado tiene id: "+ide);
+            Event.setEvent_id(ide);
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null,ex.getMessage(),"Mensaje de Error",JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_fechaEventoCBActionPerformed
 
     private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
         dispose();
-        new EventsMoreInfo();
+        new EventsMoreInfo(false);
     }//GEN-LAST:event_jToggleButton1ActionPerformed
 
     

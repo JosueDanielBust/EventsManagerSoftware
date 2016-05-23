@@ -13,64 +13,13 @@ package Mundo;
 public class Event {
     private static String event_id,ecategoria,eName,ciudad,direccion,fecha;
 
-    public static String getCiudad() {
-        return ciudad;
-    }
 
-    public static String getDireccion() {
-        return direccion;
-    }
-
-    public static String getFecha() {
-        return fecha;
-    }
-
-    public static void setCiudad(String ciudad) {
-        Event.ciudad = ciudad;
-    }
-
-    public static void setDireccion(String direccion) {
-        Event.direccion = direccion;
-    }
-
-    public static void setFecha(String fecha) {
-        Event.fecha = fecha;
-    }
-
-    
-    
-    public static String getEname() {
-        return eName;
-    }
-
-    public static void setEname(String ename) {
-        Event.eName = ename;
-    }  
-    
-    public static String getEvent_id() {
-        return event_id;
-    }
-
-    public static String getCategoria() {
-        return ecategoria;
-    }
-
-    public static void setEvent_id(String event_id) {
-        Event.event_id = event_id;
-    }
-
-    public static void setCategoria(String categoria) {
-        Event.ecategoria = categoria;
-    }
-    
-    
-    
     public static String consultarPorId(){
         return ("SELECT *  FROM EVENT WHERE EVENT_ID = "+getEvent_id());    
     }
     
-    public static String consultarEventCategory(String id_c){
-        return ("Select ECATEGORY FROM EVENT_CATEGORY WHERE ECATEGORY_ID = "+id_c);
+    public static String consultarEventCategory(String id_ec){
+        return ("Select ECATEGORY FROM EVENT_CATEGORY WHERE ECATEGORY_ID = "+id_ec);
     }
     
     public static String consultarETName(String id_et){
@@ -189,6 +138,73 @@ public class Event {
     
     public static String consultarEventosNext(){
         return " AND DATE_HOUR >= SYSDATE ";
+    }
+    
+    
+    
+     public static String buscarIdEvent(){
+        return ("SELECT EVENT_ID FROM V_EVENT "+
+                " WHERE CITY_NAME = '"+Event.getCiudad()+"' "+
+                " AND DATE_HOUR = '"+Event.getFecha()+"' "+
+                " AND PLACE_ADDRESS = '"+Event.getDireccion()+"'"+
+                " AND ETYPE_NAME = '"+Event.getEname()+"'");
+      
+    }
+    
+      public static String buscarTicketTypes(){
+          return("SELECT tick_type "
+                 + " FROM TICKET_TYPE tt"
+                 +" INNER JOIN EVENT e ON tt.event_id = e.event_id "+
+                  " AND event_id = '"+getEvent_id()+"' ");
+      }
+    
+    public static String getCiudad() {
+        return ciudad;
+    }
+
+    public static String getDireccion() {
+        return direccion;
+    }
+
+    public static String getFecha() {
+        return fecha;
+    }
+
+    public static void setCiudad(String ciudad) {
+        Event.ciudad = ciudad;
+    }
+
+    public static void setDireccion(String direccion) {
+        Event.direccion = direccion;
+    }
+
+    public static void setFecha(String fecha) {
+        Event.fecha = fecha;
+    }
+ 
+    
+    public static String getEname() {
+        return eName;
+    }
+
+    public static void setEname(String ename) {
+        Event.eName = ename;
+    }  
+    
+    public static String getEvent_id() {
+        return event_id;
+    }
+
+    public static String getCategoria() {
+        return ecategoria;
+    }
+
+    public static void setEvent_id(String event_id) {
+        Event.event_id = event_id;
+    }
+
+    public static void setCategoria(String categoria) {
+        Event.ecategoria = categoria;
     }
     
     

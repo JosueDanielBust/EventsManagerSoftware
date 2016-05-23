@@ -1,6 +1,8 @@
 
 package Mundo;
 
+import static Mundo.Event.getEvent_id;
+
 /**
  *
  * @author Julian
@@ -124,16 +126,12 @@ public class Ticket {
         preguntaCategoria());
     
     }
-        
-    public static String buscarIdEvent(){
-        return ("SELECT EVENT_ID FROM V_EVENT "+
-                " WHERE CITY_NAME = '"+Event.getCiudad()+"' "+
-                " AND DATE_HOUR = '"+Event.getFecha()+"' "+
-                " AND PLACE_ADDRESS = '"+Event.getDireccion()+"'"+
-                " AND ETYPE_NAME = '"+Event.getEname()+"'");
-      
-    }
-    
-    
-}
    
+    public static String consultarPrecio(String tipo){
+        return "Select tt.ttype_cost from "
+                 +" TICKET_TYPE tt"
+                 +" INNER JOIN EVENT e ON tt.event_id = e.event_id "
+                 +" WHERE event_id = '"+Event.getEvent_id()+"' "
+                + " AND tick_type = '"+tipo+"' ";
+    }
+}

@@ -15,15 +15,21 @@ import java.sql.*;
  * @author Nicolas
  */
 public class EventsMoreInfo extends javax.swing.JFrame {
+    private boolean bougth;
     /**
      * Creates new form EventsMoreInfo
+     * 
+     * b=true si me llamo BoughtTickets
+     * b=false si me llamo EventSearch
      */
-    public EventsMoreInfo() {
-        initComponents();
-        
+    public EventsMoreInfo(boolean b) {      
         //inicializo las variables locales
+        initComponents();
+        setVisible(true);
+        bougth=b;
         ResultSet sc2;
         String arg,comando;
+        
         
         //le paso el id para que me devuleva la consulta en un String
         
@@ -306,7 +312,10 @@ public class EventsMoreInfo extends javax.swing.JFrame {
 
     private void JBSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBSalirActionPerformed
         dispose();
-        new BoughtTickets();       
+        if(bougth)
+            new BoughtTickets();
+        else
+            new EventSearch();
     }//GEN-LAST:event_JBSalirActionPerformed
 
     
