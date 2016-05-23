@@ -11,7 +11,7 @@ public class Ticket {
     public Ticket(){}
 
    public static String preguntaPersona(){
-       return " AND ticket.PERSON_ID = = "+Person.getPERSON_ID();
+       return " AND ticket.PERSON_ID = "+Person.getPERSON_ID();
    }
    
    public static String preguntaCategoria(){
@@ -36,7 +36,7 @@ public class Ticket {
         "    inner join EVENT_TYPE et on ec.ecategory_id = et.ecategory_id" +
         "    inner join event ev on ev.etype_id = et.etype_id" +
         "    inner join ticket_type tt on ev.event_id = tt.event_id" +
-        "    inner join ticket tc on tc.ttype_id = tt.ttype_id" +
+        "    inner join ticket on ticket.ttype_id = tt.ttype_id " +
         preguntaPersona());
      
     }
