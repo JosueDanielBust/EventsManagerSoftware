@@ -242,7 +242,6 @@ public class EventSearch extends javax.swing.JFrame {
 
     private void ciudadCBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ciudadCBActionPerformed
         try {
-
             String ciudad = (String)ciudadCB.getSelectedItem();
             String []array = DBAccess.rsToArray(DBAccess.consultar(Event.consultarNombreEventoNext()));    
             Event.setCiudad(ciudad);
@@ -291,28 +290,20 @@ public class EventSearch extends javax.swing.JFrame {
     }//GEN-LAST:event_nombreEventoCBActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-       dispose();      
+        String fecha=(String)fechaEventoCB.getSelectedItem();
+        Event.setFecha(fecha);
+        dispose();      
        new BuyTicket();
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void fechaEventoCBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fechaEventoCBActionPerformed
         String fecha=(String)fechaEventoCB.getSelectedItem();
-        Event.setFecha(fecha);
-        String sqlc= Event.buscarIdEvent();
-        String ide="";
-            
-        try{
-            ResultSet rs= DBAccess.consultar(sqlc);
-            if(rs.next())
-               ide=rs.getString(1);
-            System.out.println("El evento consultado tiene id: "+ide);
-            Event.setEvent_id(ide);
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null,ex.getMessage(),"Mensaje de Error",JOptionPane.ERROR_MESSAGE);
-        }
+        Event.setFecha(fecha);    
     }//GEN-LAST:event_fechaEventoCBActionPerformed
 
     private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
+        String fecha=(String)fechaEventoCB.getSelectedItem();
+        Event.setFecha(fecha);
         dispose();
         new EventsMoreInfo(false);
     }//GEN-LAST:event_jToggleButton1ActionPerformed

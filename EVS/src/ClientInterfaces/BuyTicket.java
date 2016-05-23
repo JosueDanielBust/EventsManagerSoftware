@@ -11,6 +11,8 @@ import javax.swing.DefaultComboBoxModel;
 import java.sql.*;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
+import java.util.ArrayList;
+import javax.swing.JSpinner;
 /**
  *
  * @author Julian
@@ -22,12 +24,14 @@ public class BuyTicket extends javax.swing.JFrame {
     public BuyTicket() {
         initComponents();
         setVisible(true);
-        String sqlc=Event.buscarTicketTypes();
+        Event.consultarId();
         try{
+            String sqlc=Event.buscarTicketTypes();
             ResultSet rs=DBAccess.consultar(sqlc);
             String[]array= DBAccess.rsToArray(rs);
             JCBtipo.setModel(new DefaultComboBoxModel(array));
        }catch(Exception e){
+           System.out.println("aca");
 	  JOptionPane.showMessageDialog(null,e.getMessage(),"Mensaje de Error",JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -49,11 +53,16 @@ public class BuyTicket extends javax.swing.JFrame {
         jButton3 = new javax.swing.JButton();
         TFprecio = new javax.swing.JTextField();
         jLabel14 = new javax.swing.JLabel();
-        jSpinner1 = new javax.swing.JSpinner();
+        Jcantidad = new javax.swing.JSpinner();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jButton2.setText("Comprar");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         JCBtipo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -68,7 +77,7 @@ public class BuyTicket extends javax.swing.JFrame {
 
         jLabel12.setText("Precio");
 
-        jButton3.setText("Atras");
+        jButton3.setText("Atrás");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton3ActionPerformed(evt);
@@ -78,6 +87,12 @@ public class BuyTicket extends javax.swing.JFrame {
         TFprecio.setEditable(false);
 
         jLabel14.setText("Cantidad");
+
+        Jcantidad.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                JcantidadStateChanged(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -98,7 +113,7 @@ public class BuyTicket extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(JCBtipo, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(TFprecio, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(Jcantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(58, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -123,7 +138,7 @@ public class BuyTicket extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel14)
-                    .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(Jcantidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -152,9 +167,35 @@ public class BuyTicket extends javax.swing.JFrame {
         new EventSearch();
     }//GEN-LAST:event_jButton3ActionPerformed
 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+
+        Integer cantidad = (Integer)Jcantidad.getValue();
+        System.out.println("Van a comprar: "+cantidad);
+        ArrayList parametros=new ArrayList(){{
+        add(cantidad);
+        add(Event.getEvent_id());
+        }};     
+        try{
+            DBAccess.procedureIN("COMPRA_BOLETAS(?,?)",parametros);
+         }catch(Exception e){
+            JOptionPane.showMessageDialog(null,"Error: "+e.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+        }
+        int total=cantidad*Integer.parseInt(TFprecio.getText());
+        if(total>0){
+            JOptionPane.showMessageDialog(null,"Total: "+total,"Compra exitosa",JOptionPane.INFORMATION_MESSAGE);
+            Jcantidad= new JSpinner(); 
+            TFprecio.setText("");
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void JcantidadStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_JcantidadStateChanged
+        
+    }//GEN-LAST:event_JcantidadStateChanged
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> JCBtipo;
+    private javax.swing.JSpinner Jcantidad;
     private javax.swing.JTextField TFprecio;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -162,6 +203,5 @@ public class BuyTicket extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
-    private javax.swing.JSpinner jSpinner1;
     // End of variables declaration//GEN-END:variables
 }
