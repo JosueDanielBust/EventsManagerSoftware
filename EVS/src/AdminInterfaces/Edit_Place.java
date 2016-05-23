@@ -13,11 +13,11 @@ public class Edit_Place extends javax.swing.JFrame {
     private Boolean edit;
     
     public Edit_Place(DBAccess dba, Boolean edit) {
-        this.PLACE_ID = PLACE_ID;
         this.dba = dba;
         this.edit = edit;
         initComponents();
         if (this.edit == false) { labelTitle.setText("Crear Lugar"); } else { labelTitle.setText("Modificar Lugar"); }
+        setVisible(true);
         
         try {
             City City = new City();

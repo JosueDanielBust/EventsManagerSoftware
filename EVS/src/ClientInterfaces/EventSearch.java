@@ -226,7 +226,7 @@ public class EventSearch extends javax.swing.JFrame {
         parametros.add(Types.NUMERIC);
         parametros.add(Types.TIMESTAMP);
         try {         
-            ArrayList datosEvento = dba.procedureSearch("EVENT_SEARCH(?,?,?,?,?,?)", parametros);   
+            ArrayList datosEvento = dba.procedureIN_OUT("EVENT_SEARCH(?,?,?,?,?,?)", parametros);   
             String fecha = (String)datosEvento.get(1);
             System.out.println(fecha);
            

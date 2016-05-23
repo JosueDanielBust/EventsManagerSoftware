@@ -12,15 +12,9 @@ import java.util.logging.Logger;
 
 public final class DBAccess {
     
-private Connection conexion;
-    
-    public DBAccess(){
-        conectar();
-    }
+private static Connection conexion;
 
-    public Connection getConexion() { return conexion; }
-    public void setConexion(Connection conexion) { this.conexion = conexion; }
-    public DBAccess conectar() {
+    public static void conectar() {
         try {
             Class.forName("oracle.jdbc.OracleDriver");
             String DB = "jdbc:oracle:thin:@dbeafit.cyzd3byk9uno.us-east-1.rds.amazonaws.com:1521:DB20161";
@@ -32,10 +26,11 @@ private Connection conexion;
                 System.out.println("Conexion fallida");
             }
         } catch(Exception e){ e.printStackTrace(); }
-    return this;
     }
     
-    public boolean ejecutar(String sql){
+    public static Connection getConexion() { return conexion; }
+    
+    public static boolean ejecutar(String sql){
      try{
          Statement st = getConexion().createStatement(
          ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
@@ -53,28 +48,21 @@ private Connection conexion;
      return true;
     }
     
-    public ResultSet consultar(String sql) throws SQLException{
+    public static ResultSet consultar(String sql) throws SQLException{
         ResultSet salida;
         PreparedStatement st = getConexion().prepareStatement(sql);
         salida = st.executeQuery();         
         return salida;
     }
     
-    public ResultSet funcion(String NombreFuncion,SQLType tipoRetorno, ArrayList parametros) throws SQLException{
-        CallableStatement st = conexion.prepareCall("{?=call "+ NombreFuncion +"}");
-        st.registerOutParameter(1,tipoRetorno);
-        for(int i = 2; i <= parametros.size();i++) st.setObject(i,parametros.get(i-2));
-        return st.executeQuery();
-    }
-    
-    public void procedureWrite(String NombreProcedure,ArrayList parametros) throws SQLException{
+    public static void procedureIN(String NombreProcedure,ArrayList parametros) throws SQLException{
         CallableStatement st = conexion.prepareCall("{call "+ NombreProcedure +"}");
         for(int i = 1; i <= parametros.size();i++) st.setObject(i,parametros.get(i-1));
-        st.execute();
+        st.executeUpdate();
         getConexion().commit();
     }
     
-    public ArrayList<String> procedureSearch(String NombreProcedure, ArrayList parametrosIN_OUT) throws SQLException{
+    public static ArrayList<String> procedureIN_OUT(String NombreProcedure, ArrayList parametrosIN_OUT) throws SQLException{
         CallableStatement st = conexion.prepareCall("{call "+ NombreProcedure +"}");
         ArrayList salida = new ArrayList();
         for(int i = 1;i <= parametrosIN_OUT.size();i++) {
@@ -85,7 +73,6 @@ private Connection conexion;
                 st.registerOutParameter(i,(Integer)parametrosIN_OUT.get(i-1));
                 salida.add(i);
             }
-            
         }
         st.execute();
         for(int i = 0; i < salida.size();i++) salida.set(i,st.getString((Integer)salida.get(i)));
@@ -98,7 +85,7 @@ private Connection conexion;
      * @param datos ResultSet con datos
      * @return String[] con los datos del Set
      */
-    public String[] rsToArray(ResultSet datos) throws SQLException{
+    public static String[] rsToArray(ResultSet datos) throws SQLException{
         ArrayList<String> items = new ArrayList(100);    
         while(datos.next()){
             items.add(datos.getString(1));

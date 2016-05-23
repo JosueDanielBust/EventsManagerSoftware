@@ -1,10 +1,15 @@
 package AdminInterfaces;
 
 import MainInterfaces.DBAccess;
+import MainInterfaces.Login;
 
 public class Administrator_Panel extends javax.swing.JFrame {
     DBAccess dba;
-    public Administrator_Panel(DBAccess dba) { this.dba = dba; initComponents(); }
+    public Administrator_Panel(DBAccess dba) { 
+        this.dba = dba; 
+        initComponents();
+        setVisible(true);
+    }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -101,6 +106,7 @@ public class Administrator_Panel extends javax.swing.JFrame {
 
     private void buttonExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonExitActionPerformed
         dispose();
+        new Login(dba);
     }//GEN-LAST:event_buttonExitActionPerformed
 
     private void buttonPersonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonPersonActionPerformed

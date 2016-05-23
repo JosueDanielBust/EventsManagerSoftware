@@ -7,13 +7,11 @@ package ClientInterfaces;
 
 import MainInterfaces.DBAccess;
 import Mundo.Person;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -28,7 +26,6 @@ public class ClientConfiguration extends javax.swing.JFrame {
      */
     public ClientConfiguration(DBAccess dba) {
         this.dba = dba;
-        System.out.println("hhhhhhhhhhhhhhh");
         initComponents();
         llenarInformacion();
         setVisible(true);
@@ -39,17 +36,26 @@ public class ClientConfiguration extends javax.swing.JFrame {
          parametros.add(Person.getPERSON_ID());
          for(int i = 0; i < 6;i++) parametros.add(Types.VARCHAR);
         try {
-            ArrayList<String> datosUsuario = dba.procedureSearch("ACCOUNT_INFORMATION(?,?,?,?,?,?,?)", parametros);
-            ResultSet rs = dba.consultar("SELECT EPS FROM EPS");
+            ArrayList<String> datosUsuario = dba.procedureIN_OUT("ACCOUNT_INFORMATION(?,?,?,?,?,?,?)", parametros);
             nombreTF.setText(datosUsuario.get(0));
             correoElectronicoTF.setText(datosUsuario.get(1));
             telefonoTF.setText(datosUsuario.get(2));
             direccionTF.setText(datosUsuario.get(3));
-            epsCB.setModel(new DefaultComboBoxModel(dba.rsToArray(rs)));
-            epsCB.addItem(datosUsuario.get(4));
+            epsCB.setModel(new DefaultComboBoxModel(llenarEps(datosUsuario.get(4),dba.rsToArray(dba.consultar("SELECT EPS FROM EPS")))));
         } catch (SQLException ex) {
-            System.out.println("ERROR: No se pudo cargar la informacion de cliente");
+             JOptionPane.showMessageDialog(null,"ERROR: No se pudo cargar la informacion del cliente");
         }
+    }
+    
+    public String[] llenarEps(String epsActual, String[] todasEps){
+        ArrayList<String> eps = new ArrayList();
+        eps.add(epsActual);
+        for (String todasEp : todasEps) {
+            if (!todasEp.equals(epsActual)) {
+                eps.add(todasEp);
+            }
+        }
+        return eps.toArray(new String[eps.size()]);
     }
     
     /**
@@ -96,19 +102,7 @@ public class ClientConfiguration extends javax.swing.JFrame {
 
         jLabel12.setText("Direccion");
 
-        epsCB.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                epsCBActionPerformed(evt);
-            }
-        });
-
         jLabel14.setText("EPS");
-
-        telefonoTF.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                telefonoTFActionPerformed(evt);
-            }
-        });
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel3.setText("Datos Personales");
@@ -124,28 +118,20 @@ public class ClientConfiguration extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel5))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 55, Short.MAX_VALUE)
-                        .addComponent(nombreTF, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel14)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(epsCB, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel12)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(direccionTF, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel6))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(telefonoTF, javax.swing.GroupLayout.DEFAULT_SIZE, 166, Short.MAX_VALUE)
-                            .addComponent(correoElectronicoTF))))
+                    .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel5)
+                    .addComponent(jLabel12)
+                    .addComponent(jLabel14))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(epsCB, 0, 210, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(direccionTF, javax.swing.GroupLayout.DEFAULT_SIZE, 210, Short.MAX_VALUE)
+                        .addComponent(nombreTF)
+                        .addComponent(telefonoTF)
+                        .addComponent(correoElectronicoTF)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -178,7 +164,7 @@ public class ClientConfiguration extends javax.swing.JFrame {
 
         jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        jLabel8.setText("Contraseña Actual");
+        jLabel8.setText("Contraseña");
 
         jLabel15.setText("Nueva Contraseña");
 
@@ -196,9 +182,9 @@ public class ClientConfiguration extends javax.swing.JFrame {
                     .addComponent(jLabel4)
                     .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(contraseñaPF, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(nuevaContraseñaPF, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(nuevaContraseñaPF, javax.swing.GroupLayout.DEFAULT_SIZE, 210, Short.MAX_VALUE)
+                    .addComponent(contraseñaPF))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -225,8 +211,18 @@ public class ClientConfiguration extends javax.swing.JFrame {
         });
 
         atrasB.setText("Atras");
+        atrasB.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                atrasBActionPerformed(evt);
+            }
+        });
 
         borrarUsuarioB.setText("BORRAR USUARIO");
+        borrarUsuarioB.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                borrarUsuarioBActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -246,11 +242,11 @@ public class ClientConfiguration extends javax.swing.JFrame {
                         .addComponent(jLabel2)))
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(30, 30, 30)
                 .addComponent(borrarUsuarioB)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
-                .addComponent(atrasB, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(40, 40, 40)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
+                .addComponent(atrasB, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(29, 29, 29)
                 .addComponent(aceptarB)
                 .addGap(29, 29, 29))
         );
@@ -280,17 +276,46 @@ public class ClientConfiguration extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void epsCBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_epsCBActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_epsCBActionPerformed
-
-    private void telefonoTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_telefonoTFActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_telefonoTFActionPerformed
-
     private void aceptarBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aceptarBActionPerformed
-        // TODO add your handling code here:
+        ArrayList parametros = new ArrayList();
+        String contraseñaActual = String.valueOf(contraseñaPF.getPassword());
+        String nuevaContraseña = String.valueOf(nuevaContraseñaPF.getPassword());
+        parametros.add(Person.getPERSON_ID());
+        parametros.add(nombreTF.getText());
+        parametros.add(correoElectronicoTF.getText());
+        parametros.add(telefonoTF.getText());
+        parametros.add(direccionTF.getText());
+        parametros.add((String)epsCB.getSelectedItem());
+        parametros.add(contraseñaActual);
+        parametros.add(nuevaContraseña);
+        parametros.add(Types.NUMERIC);
+        try {
+            ArrayList<String> confirmCambio = dba.procedureIN_OUT("CHANGE_ACC_INFO(?,?,?,?,?,?,?,?,?)", parametros);
+            dba.getConexion().commit();
+            if(confirmCambio.get(0).equals("1") || (contraseñaActual.equals("") && nuevaContraseña.equals(""))){
+                JOptionPane.showMessageDialog(null,"Se han Hecho Exitosamente los Cambios pedidos en las casillas");
+            }else{
+                JOptionPane.showMessageDialog(null,"Se hicerion los cambios, a excepcion de la contraseña, Porfavor verificar que sea correcta");
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null,"Se produjo un error, ya sea que el Email existe o que se encuentre algun dato erroneo, verificar todos estos");
+            try {
+                dba.getConexion().rollback();
+            } catch (SQLException ex1) {
+                System.out.println("Error: Cargar la Base de Datos desde la configuracion de la cuenta");
+            }
+        }
     }//GEN-LAST:event_aceptarBActionPerformed
+
+    private void atrasBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_atrasBActionPerformed
+        dispose();
+        new ClientMenu(dba);
+    }//GEN-LAST:event_atrasBActionPerformed
+
+    private void borrarUsuarioBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_borrarUsuarioBActionPerformed
+        dispose();
+        new DeleteUserConfirm(dba);
+    }//GEN-LAST:event_borrarUsuarioBActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton aceptarB;

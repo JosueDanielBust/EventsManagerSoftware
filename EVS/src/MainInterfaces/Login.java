@@ -7,6 +7,7 @@ import Mundo.Person;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -19,14 +20,11 @@ import java.util.ArrayList;
  * @author Nicolas
  */
 public class Login extends javax.swing.JFrame {
-
-    private DBAccess dba;
     
     /**
      * Creates new form Login
      */
-    public Login(DBAccess dba) {
-        this.dba = dba;
+    public Login() {
         Person.setPERSON_ID(null);
         initComponents();
         setVisible(true);
@@ -98,14 +96,18 @@ public class Login extends javax.swing.JFrame {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(contraseñaTF, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
                                     .addComponent(correoElectronicoTF))))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(alertaL)
-                        .addGap(34, 34, 34)
                         .addComponent(registrarseB)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(ingresarB, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(60, 60, 60))))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(alertaL)
+                                .addGap(60, 251, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(ingresarB, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(60, 60, 60))))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(82, Short.MAX_VALUE)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -128,8 +130,8 @@ public class Login extends javax.swing.JFrame {
                 .addComponent(alerta)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(alertaL)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(ingresarB, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(registrarseB, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
@@ -140,7 +142,7 @@ public class Login extends javax.swing.JFrame {
 
     private void registrarseBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registrarseBActionPerformed
         dispose();
-        new Register(dba);
+        new Register();
     }//GEN-LAST:event_registrarseBActionPerformed
 
     private void ingresarBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ingresarBActionPerformed
@@ -150,16 +152,16 @@ public class Login extends javax.swing.JFrame {
         parametros.add(Types.NUMERIC);
         parametros.add(Types.NUMERIC);
         try {
-            ArrayList<String> datosUsuario = dba.procedureSearch("LOGIN_CONFIRMATION(?,?,?,?)", parametros);
+            ArrayList<String> datosUsuario = DBAccess.procedureIN_OUT("LOGIN_CONFIRMATION(?,?,?,?)", parametros);
             Person.setPERSON_ID(datosUsuario.get(0));
             dispose();
             if (datosUsuario.get(1).equals("2")) {
-                new ClientMenu(dba);
+                new ClientMenu();
             } else {
-                new Administrator_Panel(dba);
+                new Administrator_Panel();
             }
         } catch (SQLException ex) {
-            alertaL.setText("El Correo Electronico o la Contraseña es Incorrecta");
+             JOptionPane.showMessageDialog(null,"El Correo Electronico o la Contraseña son Incorrectas");
         }
     }//GEN-LAST:event_ingresarBActionPerformed
 

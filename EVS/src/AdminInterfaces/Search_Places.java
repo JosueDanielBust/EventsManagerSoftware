@@ -14,12 +14,12 @@ public class Search_Places extends javax.swing.JFrame {
     public Search_Places(DBAccess dba) {
         this.dba = dba;
         initComponents();
-        
+        setVisible(true);
         try {
             City City = new City();
             ResultSet rsCity = dba.consultar(City.getCiudades());
             String[] arrayCity = rsToArray(rsCity);
-            selCity = new JComboBox(arrayCity);
+            selCity.setModel(new DefaultComboBoxModel(arrayCity));
         } catch(Exception e){
             JOptionPane.showMessageDialog(null,e.getMessage(),"Mensaje de Error",JOptionPane.ERROR_MESSAGE);
         }
@@ -278,7 +278,7 @@ public class Search_Places extends javax.swing.JFrame {
             PlaceType PlaceType = new PlaceType();
             ResultSet rsPlaceType = dba.consultar(PlaceType.getPlacesTypesOfCity(CITY_ID));
             String[] arrayPlaceType = rsToArray(rsPlaceType);
-            selPlaceType = new JComboBox(arrayPlaceType);
+            selPlaceType.setModel(new DefaultComboBoxModel(arrayPlaceType));
         } catch(Exception e){
             JOptionPane.showMessageDialog(null,e.getMessage(),"Mensaje de Error",JOptionPane.ERROR_MESSAGE);
         }
