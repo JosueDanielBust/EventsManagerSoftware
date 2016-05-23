@@ -24,7 +24,7 @@ public class BuyTicket extends javax.swing.JFrame {
     public BuyTicket() {
         initComponents();
         setVisible(true);
-       
+        Event.consultarId();
         try{
             String sqlc=Event.buscarTicketTypes();
             ResultSet rs=DBAccess.consultar(sqlc);
@@ -181,9 +181,11 @@ public class BuyTicket extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null,"Error: "+e.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
         }
         int total=cantidad*Integer.parseInt(TFprecio.getText());
-        JOptionPane.showMessageDialog(null,"Total: "+total,"Compra exitosa",JOptionPane.INFORMATION_MESSAGE);
-        Jcantidad= new JSpinner(); 
-        TFprecio.setText("");
+        if(total>0){
+            JOptionPane.showMessageDialog(null,"Total: "+total,"Compra exitosa",JOptionPane.INFORMATION_MESSAGE);
+            Jcantidad= new JSpinner(); 
+            TFprecio.setText("");
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void JcantidadStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_JcantidadStateChanged
