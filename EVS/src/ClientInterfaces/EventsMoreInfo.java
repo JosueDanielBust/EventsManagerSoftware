@@ -105,10 +105,11 @@ public class EventsMoreInfo extends javax.swing.JFrame {
                
                
                //traer fecha y hora
-               arg=sc.getString(5);
+               arg=sc.getString(4);
+               System.out.println(arg);
                String[] hora=arg.split("\\s+");
-               jTFFecha.setText(hora[0]);
-               jTFHora.setText(hora[1]);
+               jTFFecha.setText(arg.substring(0,10));
+               jTFHora.setText(arg.substring(11));
              }
         }catch(SQLException e){
             e.printStackTrace();
