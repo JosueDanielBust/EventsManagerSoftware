@@ -6,6 +6,7 @@
 package ClientInterfaces;
 import Mundo.Event;
 import MainInterfaces.DBAccess;
+import Mundo.Person;
 import Mundo.Ticket;
 import javax.swing.DefaultComboBoxModel;
 import java.sql.*;
@@ -31,7 +32,6 @@ public class BuyTicket extends javax.swing.JFrame {
             String[]array= DBAccess.rsToArray(rs);
             JCBtipo.setModel(new DefaultComboBoxModel(array));
        }catch(Exception e){
-           System.out.println("aca");
 	  JOptionPane.showMessageDialog(null,e.getMessage(),"Mensaje de Error",JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -169,23 +169,42 @@ public class BuyTicket extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
 
-        Integer cantidad = (Integer)Jcantidad.getValue();
+        int cantidad = (Integer)Jcantidad.getValue();
         System.out.println("Van a comprar: "+cantidad);
-        ArrayList parametros=new ArrayList(){{
-        add(cantidad);
-        add(Event.getEvent_id());
-        }};     
+        
+        ArrayList buy_par=new ArrayList(){{
+            add(Person.getPERSON_ID());
+            add(Event.getEvent_id());
+          
+        }};
+        
+        ArrayList add_par=new ArrayList(){{
+            add(Person.getPERSON_ID());
+            add(Event.getEvent_id());
+            add(cantidad);  
+            add(Types.VARCHAR);
+        }}; 
+        
+        String mensaje="";
+        
         try{
-            DBAccess.procedureIN("COMPRA_BOLETAS(?,?)",parametros);
+            //if(total>0)
+            ArrayList salida=DBAccess.procedureIN_OUT("ADD_TICKET(?,?,?,?)",add_par);           
+            //int total=cantidad*Integer.parseInt(TFprecio.getText());
+            
+            if(salida.get(0).equals("1")){
+                mensaje="Compra exitosa. ";//Total: "+total;
+                DBAccess.procedureIN("BUY_TICKET(?,?)",buy_par);
+            }else
+                mensaje="Cantidad no disponible";
+        
+            JOptionPane.showMessageDialog(null,mensaje);
+     
          }catch(Exception e){
             JOptionPane.showMessageDialog(null,"Error: "+e.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
         }
-        int total=cantidad*Integer.parseInt(TFprecio.getText());
-        if(total>0){
-            JOptionPane.showMessageDialog(null,"Total: "+total,"Compra exitosa",JOptionPane.INFORMATION_MESSAGE);
             Jcantidad= new JSpinner(); 
             TFprecio.setText("");
-        }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void JcantidadStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_JcantidadStateChanged
