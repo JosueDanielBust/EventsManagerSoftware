@@ -218,8 +218,8 @@ public class Register extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null,"Se creo su cuenta Exitosamente");
                 dispose();
                 new Login();
-            } catch (SQLException ex) {
-                 JOptionPane.showMessageDialog(null,"La identificacion o el Email ya Existe, o hay algun campo erroneo");
+            } catch (SQLException ex) { //"La identificacion o el Email ya Existe, o hay algun campo erroneo";
+                 JOptionPane.showMessageDialog(null,ex.getMessage());
                 try {    
                     DBAccess.getConexion().rollback();
                 } catch (SQLException ex1) {

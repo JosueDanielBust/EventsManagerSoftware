@@ -309,12 +309,12 @@ public class EventsMoreInfo extends javax.swing.JFrame {
 
     private void JBSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBSalirActionPerformed
         dispose();
+        Event.limpiarEvento();
         if(bougth)
             new BoughtTickets();
         else
             new EventSearch();
     }//GEN-LAST:event_JBSalirActionPerformed
-
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables

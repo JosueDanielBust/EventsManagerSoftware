@@ -173,14 +173,15 @@ public class BuyTicket extends javax.swing.JFrame {
         System.out.println("Van a comprar: "+cantidad);
         
         ArrayList buy_par=new ArrayList(){{
-            add(Person.getPERSON_ID());
             add(Event.getEvent_id());
-          
+            add((String)JCBtipo.getSelectedItem());
+            add(cantidad);
         }};
         
         ArrayList add_par=new ArrayList(){{
             add(Person.getPERSON_ID());
             add(Event.getEvent_id());
+            add((String)JCBtipo.getSelectedItem());
             add(cantidad);  
             add(Types.VARCHAR);
         }}; 
@@ -189,12 +190,13 @@ public class BuyTicket extends javax.swing.JFrame {
         
         try{
             //if(total>0)
-            ArrayList salida=DBAccess.procedureIN_OUT("ADD_TICKET(?,?,?,?)",add_par);           
+            ArrayList salida=DBAccess.procedureIN_OUT("ADD_TICKET(?,?,?,?,?)",add_par);           
             //int total=cantidad*Integer.parseInt(TFprecio.getText());
-            
+
             if(salida.get(0).equals("1")){
+                            System.out.println("ssssssss");
                 mensaje="Compra exitosa. ";//Total: "+total;
-                DBAccess.procedureIN("BUY_TICKET(?,?)",buy_par);
+                DBAccess.procedureIN("BUY_TICKET(?,?,?)",buy_par);
             }else
                 mensaje="Cantidad no disponible";
         

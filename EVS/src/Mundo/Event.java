@@ -177,6 +177,11 @@ public class Event {
                   " AND e.event_id = '"+getEvent_id()+"' ");
       }
     
+    
+    public static void limpiarEvento(){
+        setEvent_id("");
+    }
+      
     public static String getCiudad() {
         return ciudad;
     }
